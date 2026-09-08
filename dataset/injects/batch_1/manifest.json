@@ -62,11 +62,6 @@
   "expected_effects": {
     "assumptions_changed": [
       {
-        "assumption_id": "asm_blue_3_k1",
-        "from": "unknown",
-        "to": "violated"
-      },
-      {
         "assumption_id": "asm_blue_1_k0",
         "from": "holds",
         "to": "violated"
@@ -75,31 +70,30 @@
         "assumption_id": "asm_blue_2_k0",
         "from": "holds",
         "to": "violated"
+      },
+      {
+        "assumption_id": "asm_blue_3_k1",
+        "from": "unknown",
+        "to": "violated"
       }
     ],
     "jipcl_changed": [
-      {
-        "rank_after": 4,
-        "rank_before": 3,
-        "req_id": "req_04",
-        "status_after": "research",
-        "status_before": "research"
-      },
       {
         "rank_after": 3,
         "rank_before": 4,
         "req_id": "req_03",
         "status_after": "research",
         "status_before": "research"
+      },
+      {
+        "rank_after": 4,
+        "rank_before": 3,
+        "req_id": "req_04",
+        "status_after": "research",
+        "status_before": "research"
       }
     ],
     "problem_sets_moved": [
-      {
-        "jsps_horizon": "near",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "problem_set_id": "ps_chokepoint"
-      },
       {
         "jsps_horizon": "long",
         "level_after": "significant",
@@ -108,6 +102,12 @@
       },
       {
         "jsps_horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_chokepoint"
+      },
+      {
+        "jsps_horizon": "near",
         "level_after": "significant",
         "level_before": "moderate",
         "problem_set_id": "ps_chokepoint"
@@ -125,6 +125,60 @@
     "requirements_closed": [],
     "risk_assessments_changed": [
       {
+        "he_id": "he_01",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.79,
+        "p_before": 0.415,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_01",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.79,
+        "p_before": 0.415,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_01",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.72,
+        "p_before": 0.325,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_02",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.6,
+        "p_before": 0.2,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_02",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.6,
+        "p_before": 0.2,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_02",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.6,
+        "p_before": 0.2,
+        "trend_after": "flat"
+      },
+      {
         "he_id": "he_07",
         "horizon": "long",
         "level_after": "moderate",
@@ -140,15 +194,6 @@
         "level_before": "moderate",
         "p_after": 0.487,
         "p_before": 0.2911,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_01",
-        "horizon": "near",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.72,
-        "p_before": 0.325,
         "trend_after": "up"
       },
       {
@@ -186,60 +231,15 @@
         "p_after": 0.35164,
         "p_before": 0.24067,
         "trend_after": "flat"
-      },
-      {
-        "he_id": "he_02",
-        "horizon": "long",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.6,
-        "p_before": 0.2,
-        "trend_after": "flat"
-      },
-      {
-        "he_id": "he_02",
-        "horizon": "mid",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.6,
-        "p_before": 0.2,
-        "trend_after": "flat"
-      },
-      {
-        "he_id": "he_02",
-        "horizon": "near",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.6,
-        "p_before": 0.2,
-        "trend_after": "flat"
-      },
-      {
-        "he_id": "he_01",
-        "horizon": "long",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.79,
-        "p_before": 0.415,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_01",
-        "horizon": "mid",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.79,
-        "p_before": 0.415,
-        "trend_after": "up"
       }
     ],
     "strategies_restated": [
       {
-        "status_after": "valid",
+        "status_after": "invalid",
         "status_before": "valid",
-        "strategy_id": "str_blue_3",
-        "value_after": 0.539250422,
-        "value_before": 0.57698498
+        "strategy_id": "str_blue_1",
+        "value_after": 0.369958724,
+        "value_before": 0.657667272
       },
       {
         "status_after": "valid",
@@ -249,11 +249,11 @@
         "value_before": 0.645917355
       },
       {
-        "status_after": "invalid",
+        "status_after": "valid",
         "status_before": "valid",
-        "strategy_id": "str_blue_1",
-        "value_after": 0.369958724,
-        "value_before": 0.657667272
+        "strategy_id": "str_blue_3",
+        "value_after": 0.539250422,
+        "value_before": 0.57698498
       }
     ],
     "validity_changed": [

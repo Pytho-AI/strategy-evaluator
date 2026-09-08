@@ -77,23 +77,16 @@
         "status_before": "research"
       },
       {
-        "rank_after": 3,
-        "rank_before": 2,
-        "req_id": "req_04",
+        "rank_after": 4,
+        "rank_before": 3,
+        "req_id": "req_03",
         "status_after": "research",
         "status_before": "research"
       },
       {
-        "rank_after": 1,
-        "rank_before": null,
-        "req_id": "req_07",
-        "status_after": "validation",
-        "status_before": "validation"
-      },
-      {
-        "rank_after": 4,
-        "rank_before": 3,
-        "req_id": "req_03",
+        "rank_after": 3,
+        "rank_before": 2,
+        "req_id": "req_04",
         "status_after": "research",
         "status_before": "research"
       },
@@ -110,16 +103,17 @@
         "req_id": "req_06",
         "status_after": "research",
         "status_before": "research"
+      },
+      {
+        "rank_after": 1,
+        "rank_before": null,
+        "req_id": "req_07",
+        "status_after": "validation",
+        "status_before": "validation"
       }
     ],
     "problem_sets_moved": [
       {
-        "jsps_horizon": "near",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "problem_set_id": "ps_energy"
-      },
-      {
         "jsps_horizon": "long",
         "level_after": "significant",
         "level_before": "moderate",
@@ -132,19 +126,25 @@
         "problem_set_id": "ps_cyber"
       },
       {
-        "jsps_horizon": "long",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "problem_set_id": "ps_energy"
-      },
-      {
         "jsps_horizon": "near",
         "level_after": "significant",
         "level_before": "moderate",
         "problem_set_id": "ps_cyber"
       },
       {
+        "jsps_horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_energy"
+      },
+      {
         "jsps_horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_energy"
+      },
+      {
+        "jsps_horizon": "near",
         "level_after": "significant",
         "level_before": "moderate",
         "problem_set_id": "ps_energy"
@@ -162,6 +162,114 @@
     ],
     "requirements_closed": [],
     "risk_assessments_changed": [
+      {
+        "he_id": "he_03",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.481,
+        "p_before": 0.445,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_03",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.3945,
+        "p_before": 0.3525,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_03",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.3945,
+        "p_before": 0.3525,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_04",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.593079,
+        "p_before": 0.492764,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_04",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.563392,
+        "p_before": 0.454358,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_04",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.563392,
+        "p_before": 0.454358,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_05",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.57,
+        "p_before": 0.27,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_05",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.57,
+        "p_before": 0.27,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_05",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.57,
+        "p_before": 0.27,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_06",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.45,
+        "p_before": 0.25,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_06",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.45,
+        "p_before": 0.25,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_06",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.45,
+        "p_before": 0.25,
+        "trend_after": "flat"
+      },
       {
         "he_id": "he_07",
         "horizon": "long",
@@ -199,30 +307,12 @@
         "trend_after": "flat"
       },
       {
-        "he_id": "he_06",
-        "horizon": "long",
-        "level_after": "moderate",
-        "level_before": "moderate",
-        "p_after": 0.45,
-        "p_before": 0.25,
-        "trend_after": "flat"
-      },
-      {
         "he_id": "he_08",
         "horizon": "mid",
         "level_after": "moderate",
         "level_before": "moderate",
         "p_after": 0.633296,
         "p_before": 0.36298,
-        "trend_after": "flat"
-      },
-      {
-        "he_id": "he_06",
-        "horizon": "mid",
-        "level_after": "moderate",
-        "level_before": "moderate",
-        "p_after": 0.45,
-        "p_before": 0.25,
         "trend_after": "flat"
       },
       {
@@ -233,105 +323,15 @@
         "p_after": 0.628928,
         "p_before": 0.35164,
         "trend_after": "flat"
-      },
-      {
-        "he_id": "he_06",
-        "horizon": "near",
-        "level_after": "moderate",
-        "level_before": "moderate",
-        "p_after": 0.45,
-        "p_before": 0.25,
-        "trend_after": "flat"
-      },
-      {
-        "he_id": "he_04",
-        "horizon": "long",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.593079,
-        "p_before": 0.492764,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_04",
-        "horizon": "mid",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.563392,
-        "p_before": 0.454358,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_04",
-        "horizon": "near",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.563392,
-        "p_before": 0.454358,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_03",
-        "horizon": "long",
-        "level_after": "moderate",
-        "level_before": "moderate",
-        "p_after": 0.481,
-        "p_before": 0.445,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_03",
-        "horizon": "mid",
-        "level_after": "moderate",
-        "level_before": "moderate",
-        "p_after": 0.3945,
-        "p_before": 0.3525,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_03",
-        "horizon": "near",
-        "level_after": "moderate",
-        "level_before": "moderate",
-        "p_after": 0.3945,
-        "p_before": 0.3525,
-        "trend_after": "up"
-      },
-      {
-        "he_id": "he_05",
-        "horizon": "long",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.57,
-        "p_before": 0.27,
-        "trend_after": "flat"
-      },
-      {
-        "he_id": "he_05",
-        "horizon": "mid",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.57,
-        "p_before": 0.27,
-        "trend_after": "flat"
-      },
-      {
-        "he_id": "he_05",
-        "horizon": "near",
-        "level_after": "significant",
-        "level_before": "moderate",
-        "p_after": 0.57,
-        "p_before": 0.27,
-        "trend_after": "flat"
       }
     ],
     "strategies_restated": [
       {
         "status_after": "valid",
         "status_before": "valid",
-        "strategy_id": "str_blue_3",
-        "value_after": 0.595671295,
-        "value_before": 0.595667237
+        "strategy_id": "str_blue_1",
+        "value_after": 0.647330008,
+        "value_before": 0.647275499
       },
       {
         "status_after": "valid",
@@ -343,9 +343,9 @@
       {
         "status_after": "valid",
         "status_before": "valid",
-        "strategy_id": "str_blue_1",
-        "value_after": 0.647330008,
-        "value_before": 0.647275499
+        "strategy_id": "str_blue_3",
+        "value_after": 0.595671295,
+        "value_before": 0.595667237
       }
     ],
     "validity_changed": []

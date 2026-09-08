@@ -1,0 +1,12 @@
+{"asset_id": "asset_08", "coverage_id": "cov_08_1", "objective_contribution": 0.092055932, "period": 1, "req_id": "req_01"}
+{"asset_id": "asset_06", "coverage_id": "cov_06_2", "objective_contribution": 0.077893481, "period": 1, "req_id": "req_01"}
+{"asset_id": "asset_01", "coverage_id": "cov_01_1", "objective_contribution": 0.06373103, "period": 1, "req_id": "req_01"}
+{"asset_id": "asset_04", "coverage_id": "cov_04_3", "objective_contribution": 0.06373103, "period": 1, "req_id": "req_01"}
+{"asset_id": "asset_07", "coverage_id": "cov_07_2", "objective_contribution": 0.020087746, "period": 1, "req_id": "req_02"}
+{"asset_id": "asset_02", "coverage_id": "cov_02_1", "objective_contribution": 0.016997324, "period": 1, "req_id": "req_02"}
+{"asset_id": "asset_05", "coverage_id": "cov_05_3", "objective_contribution": 0.016997324, "period": 1, "req_id": "req_02"}
+{"asset_id": "asset_03", "coverage_id": "cov_03_3", "objective_contribution": 0.0085, "period": 1, "req_id": "req_07"}
+{"asset_id": "asset_04", "coverage_id": "cov_04_2", "objective_contribution": 0.0085, "period": 1, "req_id": "req_06"}
+{"asset_id": "asset_08", "coverage_id": "cov_08_3", "objective_contribution": 0.0085, "period": 1, "req_id": "req_05"}
+{"asset_id": "asset_02", "coverage_id": "cov_02_3", "objective_contribution": 0.0075, "period": 1, "req_id": "req_06"}
+{"asset_id": "asset_06", "coverage_id": "cov_06_3", "objective_contribution": 0.0065, "period": 1, "req_id": "req_03"}

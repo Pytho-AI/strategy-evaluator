@@ -1,0 +1,4 @@
+{"approver_role": "rules engine", "max_reversibility_cost": 0.1, "name": "automatic", "tier_id": "tier_1"}
+{"approver_role": "staff analyst", "max_reversibility_cost": 0.35, "name": "J-staff analyst", "tier_id": "tier_2"}
+{"approver_role": "director", "max_reversibility_cost": 0.7, "name": "J-2/J-5 director", "tier_id": "tier_3"}
+{"approver_role": "commander", "max_reversibility_cost": 1.0, "name": "commander", "tier_id": "tier_4"}

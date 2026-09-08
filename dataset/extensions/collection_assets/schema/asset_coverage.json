@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "coverage_id": {
+      "type": "string"
+    },
+    "discipline": {
+      "enum": [
+        "GEOINT",
+        "SIGINT",
+        "HUMINT",
+        "OSINT",
+        "MASINT"
+      ]
+    },
+    "entity_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "latency_periods": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "p_success": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "predicate": {
+      "type": "string"
+    },
+    "range_ok": {
+      "type": "boolean"
+    },
+    "subject_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_characteristics_match": {
+      "type": "boolean"
+    },
+    "timeliness_ok": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "coverage_id",
+    "asset_id",
+    "subject_type",
+    "entity_id",
+    "predicate",
+    "discipline",
+    "p_success",
+    "latency_periods",
+    "target_characteristics_match",
+    "range_ok",
+    "timeliness_ok"
+  ],
+  "type": "object"
+}

@@ -9,7 +9,8 @@ To list claims carried by stale-echo sources:
 ```python
 from dataset import load
 d = load()
-sources = d["sources"].query("perturbations.apply(lambda x: 'stale_echo' in x)")
+sources = d["sources"]
+sources = sources[sources["perturbations"].apply(lambda values: "stale_echo" in values)]
 print(d["claims"].merge(sources[["source_id", "path"]], on="source_id"))
 ```
 

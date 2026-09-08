@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "area_id": {
+      "type": "string"
+    },
+    "as_of": {
+      "format": "date",
+      "type": "string"
+    },
+    "score": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "world_version": {
+      "maximum": 3,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "area_id",
+    "world_version",
+    "as_of",
+    "score"
+  ],
+  "type": "object"
+}

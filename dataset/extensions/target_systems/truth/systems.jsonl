@@ -1,0 +1,4 @@
+{"kind": "target_system", "name": "Ilmaran energy system", "purpose": "Provide electric power to Ilmaran civil and military users", "system_id": "ts_energy"}
+{"kind": "target_system", "name": "Kestrel maritime access system", "purpose": "Move shipping and naval forces through the Kestrel Strait", "system_id": "ts_maritime"}
+{"kind": "target_system", "name": "Varenian coastal strike system", "purpose": "Detect, control, and engage maritime forces", "system_id": "ts_strike"}
+{"kind": "target_system", "name": "Blue theater sustainment system", "purpose": "Move and protect supplies from port to operating forces", "system_id": "ts_sustainment"}

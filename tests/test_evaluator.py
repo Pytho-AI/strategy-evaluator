@@ -115,3 +115,9 @@ def test_opponent_distribution_cannot_repeat_a_strategy(tables):
     mix[0]["probability"] = 0.5
     mix.append(copy.deepcopy(mix[0]))
     assert not validate.inv01_referential_integrity(tables).passed
+
+
+def test_objective_ratings_preserve_ties():
+    assert engine.ordinal_rating(0.5, [0.1, 0.5, 0.5, 0.9]) == 2
+    assert engine.ordinal_rating(0.9, [0.1, 0.5, 0.5, 0.9]) == 3
+    assert engine.ordinal_rating(0.5, [0.5, 0.5]) == 3

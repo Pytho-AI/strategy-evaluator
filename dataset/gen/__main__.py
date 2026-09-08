@@ -26,7 +26,7 @@ def stages():
     exist yet (later phases) are skipped."""
     import importlib
     out = []
-    for name in ("scaffold", "facts", "plan_docs", "render", "strategies", "payoffs", "graph", "risk", "collection", "rps", "products", "injects"):
+    for name in ("scaffold", "facts", "plan_docs", "render", "strategies", "payoffs", "graph", "risk", "collection", "rps", "products", "injects", "extensions"):
         try:
             mod = importlib.import_module(f"gen.{name}")
         except ImportError as ex:
@@ -84,19 +84,20 @@ def cmd_check(args) -> int:
     # reproducibility: regenerate into a temp dir and compare truth byte-for-byte
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td) / "dataset"
-        shutil.copytree(DATASET_DIR, tmp, ignore=shutil.ignore_patterns("truth", "corpus", "injects", "__pycache__", "cache"))
+        shutil.copytree(DATASET_DIR, tmp, ignore=shutil.ignore_patterns(
+            "truth", "corpus", "injects", "extensions", "review", "__pycache__", "cache", "*.zip"))
         (tmp / "truth").mkdir()
         generate(args.seed, tmp)
         diffs = []
-        for f in sorted((DATASET_DIR / "truth").glob("*.jsonl")):
-            g = tmp / "truth" / f.name
-            if not g.exists() or not filecmp.cmp(f, g, shallow=False):
-                diffs.append(f.name)
-        for f in sorted((DATASET_DIR / "corpus").rglob("*")):
-            if f.is_file():
-                g = tmp / "corpus" / f.relative_to(DATASET_DIR / "corpus")
-                if not g.exists() or not filecmp.cmp(f, g, shallow=False):
-                    diffs.append(str(f.relative_to(DATASET_DIR)))
+        for dirname in ("truth", "corpus", "injects", "extensions", "review"):
+            expected = {f.relative_to(DATASET_DIR) for f in (DATASET_DIR / dirname).rglob("*") if f.is_file() and "__pycache__" not in f.parts}
+            actual = {f.relative_to(tmp) for f in (tmp / dirname).rglob("*") if f.is_file() and "__pycache__" not in f.parts}
+            for rel in sorted(expected | actual):
+                if rel not in expected or rel not in actual or not filecmp.cmp(DATASET_DIR / rel, tmp / rel, shallow=False):
+                    diffs.append(str(rel))
+        archive = "strategy-evaluation-dataset-pytho.zip"
+        if not filecmp.cmp(DATASET_DIR / archive, tmp / archive, shallow=False):
+            diffs.append(archive)
         results.append(validate.Result("repro", not diffs, f"regeneration with seed {args.seed} is byte-identical" if not diffs else f"differs: {diffs[:5]}"))
     from gen import denylist
     hits = denylist.run(DATASET_DIR)

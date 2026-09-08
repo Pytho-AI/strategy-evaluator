@@ -1,0 +1,12 @@
+{"component_id": "ts_energy_c1", "function": "node", "name": "Ilmaran energy system node component", "system_id": "ts_energy"}
+{"component_id": "ts_energy_c2", "function": "link", "name": "Ilmaran energy system link component", "system_id": "ts_energy"}
+{"component_id": "ts_energy_c3", "function": "control", "name": "Ilmaran energy system control component", "system_id": "ts_energy"}
+{"component_id": "ts_maritime_c1", "function": "node", "name": "Kestrel maritime access system node component", "system_id": "ts_maritime"}
+{"component_id": "ts_maritime_c2", "function": "link", "name": "Kestrel maritime access system link component", "system_id": "ts_maritime"}
+{"component_id": "ts_maritime_c3", "function": "control", "name": "Kestrel maritime access system control component", "system_id": "ts_maritime"}
+{"component_id": "ts_strike_c1", "function": "node", "name": "Varenian coastal strike system node component", "system_id": "ts_strike"}
+{"component_id": "ts_strike_c2", "function": "link", "name": "Varenian coastal strike system link component", "system_id": "ts_strike"}
+{"component_id": "ts_strike_c3", "function": "control", "name": "Varenian coastal strike system control component", "system_id": "ts_strike"}
+{"component_id": "ts_sustainment_c1", "function": "node", "name": "Blue theater sustainment system node component", "system_id": "ts_sustainment"}
+{"component_id": "ts_sustainment_c2", "function": "link", "name": "Blue theater sustainment system link component", "system_id": "ts_sustainment"}
+{"component_id": "ts_sustainment_c3", "function": "control", "name": "Blue theater sustainment system control component", "system_id": "ts_sustainment"}

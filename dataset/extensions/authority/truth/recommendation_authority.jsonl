@@ -1,0 +1,4 @@
+{"recommendation_type": "strategy_restate", "risk_level_threshold": "significant", "tier_id": "tier_3"}
+{"recommendation_type": "requirement_submit", "risk_level_threshold": "significant", "tier_id": "tier_3"}
+{"recommendation_type": "claim_approve", "risk_level_threshold": "significant", "tier_id": "tier_3"}
+{"recommendation_type": "problem_set_alert", "risk_level_threshold": "significant", "tier_id": "tier_3"}

@@ -18,6 +18,14 @@ def _d(s):
     return s if isinstance(s, date) else date.fromisoformat(s)
 
 
+def ordinal_rating(value: float, values: list[float]) -> int:
+    """Map an objective contribution to 1–3 without breaking equal-value ties."""
+    levels = sorted(set(values))
+    if len(levels) == 1:
+        return 3
+    return 1 + round(2 * levels.index(value) / (len(levels) - 1))
+
+
 def objective_order(tables: dict, game_id: str, actor_id: str) -> list[str]:
     """Utility-vector order: the actor's objectives of kind `objective` sorted by objective_id."""
     return sorted(o["objective_id"] for o in tables["objectives"] if o["game_id"] == game_id and o["actor_id"] == actor_id and o["kind"] == "objective")
@@ -228,15 +236,13 @@ def recompute(tables: dict, as_of: date, world_version: int, claims: Optional[li
                         e[i] += pw * q * u[i]
             contrib[sid] = e
         for i, oid in enumerate(order):
-            ranked = sorted(valid, key=lambda s: contrib[s["strategy_id"]][i])
+            valid_values = [contrib[s["strategy_id"]][i] for s in valid]
             for s in strategies:
                 so = next((x for x in t["strategy_objectives"] if x["strategy_id"] == s["strategy_id"] and x["objective_id"] == oid), None)
                 if so is None:
                     continue
-                if s in ranked:
-                    n = len(ranked)
-                    pos = ranked.index(s)
-                    so["rating_1_to_3"] = 3 if n == 1 else 1 + round(2 * pos / (n - 1))
+                if s in valid:
+                    so["rating_1_to_3"] = ordinal_rating(contrib[s["strategy_id"]][i], valid_values)
                 else:
                     so["rating_1_to_3"] = 1
     t["distinguishability"] = dist_rows

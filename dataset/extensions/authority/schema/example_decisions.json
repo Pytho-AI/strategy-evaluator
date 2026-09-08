@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action_cost": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "decided_at": {
+      "format": "date",
+      "type": "string"
+    },
+    "decided_by": {
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "approved",
+        "deferred",
+        "denied"
+      ]
+    },
+    "decision_id": {
+      "type": "string"
+    },
+    "evidence_claim_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "object_id": {
+      "type": "string"
+    },
+    "objective_impact": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "recommendation_type": {
+      "enum": [
+        "strategy_restate",
+        "requirement_submit",
+        "claim_approve",
+        "problem_set_alert"
+      ]
+    },
+    "resumed_from_decision_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "risk_level": {
+      "enum": [
+        "low",
+        "moderate",
+        "significant",
+        "high"
+      ]
+    },
+    "risk_score": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "tier_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_id",
+    "recommendation_type",
+    "object_id",
+    "evidence_claim_ids",
+    "action_cost",
+    "objective_impact",
+    "risk_score",
+    "risk_level",
+    "tier_id",
+    "decided_by",
+    "decision",
+    "decided_at",
+    "resumed_from_decision_id"
+  ],
+  "type": "object"
+}

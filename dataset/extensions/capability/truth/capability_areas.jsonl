@@ -1,0 +1,12 @@
+{"actor_id": "ent_blue", "aggregation": "weighted_mean", "area_id": "cap_blue_1", "name": "Force readiness"}
+{"actor_id": "ent_blue", "aggregation": "min", "area_id": "cap_blue_2", "name": "Operational reach"}
+{"actor_id": "ent_blue", "aggregation": "sum", "area_id": "cap_blue_3", "name": "Force capacity"}
+{"actor_id": "ent_blue", "aggregation": "weighted_mean", "area_id": "cap_blue_4", "name": "Sustainment depth"}
+{"actor_id": "ent_blue", "aggregation": "min", "area_id": "cap_blue_5", "name": "Mobility"}
+{"actor_id": "ent_blue", "aggregation": "sum", "area_id": "cap_blue_6", "name": "Resilience"}
+{"actor_id": "ent_varenia", "aggregation": "weighted_mean", "area_id": "cap_red_1", "name": "Force readiness"}
+{"actor_id": "ent_varenia", "aggregation": "min", "area_id": "cap_red_2", "name": "Operational reach"}
+{"actor_id": "ent_varenia", "aggregation": "sum", "area_id": "cap_red_3", "name": "Force capacity"}
+{"actor_id": "ent_varenia", "aggregation": "weighted_mean", "area_id": "cap_red_4", "name": "Sustainment depth"}
+{"actor_id": "ent_varenia", "aggregation": "min", "area_id": "cap_red_5", "name": "Mobility"}
+{"actor_id": "ent_varenia", "aggregation": "sum", "area_id": "cap_red_6", "name": "Resilience"}

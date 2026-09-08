@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "criticality": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "from_entity": {
+      "type": "string"
+    },
+    "link_id": {
+      "type": "string"
+    },
+    "relation": {
+      "type": "string"
+    },
+    "system_id": {
+      "type": "string"
+    },
+    "to_entity": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "link_id",
+    "system_id",
+    "from_entity",
+    "to_entity",
+    "relation",
+    "criticality"
+  ],
+  "type": "object"
+}

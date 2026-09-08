@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "period": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "req_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "period",
+    "asset_id",
+    "req_id"
+  ],
+  "type": "object"
+}

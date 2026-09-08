@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "recommendation_type": {
+      "enum": [
+        "strategy_restate",
+        "requirement_submit",
+        "claim_approve",
+        "problem_set_alert"
+      ]
+    },
+    "risk_level_threshold": {
+      "enum": [
+        "low",
+        "moderate",
+        "significant",
+        "high"
+      ]
+    },
+    "tier_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "recommendation_type",
+    "tier_id",
+    "risk_level_threshold"
+  ],
+  "type": "object"
+}

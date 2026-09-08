@@ -98,3 +98,15 @@ literal-surface proxy. The live LLM baseline was not run because `ANTHROPIC_API_
 Temporal fix at the P7 gate: every rendered claim now preserves its fact's `valid_to`. Two redundant
 multi-valued relationship facts were removed because the frozen invariant permits one approved value
 per `(subject, predicate, valid-time)`; unit `located_at` facts preserve those graph connections.
+
+## P8 — extension layers — PASSED 2026-09-08
+
+Shipped all five required layers plus the optional sixth: 210 RAG questions, 4 target systems,
+12 capability areas with four world-version scores each, 4 authority tiers and 24 example decisions,
+8 collection assets with a greedy baseline, and 600 multi-INT events with 40 percent of observed
+entity IDs withheld. Every extension includes schemas, truth, a licensed README and starter query,
+and an eval result where applicable.
+
+Gate: `pytest tests/test_p8.py` (2 passed). Final `make check` passed the 20 base invariants,
+byte-identical regeneration of truth, corpus, injects, extensions, review samples, and archive,
+the denylist, and all six extension gates.

@@ -1,0 +1,4 @@
+{
+  "truth_vs_truth": 1.0,
+  "method": "tree edge betweenness normalized to the highest edge in each system"
+}

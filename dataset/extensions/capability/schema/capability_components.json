@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "aggregation": {
+      "enum": [
+        "weighted_mean",
+        "min",
+        "sum"
+      ]
+    },
+    "area_id": {
+      "type": "string"
+    },
+    "component_id": {
+      "type": "string"
+    },
+    "normalizer": {
+      "additionalProperties": false,
+      "properties": {
+        "hi": {
+          "type": "number"
+        },
+        "lo": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "lo",
+        "hi"
+      ],
+      "type": "object"
+    },
+    "predicate": {
+      "type": "string"
+    },
+    "subject_id": {
+      "type": "string"
+    },
+    "weight": {
+      "minimum": 0,
+      "type": "number"
+    }
+  },
+  "required": [
+    "component_id",
+    "area_id",
+    "subject_id",
+    "predicate",
+    "weight",
+    "aggregation",
+    "normalizer"
+  ],
+  "type": "object"
+}

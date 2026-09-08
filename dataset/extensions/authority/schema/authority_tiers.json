@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "approver_role": {
+      "type": "string"
+    },
+    "max_reversibility_cost": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "name": {
+      "enum": [
+        "automatic",
+        "J-staff analyst",
+        "J-2/J-5 director",
+        "commander"
+      ]
+    },
+    "tier_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tier_id",
+    "name",
+    "approver_role",
+    "max_reversibility_cost"
+  ],
+  "type": "object"
+}

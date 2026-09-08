@@ -10,20 +10,24 @@ one command.
 Prints a single table `gate → PASS/FAIL`: schema load, invariants 01–20, reproducibility diff
 against a fresh regeneration. Nothing else on success. `make test` runs the pytest gates per phase.
 
-## Current phase: P7 (base release package)
+## Current phase: P8 (extensions and final package)
 
 Files to open and the question to answer while reading:
 
 1. `dataset/DATA_CARD.md` — does it state the contents, limits, model use, fiction notice, license,
    doctrine, and computable extensions without making an unsupported claim?
-2. `dataset/review/samples/coa_statement_src_0060.md` — could a J-5 planner brief the course of action
+2. `dataset/extensions/rag_qa/truth/questions.jsonl` — do single-hop, joined, temporal, absent-answer,
+   and doctrinal questions contain enough gold evidence to score an answer?
+3. `dataset/extensions/target_systems/truth/system_links.jsonl` — are the four fictional systems
+   useful test graphs, and is computed criticality clearly distinguished from JP 3-60 judgment?
+4. `dataset/review/samples/coa_statement_src_0060.md` — could a J-5 planner brief the course of action
    as written, and do the claim spans below it support the source text?
-3. Open three `dataset/review/samples/risk_context_*.md` products and read their risk statements
+5. Open three `dataset/review/samples/risk_context_*.md` products and read their risk statements
    against JRAM Figure 11. Does each slot map to the figure?
-4. `dataset/injects/batch_2/manifest.json` — does the evidence support closing `req_01`, and are every
+6. `dataset/injects/batch_2/manifest.json` — does the evidence support closing `req_01`, and are every
    listed strategy, risk, and collection effect caused by this batch?
 
-Gate: `pytest tests/test_p7.py` (1 passed), followed by `make check` (all gates passed).
+Gate: `pytest tests/test_p8.py` (2 passed), full `pytest` (35 passed), then `make check` (all gates passed).
 
 ## Previous phase: P0 (schemas and contract)
 

@@ -1,0 +1,4 @@
+{"tactic_class": "observe", "tier_id": "tier_1"}
+{"tactic_class": "collect", "tier_id": "tier_2"}
+{"tactic_class": "reposition", "tier_id": "tier_3"}
+{"tactic_class": "engage", "tier_id": "tier_4"}

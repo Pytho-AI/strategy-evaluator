@@ -1,7 +1,7 @@
 ## Goal
 Finish all work in CLAUDE_CODE_PROMPT_dataset_and_schemas_v2.md and its referenced v1 prompt from Downloads.
 ## Now
-P7 passed. Record its Git gate, then build P8 extension layers in priority order.
+P8 focused gate passed. Run final suite, inspect install from zip, commit and upload the archive.
 ## Next
 1. Repair facts history; gate: tests/test_p0.py and tests/test_p1.py.
 2. P2: strategies, payoff tensors, grounding graph, validity; gate: tests/test_p2.py.
@@ -35,6 +35,7 @@ gen/scenario_data.py: entities 1-138, facts/injects 139-263, guidance/objectives
 Recovery: git history confirms P0/P1 commits; baseline pytest: 7 passed, 1 failed at tests/test_p1.py:53.
 Read global user instructions, guardrails PLAN/CODE/DEBUG/EFFICIENCY/SESSION/TRAPS, and PDF skill.
 P2–P7 focused gates pass; P7 `make check` passes schema, invariants 01–20, reproducibility, denylist.
+P8 ships five required extensions plus optional events; focused test and integrated extension gates pass.
 ## Open items
 Audit agent contract_audit examines existing evaluator/model/validator defects without editing.
 LLM rendering/baseline credentials and capability not yet established; no model baseline result may be fabricated.

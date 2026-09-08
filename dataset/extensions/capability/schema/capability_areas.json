@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "type": "string"
+    },
+    "aggregation": {
+      "enum": [
+        "weighted_mean",
+        "min",
+        "sum"
+      ]
+    },
+    "area_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "area_id",
+    "actor_id",
+    "name",
+    "aggregation"
+  ],
+  "type": "object"
+}

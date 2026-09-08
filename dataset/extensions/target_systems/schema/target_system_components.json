@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "component_id": {
+      "type": "string"
+    },
+    "function": {
+      "enum": [
+        "node",
+        "link",
+        "control",
+        "input",
+        "output"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "system_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "component_id",
+    "system_id",
+    "name",
+    "function"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "answer_claim_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "answer_value": {},
+    "as_of": {
+      "format": "date",
+      "type": "string"
+    },
+    "difficulty": {
+      "enum": [
+        "single_hop",
+        "multi_hop",
+        "temporal",
+        "unanswerable",
+        "doctrinal"
+      ]
+    },
+    "doctrine_citation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "question": {
+      "type": "string"
+    },
+    "question_id": {
+      "type": "string"
+    },
+    "question_type": {
+      "enum": [
+        "single_hop",
+        "multi_hop",
+        "temporal",
+        "unanswerable",
+        "doctrinal"
+      ]
+    }
+  },
+  "required": [
+    "question_id",
+    "question",
+    "answer_claim_ids",
+    "answer_value",
+    "difficulty",
+    "question_type",
+    "as_of",
+    "doctrine_citation"
+  ],
+  "type": "object"
+}

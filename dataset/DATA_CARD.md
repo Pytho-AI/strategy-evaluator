@@ -13,7 +13,7 @@ A deterministic synthetic corpus and relational truth set for testing claim extr
 
 ## Size
 
-The base release contains 92 documents, 864 claims, 122 entities, 9 strategies, 66 worlds. Counts include the three inject batches.
+The base release contains 92 documents, 864 claims, 122 entities, 9 strategies, 66 worlds. Counts include the three inject batches. Shipped extensions are `rag_qa`, `target_systems`, `capability`, `authority`, `collection_assets`, and the optional `events` layer with 600 records.
 
 ## Schema summary
 

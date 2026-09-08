@@ -1,0 +1,14 @@
+{"criticality": 0.75, "from_entity": "inf_aldis_terminal", "link_id": "ts_energy_l1", "relation": "supports", "system_id": "ts_energy", "to_entity": "inf_veyra_station"}
+{"criticality": 1.0, "from_entity": "inf_veyra_station", "link_id": "ts_energy_l2", "relation": "supports", "system_id": "ts_energy", "to_entity": "inf_ilmara_grid_control"}
+{"criticality": 0.75, "from_entity": "inf_ilmara_grid_control", "link_id": "ts_energy_l3", "relation": "supports", "system_id": "ts_energy", "to_entity": "loc_lisenne"}
+{"criticality": 0.666667, "from_entity": "inf_kestrel_lane", "link_id": "ts_maritime_l1", "relation": "supports", "system_id": "ts_maritime", "to_entity": "inf_kestrel_cable"}
+{"criticality": 1.0, "from_entity": "inf_kestrel_cable", "link_id": "ts_maritime_l2", "relation": "supports", "system_id": "ts_maritime", "to_entity": "loc_kestrel_strait"}
+{"criticality": 1.0, "from_entity": "loc_kestrel_strait", "link_id": "ts_maritime_l3", "relation": "supports", "system_id": "ts_maritime", "to_entity": "unit_tg_kestrel"}
+{"criticality": 0.666667, "from_entity": "unit_tg_kestrel", "link_id": "ts_maritime_l4", "relation": "supports", "system_id": "ts_maritime", "to_entity": "inf_dorne_radar"}
+{"criticality": 0.75, "from_entity": "inf_dorne_radar", "link_id": "ts_strike_l1", "relation": "supports", "system_id": "ts_strike", "to_entity": "unit_var_coastal_msl_bde"}
+{"criticality": 1.0, "from_entity": "unit_var_coastal_msl_bde", "link_id": "ts_strike_l2", "relation": "supports", "system_id": "ts_strike", "to_entity": "sys_dorne_asm"}
+{"criticality": 0.75, "from_entity": "sys_dorne_asm", "link_id": "ts_strike_l3", "relation": "supports", "system_id": "ts_strike", "to_entity": "unit_var_directorate_nine"}
+{"criticality": 0.666667, "from_entity": "loc_port_auberon", "link_id": "ts_sustainment_l1", "relation": "supports", "system_id": "ts_sustainment", "to_entity": "inf_blue_logistics_network"}
+{"criticality": 1.0, "from_entity": "inf_blue_logistics_network", "link_id": "ts_sustainment_l2", "relation": "supports", "system_id": "ts_sustainment", "to_entity": "unit_meridian_log_group"}
+{"criticality": 1.0, "from_entity": "unit_meridian_log_group", "link_id": "ts_sustainment_l3", "relation": "supports", "system_id": "ts_sustainment", "to_entity": "inf_auberon_halden_airbridge"}
+{"criticality": 0.666667, "from_entity": "inf_auberon_halden_airbridge", "link_id": "ts_sustainment_l4", "relation": "supports", "system_id": "ts_sustainment", "to_entity": "loc_halden_airfield"}

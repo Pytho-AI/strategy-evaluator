@@ -1,0 +1,8 @@
+{"asset_id": "asset_01", "capacity_per_period": 1, "cost_per_task": 0.1, "name": "Northstar imaging section", "owner_org": "Meridian Surveillance Detachment"}
+{"asset_id": "asset_02", "capacity_per_period": 2, "cost_per_task": 0.15, "name": "Tern signals team", "owner_org": "Joint Task Force Meridian J-2"}
+{"asset_id": "asset_03", "capacity_per_period": 1, "cost_per_task": 0.2, "name": "Harbor liaison network", "owner_org": "Ilmaran partner cell"}
+{"asset_id": "asset_04", "capacity_per_period": 2, "cost_per_task": 0.25, "name": "Open-source watch", "owner_org": "Joint Task Force Meridian J-2"}
+{"asset_id": "asset_05", "capacity_per_period": 1, "cost_per_task": 0.3, "name": "Spectral survey flight", "owner_org": "Auberon Air Expeditionary Wing"}
+{"asset_id": "asset_06", "capacity_per_period": 2, "cost_per_task": 0.35, "name": "Kestrel patrol reporting", "owner_org": "Task Group Kestrel"}
+{"asset_id": "asset_07", "capacity_per_period": 1, "cost_per_task": 0.4, "name": "Halden observation team", "owner_org": "Halden Brigade"}
+{"asset_id": "asset_08", "capacity_per_period": 2, "cost_per_task": 0.45, "name": "Grid technical liaison", "owner_org": "Ilmaran partner cell"}

@@ -10,6 +10,18 @@ from eval.baseline import run_surface_baseline
 
 NAME = "strategy-evaluation-dataset-pytho"
 FICTION_NOTICE = "All content is fictional. No real persons, polities, organizations, or systems."
+LICENSE_TEXT = """Creative Commons Attribution 4.0 International
+
+The synthetic scenario, generated corpus, schemas, and team-authored code and documentation are
+licensed under the Creative Commons Attribution 4.0 International License. You may share and adapt
+the material for any purpose if you give appropriate credit, link to the license, and indicate
+whether changes were made.
+
+License text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+The cited doctrine source documents are not relicensed by this notice and remain subject to their
+source terms.
+"""
 
 
 def _write(path: Path, text: str) -> None:
@@ -47,7 +59,7 @@ A deterministic synthetic corpus and relational truth set for testing claim extr
 
 ## Size
 
-The base release contains {size}. Counts include the three inject batches.
+The base release contains {size}. Counts include the three inject batches. Shipped extensions are `rag_qa`, `target_systems`, `capability`, `authority`, `collection_assets`, and the optional `events` layer with 600 records.
 
 ## Schema summary
 
@@ -101,12 +113,12 @@ def _matrix() -> str:
 | Collection Management | pirs, collection_requirements, assumptions, claims | Y | shipped | JP 2-01 Ch. III §13 and Fig. III-8 |
 | Interconnected Risk | problem_sets, harmful_events, risk_drivers, risk_assessments, escalation_edges | Y | shipped | CJCSM 3105.01C Figs. 5, 6, 8, 11, 12, 22, 23, 26, 28 |
 | Strategy Option Evaluation | games, strategies, payoffs, assumptions, objectives, resources | Y | shipped | JP 5-0 COA development and comparison |
-| RAG Intelligence Service | questions | Y | P8 | ICD 203 and cited doctrine definitions |
-| Target System Object Development | systems, target_system_components, system_members, system_links, target_characteristics | Y | P8 | JP 3-60 Ch. I and Glossary |
-| Capability Assessment Visualization | capability_areas, capability_components, capability_scores | Y | P8 | Dataset computation |
-| Mission Authority Broker | authority_tiers, action_authority, recommendation_authority, decision_log | Y | P8 | JRAM senior-leader risk communication |
-| Dynamic Collection Resource Optimization | assets, asset_coverage, tasking_plan | Y | P8 | JP 2-01 collection management |
-| Multi-INT Fusion | events | Y | P8 optional | Synthetic event streams |
+| RAG Intelligence Service | questions | Y | shipped | ICD 203 and cited doctrine definitions |
+| Target System Object Development | systems, target_system_components, system_members, system_links, target_characteristics | Y | shipped | JP 3-60 Ch. I and Glossary |
+| Capability Assessment Visualization | capability_areas, capability_components, capability_scores | Y | shipped | Dataset computation |
+| Mission Authority Broker | authority_tiers, action_authority, recommendation_authority, decision_log | Y | shipped | JRAM senior-leader risk communication |
+| Dynamic Collection Resource Optimization | assets, asset_coverage, tasking_plan | Y | shipped | JP 2-01 collection management |
+| Multi-INT Fusion | events | Y | shipped (optional) | Synthetic event streams |
 """
 
 
@@ -143,7 +155,8 @@ To list claims carried by stale-echo sources:
 ```python
 from dataset import load
 d = load()
-sources = d["sources"].query("perturbations.apply(lambda x: 'stale_echo' in x)")
+sources = d["sources"]
+sources = sources[sources["perturbations"].apply(lambda values: "stale_echo" in values)]
 print(d["claims"].merge(sources[["source_id", "path"]], on="source_id"))
 ```
 
@@ -194,5 +207,6 @@ def build(ctx) -> None:
     _write(root / "USE_CASE_MATRIX.md", _matrix())
     _write(root / "eval" / "README.md", _eval_readme(baseline))
     _write(root / "gen" / "README.md", _gen_readme())
+    _write(root / "LICENSE", LICENSE_TEXT)
     _review_samples(ctx)
     _archive(root)

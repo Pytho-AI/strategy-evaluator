@@ -111,27 +111,27 @@ def _effects(before, after):
     pa, pb = pmap(before), pmap(after)
     qa, qb = qmap(before), qmap(after)
     assumptions = [dict(assumption_id=k, **{'from': aa[k]['status'], 'to': ab[k]['status']})
-                   for k in aa.keys() & ab.keys() if aa[k]['status'] != ab[k]['status']]
+                   for k in sorted(aa.keys() & ab.keys()) if aa[k]['status'] != ab[k]['status']]
     restated = [dict(strategy_id=k, value_before=sa[k]['value'], value_after=sb[k]['value'],
                      status_before=sa[k]['status'], status_after=sb[k]['status'])
-                for k in sa.keys() & sb.keys() if (sa[k]['value'], sa[k]['status']) != (sb[k]['value'], sb[k]['status'])]
+                for k in sorted(sa.keys() & sb.keys()) if (sa[k]['value'], sa[k]['status']) != (sb[k]['value'], sb[k]['status'])]
     risks = [dict(he_id=k[0], horizon=k[1], level_before=ra[k]['risk_level'], level_after=rb[k]['risk_level'],
                   trend_after=rb[k]['trend'], p_before=ra[k]['p_raw'], p_after=rb[k]['p_raw'])
-             for k in ra.keys() & rb.keys() if (ra[k]['risk_level'], ra[k]['trend'], ra[k]['p_raw']) !=
+             for k in sorted(ra.keys() & rb.keys()) if (ra[k]['risk_level'], ra[k]['trend'], ra[k]['p_raw']) !=
              (rb[k]['risk_level'], rb[k]['trend'], rb[k]['p_raw'])]
     problems = [dict(problem_set_id=k[0], jsps_horizon=k[1], level_before=pa[k]['max_risk_level'],
-                     level_after=pb[k]['max_risk_level']) for k in pa.keys() & pb.keys()
+                     level_after=pb[k]['max_risk_level']) for k in sorted(pa.keys() & pb.keys())
                 if pa[k]['max_risk_level'] != pb[k]['max_risk_level']]
     validity = [dict(strategy_id=k, test=test, before=sa[k]['validity'][test]['pass'],
-                     after=sb[k]['validity'][test]['pass']) for k in sa.keys() & sb.keys()
+                     after=sb[k]['validity'][test]['pass']) for k in sorted(sa.keys() & sb.keys())
                 for test in sa[k]['validity'] if sa[k]['validity'][test]['pass'] != sb[k]['validity'][test]['pass']]
     jipcl = [dict(req_id=k, rank_before=qa[k]['jipcl_rank'], rank_after=qb[k]['jipcl_rank'],
                   status_before=qa[k]['status'], status_after=qb[k]['status'])
-             for k in qa.keys() & qb.keys() if (qa[k]['jipcl_rank'], qa[k]['status']) !=
+             for k in sorted(qa.keys() & qb.keys()) if (qa[k]['jipcl_rank'], qa[k]['status']) !=
              (qb[k]['jipcl_rank'], qb[k]['status'])]
     return dict(assumptions_changed=assumptions, strategies_restated=restated,
         ranking_before=ranking(before, 'meridian', 'ent_blue'), ranking_after=ranking(after, 'meridian', 'ent_blue'),
-        requirements_closed=[k for k in qa.keys() & qb.keys() if qa[k]['status'] not in ('satisfaction', 'closed') and qb[k]['status'] in ('satisfaction', 'closed')],
+        requirements_closed=[k for k in sorted(qa.keys() & qb.keys()) if qa[k]['status'] not in ('satisfaction', 'closed') and qb[k]['status'] in ('satisfaction', 'closed')],
         problem_sets_moved=problems, risk_assessments_changed=risks, validity_changed=validity, jipcl_changed=jipcl)
 
 

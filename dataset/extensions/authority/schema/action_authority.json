@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "tactic_class": {
+      "type": "string"
+    },
+    "tier_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tactic_class",
+    "tier_id"
+  ],
+  "type": "object"
+}

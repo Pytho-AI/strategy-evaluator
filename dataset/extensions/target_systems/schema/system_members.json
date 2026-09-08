@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "component_id": {
+      "type": "string"
+    },
+    "entity_id": {
+      "type": "string"
+    },
+    "system_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "system_id",
+    "component_id",
+    "entity_id"
+  ],
+  "type": "object"
+}

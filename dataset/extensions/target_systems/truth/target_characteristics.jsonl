@@ -1,0 +1,90 @@
+{"characteristic_type": "physical", "entity_id": "inf_aldis_terminal", "system_id": "ts_energy", "value": "Aldis gas terminal: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_aldis_terminal", "system_id": "ts_energy", "value": "Aldis gas terminal: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_aldis_terminal", "system_id": "ts_energy", "value": "Aldis gas terminal: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_aldis_terminal", "system_id": "ts_energy", "value": "Aldis gas terminal: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_aldis_terminal", "system_id": "ts_energy", "value": "Aldis gas terminal: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_veyra_station", "system_id": "ts_energy", "value": "Veyra power station: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_veyra_station", "system_id": "ts_energy", "value": "Veyra power station: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_veyra_station", "system_id": "ts_energy", "value": "Veyra power station: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_veyra_station", "system_id": "ts_energy", "value": "Veyra power station: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_veyra_station", "system_id": "ts_energy", "value": "Veyra power station: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_ilmara_grid_control", "system_id": "ts_energy", "value": "Ilmaran grid control network: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_ilmara_grid_control", "system_id": "ts_energy", "value": "Ilmaran grid control network: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_ilmara_grid_control", "system_id": "ts_energy", "value": "Ilmaran grid control network: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_ilmara_grid_control", "system_id": "ts_energy", "value": "Ilmaran grid control network: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_ilmara_grid_control", "system_id": "ts_energy", "value": "Ilmaran grid control network: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "loc_lisenne", "system_id": "ts_energy", "value": "Lisenne: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "loc_lisenne", "system_id": "ts_energy", "value": "Lisenne: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "loc_lisenne", "system_id": "ts_energy", "value": "Lisenne: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "loc_lisenne", "system_id": "ts_energy", "value": "Lisenne: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "loc_lisenne", "system_id": "ts_energy", "value": "Lisenne: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_kestrel_lane", "system_id": "ts_maritime", "value": "Kestrel Strait sea lane: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_kestrel_lane", "system_id": "ts_maritime", "value": "Kestrel Strait sea lane: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_kestrel_lane", "system_id": "ts_maritime", "value": "Kestrel Strait sea lane: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_kestrel_lane", "system_id": "ts_maritime", "value": "Kestrel Strait sea lane: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_kestrel_lane", "system_id": "ts_maritime", "value": "Kestrel Strait sea lane: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_kestrel_cable", "system_id": "ts_maritime", "value": "Kestrel undersea cable: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_kestrel_cable", "system_id": "ts_maritime", "value": "Kestrel undersea cable: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_kestrel_cable", "system_id": "ts_maritime", "value": "Kestrel undersea cable: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_kestrel_cable", "system_id": "ts_maritime", "value": "Kestrel undersea cable: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_kestrel_cable", "system_id": "ts_maritime", "value": "Kestrel undersea cable: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "loc_kestrel_strait", "system_id": "ts_maritime", "value": "Kestrel Strait: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "loc_kestrel_strait", "system_id": "ts_maritime", "value": "Kestrel Strait: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "loc_kestrel_strait", "system_id": "ts_maritime", "value": "Kestrel Strait: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "loc_kestrel_strait", "system_id": "ts_maritime", "value": "Kestrel Strait: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "loc_kestrel_strait", "system_id": "ts_maritime", "value": "Kestrel Strait: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "unit_tg_kestrel", "system_id": "ts_maritime", "value": "Task Group Kestrel: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "unit_tg_kestrel", "system_id": "ts_maritime", "value": "Task Group Kestrel: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "unit_tg_kestrel", "system_id": "ts_maritime", "value": "Task Group Kestrel: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "unit_tg_kestrel", "system_id": "ts_maritime", "value": "Task Group Kestrel: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "unit_tg_kestrel", "system_id": "ts_maritime", "value": "Task Group Kestrel: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_dorne_radar", "system_id": "ts_maritime", "value": "Dorne coastal radar: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_dorne_radar", "system_id": "ts_maritime", "value": "Dorne coastal radar: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_dorne_radar", "system_id": "ts_maritime", "value": "Dorne coastal radar: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_dorne_radar", "system_id": "ts_maritime", "value": "Dorne coastal radar: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_dorne_radar", "system_id": "ts_maritime", "value": "Dorne coastal radar: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_dorne_radar", "system_id": "ts_strike", "value": "Dorne coastal radar: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_dorne_radar", "system_id": "ts_strike", "value": "Dorne coastal radar: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_dorne_radar", "system_id": "ts_strike", "value": "Dorne coastal radar: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_dorne_radar", "system_id": "ts_strike", "value": "Dorne coastal radar: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_dorne_radar", "system_id": "ts_strike", "value": "Dorne coastal radar: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "unit_var_coastal_msl_bde", "system_id": "ts_strike", "value": "7th Coastal Missile Brigade: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "unit_var_coastal_msl_bde", "system_id": "ts_strike", "value": "7th Coastal Missile Brigade: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "unit_var_coastal_msl_bde", "system_id": "ts_strike", "value": "7th Coastal Missile Brigade: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "unit_var_coastal_msl_bde", "system_id": "ts_strike", "value": "7th Coastal Missile Brigade: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "unit_var_coastal_msl_bde", "system_id": "ts_strike", "value": "7th Coastal Missile Brigade: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "sys_dorne_asm", "system_id": "ts_strike", "value": "Dorne-3 coastal anti-ship missile: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "sys_dorne_asm", "system_id": "ts_strike", "value": "Dorne-3 coastal anti-ship missile: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "sys_dorne_asm", "system_id": "ts_strike", "value": "Dorne-3 coastal anti-ship missile: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "sys_dorne_asm", "system_id": "ts_strike", "value": "Dorne-3 coastal anti-ship missile: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "sys_dorne_asm", "system_id": "ts_strike", "value": "Dorne-3 coastal anti-ship missile: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "unit_var_directorate_nine", "system_id": "ts_strike", "value": "Varenian Signals Directorate Nine: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "unit_var_directorate_nine", "system_id": "ts_strike", "value": "Varenian Signals Directorate Nine: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "unit_var_directorate_nine", "system_id": "ts_strike", "value": "Varenian Signals Directorate Nine: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "unit_var_directorate_nine", "system_id": "ts_strike", "value": "Varenian Signals Directorate Nine: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "unit_var_directorate_nine", "system_id": "ts_strike", "value": "Varenian Signals Directorate Nine: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "loc_port_auberon", "system_id": "ts_sustainment", "value": "Port Auberon: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "loc_port_auberon", "system_id": "ts_sustainment", "value": "Port Auberon: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "loc_port_auberon", "system_id": "ts_sustainment", "value": "Port Auberon: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "loc_port_auberon", "system_id": "ts_sustainment", "value": "Port Auberon: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "loc_port_auberon", "system_id": "ts_sustainment", "value": "Port Auberon: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_blue_logistics_network", "system_id": "ts_sustainment", "value": "Blue logistics network: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_blue_logistics_network", "system_id": "ts_sustainment", "value": "Blue logistics network: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_blue_logistics_network", "system_id": "ts_sustainment", "value": "Blue logistics network: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_blue_logistics_network", "system_id": "ts_sustainment", "value": "Blue logistics network: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_blue_logistics_network", "system_id": "ts_sustainment", "value": "Blue logistics network: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "unit_meridian_log_group", "system_id": "ts_sustainment", "value": "Meridian Logistics Group: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "unit_meridian_log_group", "system_id": "ts_sustainment", "value": "Meridian Logistics Group: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "unit_meridian_log_group", "system_id": "ts_sustainment", "value": "Meridian Logistics Group: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "unit_meridian_log_group", "system_id": "ts_sustainment", "value": "Meridian Logistics Group: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "unit_meridian_log_group", "system_id": "ts_sustainment", "value": "Meridian Logistics Group: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "inf_auberon_halden_airbridge", "system_id": "ts_sustainment", "value": "Auberon–Halden air bridge: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "inf_auberon_halden_airbridge", "system_id": "ts_sustainment", "value": "Auberon–Halden air bridge: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "inf_auberon_halden_airbridge", "system_id": "ts_sustainment", "value": "Auberon–Halden air bridge: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "inf_auberon_halden_airbridge", "system_id": "ts_sustainment", "value": "Auberon–Halden air bridge: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "inf_auberon_halden_airbridge", "system_id": "ts_sustainment", "value": "Auberon–Halden air bridge: Availability and effect can change across inject batches"}
+{"characteristic_type": "physical", "entity_id": "loc_halden_airfield", "system_id": "ts_sustainment", "value": "Halden Airfield: Observable physical location and condition"}
+{"characteristic_type": "functional", "entity_id": "loc_halden_airfield", "system_id": "ts_sustainment", "value": "Halden Airfield: Performs the assigned system function"}
+{"characteristic_type": "cognitive_control_informational", "entity_id": "loc_halden_airfield", "system_id": "ts_sustainment", "value": "Halden Airfield: Depends on reporting, control, or operator decisions"}
+{"characteristic_type": "environmental", "entity_id": "loc_halden_airfield", "system_id": "ts_sustainment", "value": "Halden Airfield: Affected by the fictional Meridian Sea operating environment"}
+{"characteristic_type": "temporal", "entity_id": "loc_halden_airfield", "system_id": "ts_sustainment", "value": "Halden Airfield: Availability and effect can change across inject batches"}

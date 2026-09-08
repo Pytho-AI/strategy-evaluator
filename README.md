@@ -1,4 +1,4 @@
-# claimgraph-dataset
+# strategy-evaluation-dataset-pytho
 
 Dataset generator and schema contract for a claim-graph prototype that serves four sponsor
 use cases (foundational data ingestion, collection management, interconnected risk, strategy

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "capacity_per_period": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "cost_per_task": {
+      "minimum": 0,
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "owner_org": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "asset_id",
+    "name",
+    "owner_org",
+    "capacity_per_period",
+    "cost_per_task"
+  ],
+  "type": "object"
+}

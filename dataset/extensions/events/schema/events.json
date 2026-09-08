@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "entity_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "location_id": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "stream": {
+      "enum": [
+        "ais_like",
+        "rf_like",
+        "social_like"
+      ]
+    },
+    "truth_entity_id": {
+      "type": "string"
+    },
+    "ts": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "ts",
+    "stream",
+    "entity_id",
+    "location_id",
+    "payload",
+    "truth_entity_id"
+  ],
+  "type": "object"
+}
