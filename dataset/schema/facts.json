@@ -1,0 +1,222 @@
+{
+  "$defs": {
+    "ConfidenceICD203": {
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ],
+      "title": "ConfidenceICD203",
+      "type": "string"
+    },
+    "LikelihoodICD203": {
+      "enum": [
+        "almost_no_chance",
+        "very_unlikely",
+        "unlikely",
+        "roughly_even_chance",
+        "likely",
+        "very_likely",
+        "almost_certain"
+      ],
+      "title": "LikelihoodICD203",
+      "type": "string"
+    },
+    "Predicate": {
+      "description": "Controlled predicate vocabulary (DATASET). value_type/unit per predicate in PREDICATES.",
+      "enum": [
+        "range_km",
+        "count",
+        "readiness",
+        "status",
+        "throughput_per_day",
+        "alignment",
+        "basing_access",
+        "mobilization_days",
+        "mobilized_brigades",
+        "cyber_capacity",
+        "munitions_stock_days",
+        "posture_state",
+        "capacity_mw",
+        "displaced_persons",
+        "outage_hours",
+        "intent",
+        "mixing_bias",
+        "located_at",
+        "operated_by",
+        "subordinate_to",
+        "supplies",
+        "controls",
+        "hosts"
+      ],
+      "title": "Predicate",
+      "type": "string"
+    },
+    "ValueType": {
+      "enum": [
+        "entity",
+        "number",
+        "string",
+        "bool",
+        "date"
+      ],
+      "title": "ValueType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "predicate": {
+      "$ref": "#/$defs/Predicate"
+    },
+    "object_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Object Id"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value"
+    },
+    "value_type": {
+      "$ref": "#/$defs/ValueType"
+    },
+    "unit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unit"
+    },
+    "valid_from": {
+      "format": "date",
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_to": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid To"
+    },
+    "estimative": {
+      "default": false,
+      "title": "Estimative",
+      "type": "boolean"
+    },
+    "likelihood_icd203": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LikelihoodICD203"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "confidence_icd203": {
+      "$ref": "#/$defs/ConfidenceICD203"
+    },
+    "confidence": {
+      "description": "DERIVED per SCHEMA.md \u00a7confidence",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "fact_id": {
+      "pattern": "^fct_[a-z0-9_]+$",
+      "title": "Fact Id",
+      "type": "string"
+    },
+    "supersedes_fact_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "the earlier fact on the same (subject, predicate) this one replaces: together they are a change event",
+      "title": "Supersedes Fact Id"
+    },
+    "first_asserted_batch": {
+      "description": "0 = asserted by a T0 document; n = first asserted by inject batch n",
+      "maximum": 3,
+      "minimum": 0,
+      "title": "First Asserted Batch",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "subject_id",
+    "predicate",
+    "value_type",
+    "valid_from",
+    "confidence_icd203",
+    "confidence",
+    "fact_id",
+    "first_asserted_batch"
+  ],
+  "title": "facts",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/facts.json",
+  "description": "truth/ only: the canonical world documents are rendered from; change events are supersedes_fact_id pairs.",
+  "x-primary-key": [
+    "fact_id"
+  ],
+  "x-foreign-keys": {
+    "subject_id": "entities.entity_id",
+    "object_id": "entities.entity_id",
+    "supersedes_fact_id": "facts.fact_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "confidence"
+  ],
+  "x-truth-only": true
+}

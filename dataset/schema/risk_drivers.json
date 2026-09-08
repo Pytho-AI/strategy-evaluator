@@ -1,0 +1,154 @@
+{
+  "$defs": {
+    "CmpOp": {
+      "enum": [
+        "==",
+        "!=",
+        "<",
+        "<=",
+        ">",
+        ">=",
+        "abs_le",
+        "in"
+      ],
+      "title": "CmpOp",
+      "type": "string"
+    },
+    "DriverKind": {
+      "enum": [
+        "frequency",
+        "vulnerability",
+        "resilience",
+        "criticality",
+        "accessibility",
+        "recognition",
+        "impact",
+        "resources",
+        "response",
+        "reliance"
+      ],
+      "title": "DriverKind",
+      "type": "string"
+    },
+    "DriverLocus": {
+      "enum": [
+        "internal",
+        "external"
+      ],
+      "title": "DriverLocus",
+      "type": "string"
+    },
+    "Predicate": {
+      "description": "Controlled predicate vocabulary (DATASET). value_type/unit per predicate in PREDICATES.",
+      "enum": [
+        "range_km",
+        "count",
+        "readiness",
+        "status",
+        "throughput_per_day",
+        "alignment",
+        "basing_access",
+        "mobilization_days",
+        "mobilized_brigades",
+        "cyber_capacity",
+        "munitions_stock_days",
+        "posture_state",
+        "capacity_mw",
+        "displaced_persons",
+        "outage_hours",
+        "intent",
+        "mixing_bias",
+        "located_at",
+        "operated_by",
+        "subordinate_to",
+        "supplies",
+        "controls",
+        "hosts"
+      ],
+      "title": "Predicate",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "driver_id": {
+      "pattern": "^rd_[a-z0-9_]+$",
+      "title": "Driver Id",
+      "type": "string"
+    },
+    "he_id": {
+      "title": "He Id",
+      "type": "string"
+    },
+    "claim_subject_id": {
+      "title": "Claim Subject Id",
+      "type": "string"
+    },
+    "claim_predicate": {
+      "$ref": "#/$defs/Predicate"
+    },
+    "driver_kind": {
+      "$ref": "#/$defs/DriverKind"
+    },
+    "locus": {
+      "$ref": "#/$defs/DriverLocus"
+    },
+    "op": {
+      "$ref": "#/$defs/CmpOp"
+    },
+    "value": {
+      "default": null,
+      "title": "Value"
+    },
+    "delta": {
+      "description": "added to P_raw when the current approved claim satisfies (op, value)",
+      "maximum": 1.0,
+      "minimum": -1.0,
+      "title": "Delta",
+      "type": "number"
+    },
+    "horizons": {
+      "items": {
+        "enum": [
+          "near",
+          "mid",
+          "long"
+        ],
+        "type": "string"
+      },
+      "title": "Horizons",
+      "type": "array"
+    },
+    "label": {
+      "description": "short phrase for the Fig. 11 [key drivers] slot",
+      "title": "Label",
+      "type": "string"
+    }
+  },
+  "required": [
+    "driver_id",
+    "he_id",
+    "claim_subject_id",
+    "claim_predicate",
+    "driver_kind",
+    "locus",
+    "op",
+    "delta",
+    "label"
+  ],
+  "title": "risk_drivers",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/risk_drivers.json",
+  "description": "Drivers of risk: claim terms that move P_raw.",
+  "x-primary-key": [
+    "driver_id"
+  ],
+  "x-foreign-keys": {
+    "he_id": "harmful_events.he_id",
+    "claim_subject_id": "entities.entity_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

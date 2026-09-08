@@ -1,0 +1,225 @@
+{
+  "$defs": {
+    "CLevel": {
+      "enum": [
+        "minor",
+        "modest",
+        "major",
+        "extreme"
+      ],
+      "title": "CLevel",
+      "type": "string"
+    },
+    "DamageDegree": {
+      "enum": [
+        "confined",
+        "considerable",
+        "catastrophic",
+        "existential"
+      ],
+      "title": "DamageDegree",
+      "type": "string"
+    },
+    "HarmCondition": {
+      "enum": [
+        "action",
+        "inaction",
+        "posture",
+        "plan"
+      ],
+      "title": "HarmCondition",
+      "type": "string"
+    },
+    "RiskSubset": {
+      "enum": [
+        "operational",
+        "projected_mission",
+        "force_management",
+        "institutional"
+      ],
+      "title": "RiskSubset",
+      "type": "string"
+    },
+    "RiskType": {
+      "enum": [
+        "MSR",
+        "MR"
+      ],
+      "title": "RiskType",
+      "type": "string"
+    },
+    "StrategicValue": {
+      "enum": [
+        "homeland_vital",
+        "ally_global",
+        "partner_regional",
+        "other_local"
+      ],
+      "title": "StrategicValue",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "he_id": {
+      "pattern": "^he_[a-z0-9_]+$",
+      "title": "He Id",
+      "type": "string"
+    },
+    "problem_set_id": {
+      "title": "Problem Set Id",
+      "type": "string"
+    },
+    "statement": {
+      "description": "the harmful event phrase used in the Fig. 11 [harmful event] slot",
+      "title": "Statement",
+      "type": "string"
+    },
+    "thing_of_value_id": {
+      "description": "FK objectives",
+      "title": "Thing Of Value Id",
+      "type": "string"
+    },
+    "risk_type": {
+      "$ref": "#/$defs/RiskType"
+    },
+    "risk_subset": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RiskSubset"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "strategic_value": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StrategicValue"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "damage_degree": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DamageDegree"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "fig28_row": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fig28 Row"
+    },
+    "fig28_cell": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CLevel"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "MR only: the Fig. 28 cell (column) of fig28_row the assessor expects; MR consequence level"
+    },
+    "base_p": {
+      "description": "baseline probability before drivers and cascade",
+      "exclusiveMaximum": 1.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Base P",
+      "type": "number"
+    },
+    "condition": {
+      "$ref": "#/$defs/HarmCondition"
+    },
+    "posture_subject_ids": {
+      "description": "Blue entities whose posture_state claims decide the forced choice (JRAM Encl. C \u00a74.d)",
+      "items": {
+        "type": "string"
+      },
+      "title": "Posture Subject Ids",
+      "type": "array"
+    },
+    "beneficial_counterpart_he_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Beneficial Counterpart He Id"
+    },
+    "beneficial_statement": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "for opportunity statements (Fig. 12): the beneficial event phrase; set on the counterpart",
+      "title": "Beneficial Statement"
+    },
+    "key_actions": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Fig. 12 [key actions/conditions] slot",
+      "title": "Key Actions"
+    }
+  },
+  "required": [
+    "he_id",
+    "problem_set_id",
+    "statement",
+    "thing_of_value_id",
+    "risk_type",
+    "base_p",
+    "condition"
+  ],
+  "title": "harmful_events",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/harmful_events.json",
+  "description": "JRAM harmful events (Pillar 1) with consequence inputs.",
+  "x-primary-key": [
+    "he_id"
+  ],
+  "x-foreign-keys": {
+    "problem_set_id": "problem_sets.problem_set_id",
+    "thing_of_value_id": "objectives.objective_id",
+    "beneficial_counterpart_he_id": "harmful_events.he_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

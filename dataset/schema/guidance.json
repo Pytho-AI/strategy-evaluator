@@ -1,0 +1,91 @@
+{
+  "$defs": {
+    "GuidanceProductType": {
+      "enum": [
+        "NSS",
+        "NDS",
+        "NMS",
+        "JSCP",
+        "GCP",
+        "CCP",
+        "contingency_plan",
+        "OPORD"
+      ],
+      "title": "GuidanceProductType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "guidance_id": {
+      "pattern": "^gd_[a-z0-9_]+$",
+      "title": "Guidance Id",
+      "type": "string"
+    },
+    "product_type": {
+      "$ref": "#/$defs/GuidanceProductType"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "issuing_role": {
+      "description": "real role that issues this product type: President (NSS), SecWar (NDS), CJCS (NMS, JSCP), SecWar-approved/CJCS-endorsed (GCP), CCDR (CCP)",
+      "title": "Issuing Role",
+      "type": "string"
+    },
+    "parent_guidance_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Guidance Id"
+    },
+    "objective_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Objective Ids",
+      "type": "array"
+    },
+    "source_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "the rendered guidance document (set once corpus is rendered)",
+      "title": "Source Id"
+    }
+  },
+  "required": [
+    "guidance_id",
+    "product_type",
+    "title",
+    "issuing_role"
+  ],
+  "title": "guidance",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/guidance.json",
+  "description": "JSPS products (real product types, fictional content) and their nesting.",
+  "x-primary-key": [
+    "guidance_id"
+  ],
+  "x-foreign-keys": {
+    "parent_guidance_id": "guidance.guidance_id",
+    "source_id": "sources.source_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

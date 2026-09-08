@@ -1,0 +1,127 @@
+{
+  "$defs": {
+    "Direction": {
+      "enum": [
+        "max",
+        "min"
+      ],
+      "title": "Direction",
+      "type": "string"
+    },
+    "ObjectiveKind": {
+      "enum": [
+        "end_state",
+        "objective",
+        "effect"
+      ],
+      "title": "ObjectiveKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "objective_id": {
+      "pattern": "^obj_[a-z0-9_]+$",
+      "title": "Objective Id",
+      "type": "string"
+    },
+    "game_id": {
+      "title": "Game Id",
+      "type": "string"
+    },
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/ObjectiveKind"
+    },
+    "guidance_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Guidance Id"
+    },
+    "parent_objective_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "effect -> objective -> end_state nesting (JP 5-0 Fig. IV-9)",
+      "title": "Parent Objective Id"
+    },
+    "metric": {
+      "title": "Metric",
+      "type": "string"
+    },
+    "direction": {
+      "$ref": "#/$defs/Direction",
+      "default": "max"
+    },
+    "aspiration": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Aspiration"
+    },
+    "statement": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "short active-voice phrase (JP 5-0 Ch. III \u00a7(11)(b))",
+      "title": "Statement"
+    }
+  },
+  "required": [
+    "objective_id",
+    "game_id",
+    "actor_id",
+    "name",
+    "kind",
+    "metric"
+  ],
+  "title": "objectives",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/objectives.json",
+  "description": "Ends U: end states, objectives, effects (JP 5-0 Fig. IV-9).",
+  "x-primary-key": [
+    "objective_id"
+  ],
+  "x-foreign-keys": {
+    "game_id": "games.game_id",
+    "actor_id": "entities.entity_id",
+    "guidance_id": "guidance.guidance_id",
+    "parent_objective_id": "objectives.objective_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

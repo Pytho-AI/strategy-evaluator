@@ -1,0 +1,3365 @@
+_about: Acronyms permitted in rendered products. Extracted from the Part I glossaries of the five doctrine PDFs plus ICD 203 terms reproduced in JRAM Fig. 19. Regenerate with `python -m gen.styles.build_acronyms`.
+acronyms:
+  A&P:
+    expansion: ally and partner
+    expansions:
+    - ally and partner
+    sources:
+    - JSPS
+  A-Space:
+    expansion: Analytic Space
+    expansions:
+    - Analytic Space
+    sources:
+    - JP 2-01
+  ADCON:
+    expansion: administrative control
+    expansions:
+    - administrative control
+    sources:
+    - JP 2-01
+  ADP:
+    expansion: Army doctrine publication
+    expansions:
+    - Army doctrine publication
+    sources:
+    - JP 5-0
+  AF/A2:
+    expansion: Air Force Director of Intelligence, Surveillance, and Reconnaissance
+    expansions:
+    - Air Force Director of Intelligence, Surveillance, and Reconnaissance
+    sources:
+    - JP 2-01
+  AFB:
+    expansion: Air Force base
+    expansions:
+    - Air Force base
+    sources:
+    - JP 2-01
+  AFDA:
+    expansion: Air Force doctrine annex
+    expansions:
+    - Air Force doctrine annex
+    sources:
+    - JP 5-0
+  AFIAA:
+    expansion: Air Force Intelligence Analysis Agency
+    expansions:
+    - Air Force Intelligence Analysis Agency
+    sources:
+    - JP 2-01
+  AFISRA:
+    expansion: Air Force Intelligence, Surveillance, and Reconnaissance Agency
+    expansions:
+    - Air Force Intelligence, Surveillance, and Reconnaissance Agency
+    sources:
+    - JP 2-01
+  AFOSI:
+    expansion: Air Force Office of Special Investigations
+    expansions:
+    - Air Force Office of Special Investigations
+    sources:
+    - JP 2-01
+  AFSC:
+    expansion: Army Field Support Center
+    expansions:
+    - Army Field Support Center
+    sources:
+    - JP 2-01
+  AFTTP:
+    expansion: Air Force tactics, techniques, and procedures
+    expansions:
+    - Air Force tactics, techniques, and procedures
+    sources:
+    - JP 5-0
+    - JP 3-60
+  AJA:
+    expansion: Annual Joint Assessment
+    expansions:
+    - Annual Joint Assessment
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+  AJP:
+    expansion: Allied joint publication
+    expansions:
+    - Allied joint publication
+    sources:
+    - JP 5-0
+  ALERTORD:
+    expansion: alert order
+    expansions:
+    - alert order
+    sources:
+    - JP 5-0
+  AMHS:
+    expansion: automated message handling system
+    expansions:
+    - automated message handling system
+    sources:
+    - JP 2-01
+  AOG:
+    expansion: Army Operations Group
+    expansions:
+    - Army Operations Group
+    sources:
+    - JP 2-01
+  AOR:
+    expansion: area of responsibility
+    expansions:
+    - area of responsibility
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  ARCCR:
+    expansion: Annual Report on Combatant Command Requirements
+    expansions:
+    - Annual Report on Combatant Command Requirements
+    sources:
+    - JSPS
+  ATO:
+    expansion: air tasking order
+    expansions:
+    - air tasking order
+    sources:
+    - JP 3-60
+  ATP:
+    expansion: Army techniques publication
+    expansions:
+    - Army techniques publication
+    sources:
+    - JP 3-60
+  BDA:
+    expansion: battle damage assessment
+    expansions:
+    - battle damage assessment
+    sources:
+    - JP 2-01
+    - JP 3-60
+  BEI:
+    expansion: biometrics-enabled intelligence
+    expansions:
+    - biometrics-enabled intelligence
+    sources:
+    - JP 2-01
+  BICES:
+    expansion: battlefield information collection and exploitation system (NATO)
+    expansions:
+    - battlefield information collection and exploitation system (NATO)
+    sources:
+    - JP 2-01
+  BPLAN:
+    expansion: base plan
+    expansions:
+    - base plan
+    sources:
+    - JP 5-0
+  BW:
+    expansion: biological warfare
+    expansions:
+    - biological warfare
+    sources:
+    - JP 2-01
+  C:
+    expansion: Consequence
+    expansions:
+    - Consequence
+    sources:
+    - JRAM
+  C-JWICS:
+    expansion: Containerized Joint Worldwide Intelligence Communications System
+    expansions:
+    - Containerized Joint Worldwide Intelligence Communications System
+    sources:
+    - JP 2-01
+  C2:
+    expansion: command and control
+    expansions:
+    - command and control
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  C4:
+    expansion: command, control, communications, and computers
+    expansions:
+    - command, control, communications, and computers
+    sources:
+    - JSPS
+  CA:
+    expansion: coordinating authority
+    expansions:
+    - coordinating authority
+    - combat assessment
+    sources:
+    - JSPS
+    - JP 2-01
+    - JP 3-60
+  CAB:
+    expansion: commander's assessment board
+    expansions:
+    - commander's assessment board
+    sources:
+    - JP 5-0
+  CAP:
+    expansion: crisis action planning
+    expansions:
+    - crisis action planning
+    sources:
+    - JP 2-01
+  CAPE:
+    expansion: Cost Assessment and Program Evaluation
+    expansions:
+    - Cost Assessment and Program Evaluation
+    sources:
+    - JSPS
+  CAT:
+    expansion: crisis action team
+    expansions:
+    - crisis action team
+    sources:
+    - JP 2-01
+  CBRN:
+    expansion: chemical, biological, radiological, and nuclear
+    expansions:
+    - chemical, biological, radiological, and nuclear
+    sources:
+    - JP 2-01
+  CBRNE:
+    expansion: chemical, biological, radiological, nuclear, and high-yield explosives
+    expansions:
+    - chemical, biological, radiological, nuclear, and high-yield explosives
+    sources:
+    - JP 2-01
+  CCDR:
+    expansion: Combatant Commander
+    expansions:
+    - Combatant Commander
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  CCIR:
+    expansion: commander's critical information requirement
+    expansions:
+    - commander's critical information requirement
+    - commander’s critical information requirement
+    sources:
+    - JP 5-0
+    - JP 2-01
+  CCMD:
+    expansion: Combatant Command
+    expansions:
+    - Combatant Command
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  CCP:
+    expansion: Combatant Command Campaign Plan
+    expansions:
+    - Combatant Command Campaign Plan
+    - consolidated cryptologic program
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  CD-ROM:
+    expansion: compact disc read-only memory
+    expansions:
+    - compact disc read-only memory
+    sources:
+    - JP 2-01
+  CDA:
+    expansion: collateral damage assessment
+    expansions:
+    - collateral damage assessment
+    sources:
+    - JP 3-60
+  CDE:
+    expansion: collateral damage estimation
+    expansions:
+    - collateral damage estimation
+    sources:
+    - JP 3-60
+  CEE:
+    expansion: collateral effects estimation
+    expansions:
+    - collateral effects estimation
+    sources:
+    - JP 3-60
+  CENTRIXS:
+    expansion: Combined Enterprise Regional Information Exchange System
+    expansions:
+    - Combined Enterprise Regional Information Exchange System
+    sources:
+    - JP 2-01
+  CEP:
+    expansion: Chairman’s Exercise Program
+    expansions:
+    - Chairman’s Exercise Program
+    sources:
+    - JSPS
+  CFT:
+    expansion: cross-functional team
+    expansions:
+    - cross-functional team
+    sources:
+    - JSPS
+  CGA:
+    expansion: Capability Gap Assessment
+    expansions:
+    - Capability Gap Assessment
+    sources:
+    - JSPS
+  CGCG:
+    expansion: Coast Guard Cryptologic Group
+    expansions:
+    - Coast Guard Cryptologic Group
+    sources:
+    - JP 2-01
+  CGCIS:
+    expansion: Coast Guard Counterintelligence Service
+    expansions:
+    - Coast Guard Counterintelligence Service
+    sources:
+    - JP 2-01
+  CGIS:
+    expansion: United States Coast Guard Investigative Service
+    expansions:
+    - United States Coast Guard Investigative Service
+    sources:
+    - JP 2-01
+  CI:
+    expansion: counterintelligence
+    expansions:
+    - counterintelligence
+    sources:
+    - JP 2-01
+  CIA:
+    expansion: Central Intelligence Agency
+    expansions:
+    - Central Intelligence Agency
+    sources:
+    - JP 2-01
+  CIAP:
+    expansion: Central Intelligence Agency program
+    expansions:
+    - Central Intelligence Agency program
+    sources:
+    - JP 2-01
+  CICA:
+    expansion: counterintelligence coordinating authority
+    expansions:
+    - counterintelligence coordinating authority
+    sources:
+    - JP 2-01
+  CID:
+    expansion: combat identification
+    expansions:
+    - combat identification
+    sources:
+    - JP 3-60
+  CJCS:
+    expansion: Chairman of the Joint Chiefs of Staff
+    expansions:
+    - Chairman of the Joint Chiefs of Staff
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  CJCSI:
+    expansion: Chairman of the Joint Chiefs of Staff Instruction
+    expansions:
+    - Chairman of the Joint Chiefs of Staff Instruction
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  CJCSM:
+    expansion: Chairman of the Joint Chiefs of Staff Manual
+    expansions:
+    - Chairman of the Joint Chiefs of Staff Manual
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  CJTG:
+    expansion: Chairman’s Guidance for Training and Exercise Support to Global Integration (Chairman’s Joint Training Guidance)
+    expansions:
+    - Chairman’s Guidance for Training and Exercise Support to Global Integration (Chairman’s Joint Training Guidance)
+    sources:
+    - JSPS
+  CMA:
+    expansion: collection management authority
+    expansions:
+    - collection management authority
+    sources:
+    - JP 2-01
+  CMMA:
+    expansion: collection management mission application
+    expansions:
+    - collection management mission application
+    sources:
+    - JP 2-01
+  CNO:
+    expansion: computer network operations
+    expansions:
+    - computer network operations
+    sources:
+    - JP 2-01
+  COA:
+    expansion: course of action
+    expansions:
+    - course of action
+    sources:
+    - JRAM
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  COCOM:
+    expansion: Combatant Command authority
+    expansions:
+    - Combatant Command authority
+    sources:
+    - JSPS
+  COG:
+    expansion: center of gravity
+    expansions:
+    - center of gravity
+    sources:
+    - JP 5-0
+    - JP 2-01
+  COLISEUM:
+    expansion: community on-line intelligence system for end-users and managers
+    expansions:
+    - community on-line intelligence system for end-users and managers
+    sources:
+    - JP 2-01
+  COM:
+    expansion: collection operations management
+    expansions:
+    - collection operations management
+    sources:
+    - JP 2-01
+  COMINT:
+    expansion: communications intelligence
+    expansions:
+    - communications intelligence
+    sources:
+    - JP 2-01
+  COMSEC:
+    expansion: communications security
+    expansions:
+    - communications security
+    sources:
+    - JP 2-01
+  COMTENTHFLT:
+    expansion: Commander, Tenth Fleet
+    expansions:
+    - Commander, Tenth Fleet
+    sources:
+    - JP 2-01
+  CONOPS:
+    expansion: concept of operations
+    expansions:
+    - concept of operations
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  CONPLAN:
+    expansion: concept plan
+    expansions:
+    - concept plan
+    - operation plan in concept format
+    - contingency plan
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  CONUS:
+    expansion: continental United States
+    expansions:
+    - continental United States
+    sources:
+    - JP 2-01
+  COP:
+    expansion: common operational picture
+    expansions:
+    - common operational picture
+    sources:
+    - JP 2-01
+  COS:
+    expansion: chief of staff
+    expansions:
+    - chief of staff
+    sources:
+    - JP 5-0
+  COTS:
+    expansion: commercial off-the-shelf
+    expansions:
+    - commercial off-the-shelf
+    sources:
+    - JP 2-01
+  CPG:
+    expansion: Contingency Planning Guidance
+    expansions:
+    - Contingency Planning Guidance
+    sources:
+    - JSPS
+    - JP 5-0
+  CPMR:
+    expansion: Capability Portfolio Management Review
+    expansions:
+    - Capability Portfolio Management Review
+    sources:
+    - JSPS
+  CPR:
+    expansion: Chairman’s Program Recommendation
+    expansions:
+    - Chairman’s Program Recommendation
+    sources:
+    - JSPS
+  CRA:
+    expansion: Chairman’s Risk Assessment
+    expansions:
+    - Chairman’s Risk Assessment
+    - Chairman's Risk Assessment
+    sources:
+    - JRAM
+    - JSPS
+  CRM:
+    expansion: collection requirements management
+    expansions:
+    - collection requirements management
+    sources:
+    - JP 2-01
+  CRS:
+    expansion: Chairman’s Readiness System
+    expansions:
+    - Chairman’s Readiness System
+    sources:
+    - JSPS
+  CS:
+    expansion: civil support
+    expansions:
+    - civil support
+    sources:
+    - JP 2-01
+  CSA:
+    expansion: Combat Support Agency
+    expansions:
+    - Combat Support Agency
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  CSCS:
+    expansion: country-specific security cooperation section
+    expansions:
+    - country-specific security cooperation section
+    sources:
+    - JP 5-0
+  CSG:
+    expansion: cryptologic services group
+    expansions:
+    - cryptologic services group
+    sources:
+    - JP 2-01
+  CSL:
+    expansion: cooperative security location
+    expansions:
+    - cooperative security location
+    sources:
+    - JP 5-0
+  CSO:
+    expansion: Consolidated Strategic Opportunity
+    expansions:
+    - Consolidated Strategic Opportunity
+    sources:
+    - JSPS
+  CSS:
+    expansion: central security service
+    expansions:
+    - central security service
+    sources:
+    - JP 2-01
+  CTL:
+    expansion: candidate target list
+    expansions:
+    - candidate target list
+    sources:
+    - JP 3-60
+  DA:
+    expansion: Directorate for Mission Services (DIA)
+    expansions:
+    - Directorate for Mission Services (DIA)
+    sources:
+    - JP 2-01
+  DAC:
+    expansion: Defense Intelligence Agency (DIA) counterintelligence and security activity
+    expansions:
+    - Defense Intelligence Agency (DIA) counterintelligence and security activity
+    sources:
+    - JP 2-01
+  DCGS:
+    expansion: distributed common ground/surface system
+    expansions:
+    - distributed common ground/surface system
+    sources:
+    - JP 2-01
+  DCHC:
+    expansion: Defense Counterintelligence and Human Intelligence Center
+    expansions:
+    - Defense Counterintelligence and Human Intelligence Center
+    sources:
+    - JP 2-01
+  DCI:
+    expansion: Director of Central Intelligence
+    expansions:
+    - Director of Central Intelligence
+    sources:
+    - JP 2-01
+  DCID:
+    expansion: Director of Central Intelligence directive
+    expansions:
+    - Director of Central Intelligence directive
+    sources:
+    - JP 2-01
+  DCO:
+    expansion: defense coordinating officer
+    expansions:
+    - defense coordinating officer
+    sources:
+    - JP 2-01
+  DCP:
+    expansion: data collection plan
+    expansions:
+    - data collection plan
+    sources:
+    - JP 5-0
+  DCS:
+    expansion: deputy chief of staff
+    expansions:
+    - deputy chief of staff
+    sources:
+    - JP 2-01
+  DCW:
+    expansion: Defense Collection Watch (DIA)
+    expansions:
+    - Defense Collection Watch (DIA)
+    sources:
+    - JP 2-01
+  DD-JSP:
+    expansion: Deputy Director for Joint Strategic Planning
+    expansions:
+    - Deputy Director for Joint Strategic Planning
+    sources:
+    - JSPS
+  DDI:
+    expansion: Director of Defense Intelligence
+    expansions:
+    - Director of Defense Intelligence
+    sources:
+    - JP 2-01
+  DDMS:
+    expansion: Deputy Director for Military Support (NRO)
+    expansions:
+    - Deputy Director for Military Support (NRO)
+    sources:
+    - JP 2-01
+  DEA:
+    expansion: Drug Enforcement Administration
+    expansions:
+    - Drug Enforcement Administration
+    sources:
+    - JP 2-01
+  DEPORD:
+    expansion: deployment order
+    expansions:
+    - deployment order
+    sources:
+    - JP 5-0
+  DFE:
+    expansion: Dynamic Force Employment
+    expansions:
+    - Dynamic Force Employment
+    - Defense Intelligence Agency (DIA) forward element
+    sources:
+    - JSPS
+    - JP 2-01
+  DHS:
+    expansion: Department of Homeland Security
+    expansions:
+    - Department of Homeland Security
+    sources:
+    - JRAM
+    - JP 2-01
+  DI:
+    expansion: Defense Intelligence Agency (DIA) Directorate for Analysis
+    expansions:
+    - Defense Intelligence Agency (DIA) Directorate for Analysis
+    sources:
+    - JP 2-01
+  DIA:
+    expansion: Defense Intelligence Agency
+    expansions:
+    - Defense Intelligence Agency
+    sources:
+    - JSPS
+    - JP 2-01
+    - JP 3-60
+  DIAP:
+    expansion: Defense Intelligence Analysis Program
+    expansions:
+    - Defense Intelligence Analysis Program
+    sources:
+    - JP 2-01
+  DID:
+    expansion: Defense Intelligence Digest
+    expansions:
+    - Defense Intelligence Digest
+    sources:
+    - JP 2-01
+  DIE:
+    expansion: Defense Intelligence Enterprise
+    expansions:
+    - Defense Intelligence Enterprise
+    sources:
+    - JSPS
+  DIEB:
+    expansion: Defense Intelligence Executive Board
+    expansions:
+    - Defense Intelligence Executive Board
+    sources:
+    - JP 2-01
+  DIPF:
+    expansion: defense intelligence priorities framework
+    expansions:
+    - defense intelligence priorities framework
+    sources:
+    - JP 2-01
+  DIRINT:
+    expansion: Director of Intelligence (USMC)
+    expansions:
+    - Director of Intelligence (USMC)
+    sources:
+    - JP 2-01
+  DIRNSA:
+    expansion: Director, National Security Agency
+    expansions:
+    - Director, National Security Agency
+    sources:
+    - JP 2-01
+  DISA:
+    expansion: Defense Information Systems Agency
+    expansions:
+    - Defense Information Systems Agency
+    sources:
+    - JP 2-01
+  DJS:
+    expansion: Director, Joint Staff DJ-# Director, J-# (e.g., the Director of Strategy, Plans, and Policy, J-5 is DJ-5)
+    expansions:
+    - Director, Joint Staff DJ-# Director, J-# (e.g., the Director of Strategy, Plans, and Policy, J-5 is DJ-5)
+    sources:
+    - JSPS
+  DNI:
+    expansion: Director of National Intelligence
+    expansions:
+    - Director of National Intelligence
+    sources:
+    - JP 2-01
+  DOD:
+    expansion: Department of Defense
+    expansions:
+    - Department of Defense
+    sources:
+    - JP 5-0
+    - JP 2-01
+  DOD1:
+    expansion: Department of Defense instruction
+    expansions:
+    - Department of Defense instruction
+    sources:
+    - JP 5-0
+  DODD:
+    expansion: Department of Defense directive
+    expansions:
+    - Department of Defense directive
+    sources:
+    - JP 5-0
+    - JP 2-01
+  DODI:
+    expansion: Department of Defense instruction
+    expansions:
+    - Department of Defense instruction
+    sources:
+    - JP 2-01
+  DODIIS:
+    expansion: Department of Defense Intelligence Information System
+    expansions:
+    - Department of Defense Intelligence Information System
+    sources:
+    - JP 2-01
+  DOE:
+    expansion: Department of Energy
+    expansions:
+    - Department of Energy
+    sources:
+    - JP 2-01
+  DOJ:
+    expansion: Department of Justice
+    expansions:
+    - Department of Justice
+    sources:
+    - JP 2-01
+    - JP 3-60
+  DOMEX:
+    expansion: document and media exploitation
+    expansions:
+    - document and media exploitation
+    sources:
+    - JP 2-01
+  DON:
+    expansion: Department of the Navy
+    expansions:
+    - Department of the Navy
+    sources:
+    - JP 2-01
+  DOS:
+    expansion: Department of State
+    expansions:
+    - Department of State
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  DOTMLPF-P:
+    expansion: doctrine, organization, training, materiel, leadership and education, personnel, facilities, and policy
+    expansions:
+    - doctrine, organization, training, materiel, leadership and education, personnel, facilities, and policy
+    sources:
+    - JSPS
+  DPG:
+    expansion: Defense Planning Guidance
+    expansions:
+    - Defense Planning Guidance
+    sources:
+    - JRAM
+    - JSPS
+  DPM:
+    expansion: dissemination program manager
+    expansions:
+    - dissemination program manager
+    sources:
+    - JP 2-01
+  DRRS:
+    expansion: Defense Readiness Reporting System
+    expansions:
+    - Defense Readiness Reporting System
+    sources:
+    - JSPS
+  DRT:
+    expansion: Directed Readiness Tables
+    expansions:
+    - Directed Readiness Tables
+    - directed readiness table
+    sources:
+    - JSPS
+    - JP 5-0
+  DS:
+    expansion: Directorate for Information Management and Chief Information Officer (DIA)
+    expansions:
+    - Directorate for Information Management and Chief Information Officer (DIA)
+    sources:
+    - JP 2-01
+  DSE:
+    expansion: direct support element
+    expansions:
+    - direct support element
+    sources:
+    - JP 2-01
+  DSM:
+    expansion: decision support matrix
+    expansions:
+    - decision support matrix
+    sources:
+    - JP 5-0
+  DST:
+    expansion: decision support template
+    expansions:
+    - decision support template
+    sources:
+    - JP 5-0
+  DT:
+    expansion: Directorate for MASINT and Technical Collection (DIA)
+    expansions:
+    - Directorate for MASINT and Technical Collection (DIA)
+    sources:
+    - JP 2-01
+  DTA:
+    expansion: dynamic threat assessment
+    expansions:
+    - dynamic threat assessment
+    sources:
+    - JP 2-01
+  DTRA:
+    expansion: Defense Threat Reduction Agency
+    expansions:
+    - Defense Threat Reduction Agency
+    sources:
+    - JP 3-60
+  DUSD:
+    expansion: deputy under Secretary of Defense
+    expansions:
+    - deputy under Secretary of Defense
+    sources:
+    - JP 2-01
+  DoD:
+    expansion: Department of Defense
+    expansions:
+    - Department of Defense
+    sources:
+    - JSPS
+    - JP 3-60
+  DoDD:
+    expansion: Department of Defense Directive
+    expansions:
+    - Department of Defense Directive
+    sources:
+    - JSPS
+  DoDI:
+    expansion: DoD Instruction
+    expansions:
+    - DoD Instruction
+    - Department of Defense Instruction
+    sources:
+    - JRAM
+    - JSPS
+  DoW:
+    expansion: Department of War
+    expansions:
+    - Department of War
+    sources:
+    - JRAM
+  EEI:
+    expansion: essential element of information
+    expansions:
+    - essential element of information
+    sources:
+    - JP 2-01
+  ELINT:
+    expansion: electronic intelligence
+    expansions:
+    - electronic intelligence
+    sources:
+    - JP 2-01
+  EMS:
+    expansion: electromagnetic spectrum
+    expansions:
+    - electromagnetic spectrum
+    sources:
+    - JP 3-60
+  EO:
+    expansion: executive order
+    expansions:
+    - executive order
+    sources:
+    - JP 2-01
+  EPW:
+    expansion: enemy prisoner of war
+    expansions:
+    - enemy prisoner of war
+    sources:
+    - JP 2-01
+  ETF:
+    expansion: electronic target folder
+    expansions:
+    - electronic target folder
+    sources:
+    - JP 3-60
+  EW:
+    expansion: electronic warfare
+    expansions:
+    - electronic warfare
+    sources:
+    - JP 2-01
+  EXORD:
+    expansion: execute order
+    expansions:
+    - execute order
+    sources:
+    - JP 5-0
+  FAX:
+    expansion: facsimile
+    expansions:
+    - facsimile
+    sources:
+    - JP 2-01
+  FBI:
+    expansion: Federal Bureau of Investigation
+    expansions:
+    - Federal Bureau of Investigation
+    sources:
+    - JP 2-01
+  FCB:
+    expansion: Functional Capabilities Board
+    expansions:
+    - Functional Capabilities Board
+    sources:
+    - JSPS
+  FCP:
+    expansion: Functional Campaign Plan
+    expansions:
+    - Functional Campaign Plan
+    sources:
+    - JSPS
+    - JP 5-0
+  FDA:
+    expansion: functional damage and change assessment
+    expansions:
+    - functional damage and change assessment
+    sources:
+    - JP 3-60
+  FDO:
+    expansion: flexible deterrent option
+    expansions:
+    - flexible deterrent option
+    - foreign disclosure officer
+    sources:
+    - JP 5-0
+    - JP 2-01
+  FE:
+    expansion: force element
+    expansions:
+    - force element
+    sources:
+    - JSPS
+  FEI:
+    expansion: forensic-enabled intelligence
+    expansions:
+    - forensic-enabled intelligence
+    sources:
+    - JP 2-01
+  FEMA:
+    expansion: Federal Emergency Management Agency
+    expansions:
+    - Federal Emergency Management Agency
+    sources:
+    - JP 2-01
+  FFIR:
+    expansion: friendly force information requirement
+    expansions:
+    - friendly force information requirement
+    sources:
+    - JP 5-0
+    - JP 2-01
+  FISINT:
+    expansion: foreign instrumentation signals intelligence
+    expansions:
+    - foreign instrumentation signals intelligence
+    sources:
+    - JP 2-01
+  FLTCYBERCOM:
+    expansion: Fleet Cyber Command (Navy)
+    expansions:
+    - Fleet Cyber Command (Navy)
+    sources:
+    - JP 2-01
+  FM:
+    expansion: field manual (USA)
+    expansions:
+    - field manual (USA)
+    sources:
+    - JP 5-0
+  FM/A:
+    expansion: functional manager for analysis
+    expansions:
+    - functional manager for analysis
+    sources:
+    - JP 2-01
+  FMF:
+    expansion: Force Management Framework
+    expansions:
+    - Force Management Framework
+    sources:
+    - JSPS
+  FOS:
+    expansion: forward operating site
+    expansions:
+    - forward operating site
+    sources:
+    - JP 5-0
+  FP:
+    expansion: force provider
+    expansions:
+    - force provider
+    sources:
+    - JSPS
+    - JP 5-0
+  FRAGORD:
+    expansion: fragmentary order
+    expansions:
+    - fragmentary order
+    sources:
+    - JP 5-0
+  FRO:
+    expansion: flexible response option
+    expansions:
+    - flexible response option
+    sources:
+    - JP 5-0
+  FSCM:
+    expansion: fire support coordination measure
+    expansions:
+    - fire support coordination measure
+    sources:
+    - JP 3-60
+  FSP:
+    expansion: functional support plan
+    expansions:
+    - functional support plan
+    sources:
+    - JP 5-0
+    - JP 2-01
+  FYDP:
+    expansion: Future Years Defense Program
+    expansions:
+    - Future Years Defense Program
+    sources:
+    - JSPS
+    - JP 5-0
+  G-2:
+    expansion: Army Deputy Chief of Staff for Intelligence
+    expansions:
+    - Army Deputy Chief of Staff for Intelligence
+    sources:
+    - JP 2-01
+  GCCS:
+    expansion: Global Command and Control System
+    expansions:
+    - Global Command and Control System
+    sources:
+    - JP 2-01
+  GCCS-I3:
+    expansion: Global Command and Control System Integrated Imagery and Intelligence
+    expansions:
+    - Global Command and Control System Integrated Imagery and Intelligence
+    sources:
+    - JP 2-01
+  GCF:
+    expansion: Global Competition Framework
+    expansions:
+    - Global Competition Framework
+    sources:
+    - JSPS
+  GCP:
+    expansion: Global Campaign Plan
+    expansions:
+    - Global Campaign Plan
+    sources:
+    - JSPS
+    - JP 5-0
+  GCP A:
+    expansion: Global Campaign Plan Assessment
+    expansions:
+    - Global Campaign Plan Assessment
+    sources:
+    - JSPS
+  GDIP:
+    expansion: General Defense Intelligence Program
+    expansions:
+    - General Defense Intelligence Program
+    sources:
+    - JP 2-01
+  GDP:
+    expansion: global defense posture
+    expansions:
+    - global defense posture
+    sources:
+    - JP 5-0
+  GEF:
+    expansion: Guidance for the Employment of the Force
+    expansions:
+    - Guidance for the Employment of the Force
+    sources:
+    - JSPS
+  GEOINT:
+    expansion: geospatial intelligence
+    expansions:
+    - geospatial intelligence
+    sources:
+    - JP 2-01
+    - JP 3-60
+  GFM:
+    expansion: Global Force Management
+    expansions:
+    - Global Force Management
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  GFMAP:
+    expansion: Global Force Management Allocation Plan
+    expansions:
+    - Global Force Management Allocation Plan
+    sources:
+    - JSPS
+    - JP 5-0
+  GFMB:
+    expansion: Global Force Management Board
+    expansions:
+    - Global Force Management Board
+    sources:
+    - JP 5-0
+  GFMIG:
+    expansion: Global Force Management Implementation Guidance
+    expansions:
+    - Global Force Management Implementation Guidance
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+  GI&S:
+    expansion: geospatial information and services
+    expansions:
+    - geospatial information and services
+    sources:
+    - JP 2-01
+  GIE:
+    expansion: Globally Integrated Exercises
+    expansions:
+    - Globally Integrated Exercises
+    sources:
+    - JSPS
+  GIF:
+    expansion: global integration framework
+    expansions:
+    - global integration framework
+    sources:
+    - JP 5-0
+  GIS:
+    expansion: geographic information system
+    expansions:
+    - geographic information system
+    sources:
+    - JP 2-01
+  GITL:
+    expansion: global integrated target list
+    expansions:
+    - global integrated target list
+    sources:
+    - JP 3-60
+  GIWG:
+    expansion: Globally Integrated Wargame
+    expansions:
+    - Globally Integrated Wargame
+    sources:
+    - JSPS
+  GMI:
+    expansion: general military intelligence
+    expansions:
+    - general military intelligence
+    sources:
+    - JP 2-01
+  GOTS:
+    expansion: government off-the-shelf
+    expansions:
+    - government off-the-shelf
+    sources:
+    - JP 2-01
+  GPEC:
+    expansion: Global Posture Executive Council
+    expansions:
+    - Global Posture Executive Council
+    sources:
+    - JSPS
+    - JP 5-0
+  HC:
+    expansion: Directorate for Human Capital (DIA)
+    expansions:
+    - Directorate for Human Capital (DIA)
+    sources:
+    - JP 2-01
+  HD:
+    expansion: homeland defense
+    expansions:
+    - homeland defense
+    sources:
+    - JP 2-01
+  HN:
+    expansion: host nation
+    expansions:
+    - host nation
+    sources:
+    - JP 5-0
+  HNS:
+    expansion: host-nation support
+    expansions:
+    - host-nation support
+    sources:
+    - JP 5-0
+  HOC:
+    expansion: human intelligence operations cell
+    expansions:
+    - human intelligence operations cell
+    sources:
+    - JP 2-01
+  HPT:
+    expansion: high-payoff target
+    expansions:
+    - high-payoff target
+    sources:
+    - JP 3-60
+  HQ:
+    expansion: headquarters
+    expansions:
+    - headquarters
+    sources:
+    - JP 2-01
+    - JP 3-60
+  HQDA:
+    expansion: Headquarters, Department of the Army
+    expansions:
+    - Headquarters, Department of the Army
+    sources:
+    - JP 2-01
+  HSC:
+    expansion: Homeland Security Council
+    expansions:
+    - Homeland Security Council
+    sources:
+    - JP 2-01
+  HSIN:
+    expansion: Homeland Security Information Network (DHS)
+    expansions:
+    - Homeland Security Information Network (DHS)
+    sources:
+    - JP 2-01
+  HUMINT:
+    expansion: human intelligence
+    expansions:
+    - human intelligence
+    sources:
+    - JP 2-01
+  HVT:
+    expansion: high-value target
+    expansions:
+    - high-value target
+    sources:
+    - JP 3-60
+  I&A:
+    expansion: Office of Intelligence and Analysis (DHS)
+    expansions:
+    - Office of Intelligence and Analysis (DHS)
+    sources:
+    - JP 2-01
+  I&W:
+    expansion: indications and warning
+    expansions:
+    - indications and warning
+    sources:
+    - JP 2-01
+  I-JROC:
+    expansion: International JROC
+    expansions:
+    - International JROC
+    sources:
+    - JSPS
+  IA:
+    expansion: information assurance
+    expansions:
+    - information assurance
+    sources:
+    - JP 2-01
+  IAA:
+    expansion: incident awareness and assessment
+    expansions:
+    - incident awareness and assessment
+    sources:
+    - JP 2-01
+  IAW:
+    expansion: in accordance with
+    expansions:
+    - in accordance with
+    sources:
+    - JRAM
+    - JSPS
+    - JP 2-01
+    - JP 3-60
+  IBS:
+    expansion: Integrated Broadcast System
+    expansions:
+    - Integrated Broadcast System
+    sources:
+    - JP 2-01
+  IC:
+    expansion: Intelligence Community
+    expansions:
+    - Intelligence Community
+    sources:
+    - JRAM
+    - JSPS
+    - JP 2-01
+    - JP 3-60
+    - ICD 203
+  IC/EXCOM:
+    expansion: Intelligence Community Executive Committee
+    expansions:
+    - Intelligence Community Executive Committee
+    sources:
+    - JP 2-01
+  ICC:
+    expansion: Intelligence Coordination Center (USCG)
+    expansions:
+    - Intelligence Coordination Center (USCG)
+    sources:
+    - JP 2-01
+  ICD:
+    expansion: Intelligence Community Directive
+    expansions:
+    - Intelligence Community Directive
+    sources:
+    - ICD 203
+  IED:
+    expansion: improvised explosive device
+    expansions:
+    - improvised explosive device
+    sources:
+    - JP 2-01
+  IIR:
+    expansion: intelligence information report
+    expansions:
+    - intelligence information report
+    sources:
+    - JP 2-01
+  IMINT:
+    expansion: imagery intelligence
+    expansions:
+    - imagery intelligence
+    sources:
+    - JP 2-01
+  IMO:
+    expansion: Intermediate Military Objective
+    expansions:
+    - Intermediate Military Objective
+    sources:
+    - JSPS
+  INR:
+    expansion: Bureau of Intelligence and Research (DOS)
+    expansions:
+    - Bureau of Intelligence and Research (DOS)
+    sources:
+    - JP 2-01
+  INSCOM:
+    expansion: United States Army Intelligence and Security Command
+    expansions:
+    - United States Army Intelligence and Security Command
+    sources:
+    - JP 2-01
+  IO:
+    expansion: information operations
+    expansions:
+    - information operations
+    sources:
+    - JP 2-01
+  IOB:
+    expansion: intelligence oversight board
+    expansions:
+    - intelligence oversight board
+    sources:
+    - JP 2-01
+  IOII:
+    expansion: information operations intelligence integration
+    expansions:
+    - information operations intelligence integration
+    sources:
+    - JP 2-01
+  IOW:
+    expansion: information operations wing
+    expansions:
+    - information operations wing
+    sources:
+    - JP 2-01
+  IP:
+    expansion: intelligence planning
+    expansions:
+    - intelligence planning
+    sources:
+    - JP 5-0
+    - JP 2-01
+  IPL:
+    expansion: Integrated Priority List
+    expansions:
+    - Integrated Priority List
+    sources:
+    - JSPS
+  IPR:
+    expansion: in-progress review
+    expansions:
+    - in-progress review
+    sources:
+    - JP 5-0
+    - JP 2-01
+  IR:
+    expansion: intelligence requirement
+    expansions:
+    - intelligence requirement
+    sources:
+    - JP 2-01
+  IRGC:
+    expansion: International Risk Governance Council
+    expansions:
+    - International Risk Governance Council
+    sources:
+    - JRAM
+  IRSCC:
+    expansion: interagency remote sensing coordination cell
+    expansions:
+    - interagency remote sensing coordination cell
+    sources:
+    - JP 2-01
+  IRTPA:
+    expansion: Intelligence Reform and Terrorism Prevention Act
+    expansions:
+    - Intelligence Reform and Terrorism Prevention Act
+    sources:
+    - JP 2-01
+  ISO:
+    expansion: International Organization for Standardization
+    expansions:
+    - International Organization for Standardization
+    sources:
+    - JRAM
+  ISR:
+    expansion: intelligence, surveillance, and reconnaissance
+    expansions:
+    - intelligence, surveillance, and reconnaissance
+    sources:
+    - JP 5-0
+    - JP 2-01
+  ISR WG:
+    expansion: Intelligence, Surveillance, and Reconnaissance Wing
+    expansions:
+    - Intelligence, Surveillance, and Reconnaissance Wing
+    sources:
+    - JP 2-01
+  IT:
+    expansion: information technology
+    expansions:
+    - information technology
+    sources:
+    - JP 2-01
+  ITF:
+    expansion: intelligence task force (DIA)
+    expansions:
+    - intelligence task force (DIA)
+    sources:
+    - JP 2-01
+  ITL:
+    expansion: intelligence task list
+    expansions:
+    - intelligence task list
+    sources:
+    - JP 2-01
+  ITO:
+    expansion: integrated tasking order
+    expansions:
+    - integrated tasking order
+    sources:
+    - JP 3-60
+  IWG:
+    expansion: intelligence working group
+    expansions:
+    - intelligence working group
+    sources:
+    - JP 2-01
+  J-1:
+    expansion: manpower and personnel directorate of a joint staff
+    expansions:
+    - manpower and personnel directorate of a joint staff
+    sources:
+    - JP 2-01
+  J-2:
+    expansion: Joint Staff Directorate for Intelligence
+    expansions:
+    - Joint Staff Directorate for Intelligence
+    - intelligence directorate of a joint staff
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  J-2T:
+    expansion: joint force deputy directorate for targeting, intelligence directorate
+    expansions:
+    - joint force deputy directorate for targeting, intelligence directorate
+    sources:
+    - JP 3-60
+  J-2X:
+    expansion: joint force counterintelligence and human intelligence staff element
+    expansions:
+    - joint force counterintelligence and human intelligence staff element
+    sources:
+    - JP 2-01
+  J-3:
+    expansion: Joint Staff Directorate for Operations
+    expansions:
+    - Joint Staff Directorate for Operations
+    - operations directorate of a joint staff
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  J-4:
+    expansion: Joint Staff Directorate for Logistics
+    expansions:
+    - Joint Staff Directorate for Logistics
+    - logistics directorate of a joint staff
+    sources:
+    - JSPS
+    - JP 2-01
+  J-5:
+    expansion: Joint Staff Directorate for Strategy, Plans, and Policy, J-5
+    expansions:
+    - Joint Staff Directorate for Strategy, Plans, and Policy, J-5
+    - Joint Staff Directorate for Strategy, Plans, and Policy
+    - plans directorate of a joint staff
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  J-6:
+    expansion: Joint Staff Directorate for Command, Control, Communications, and Computers/Cyber
+    expansions:
+    - Joint Staff Directorate for Command, Control, Communications, and Computers/Cyber
+    - communications system directorate of a joint staff
+    sources:
+    - JSPS
+    - JP 2-01
+  J-7:
+    expansion: Joint Staff Directorate for Force Development
+    expansions:
+    - Joint Staff Directorate for Force Development
+    sources:
+    - JSPS
+  J-8:
+    expansion: Joint Staff Directorate for Force Structure, Resources, and Assessment
+    expansions:
+    - Joint Staff Directorate for Force Structure, Resources, and Assessment
+    - force structure, resource, and assessment directorate of a joint staff
+    sources:
+    - JSPS
+    - JP 5-0
+  J-Dir:
+    expansion: Joint Staff Directorate J-Director Director of a Joint Staff Directorate
+    expansions:
+    - Joint Staff Directorate J-Director Director of a Joint Staff Directorate
+    sources:
+    - JSPS
+  JADO:
+    expansion: joint all-domain operations
+    expansions:
+    - joint all-domain operations
+    sources:
+    - JP 3-60
+  JCC:
+    expansion: Joint Concept for Competing
+    expansions:
+    - Joint Concept for Competing
+    sources:
+    - JSPS
+  JCIDS:
+    expansion: Joint Capabilities Integration and Development System
+    expansions:
+    - Joint Capabilities Integration and Development System
+    sources:
+    - JSPS
+  JCMA:
+    expansion: joint communications security monitor activity
+    expansions:
+    - joint communications security monitor activity
+    sources:
+    - JP 2-01
+  JCMB:
+    expansion: Joint Collection Management Board
+    expansions:
+    - Joint Collection Management Board
+    sources:
+    - JP 2-01
+  JCMEC:
+    expansion: joint captured materiel exploitation center
+    expansions:
+    - joint captured materiel exploitation center
+    sources:
+    - JP 2-01
+  JCS:
+    expansion: Joint Chiefs of Staff
+    expansions:
+    - Joint Chiefs of Staff
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  JCSE:
+    expansion: joint communications support element
+    expansions:
+    - joint communications support element
+    sources:
+    - JP 2-01
+  JDDE:
+    expansion: joint deployment and distribution enterprise
+    expansions:
+    - joint deployment and distribution enterprise
+    sources:
+    - JP 5-0
+  JDEC:
+    expansion: joint document exploitation center
+    expansions:
+    - joint document exploitation center
+    sources:
+    - JP 2-01
+  JDISS:
+    expansion: joint deployable intelligence support system
+    expansions:
+    - joint deployable intelligence support system
+    sources:
+    - JP 2-01
+  JDPI:
+    expansion: joint desired point of impact
+    expansions:
+    - joint desired point of impact
+    sources:
+    - JP 3-60
+  JEP:
+    expansion: Joint Exercise Program
+    expansions:
+    - Joint Exercise Program
+    sources:
+    - JSPS
+  JFACC:
+    expansion: joint force air component commander
+    expansions:
+    - joint force air component commander
+    sources:
+    - JP 2-01
+    - JP 3-60
+  JFC:
+    expansion: joint force commander
+    expansions:
+    - joint force commander
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  JFCC-ISR:
+    expansion: Joint Functional Component Command for Intelligence, Surveillance, and Reconnaissance
+    expansions:
+    - Joint Functional Component Command for Intelligence, Surveillance, and Reconnaissance
+    sources:
+    - JP 2-01
+  JFE:
+    expansion: joint fires element
+    expansions:
+    - joint fires element
+    sources:
+    - JP 3-60
+  JFHQ:
+    expansion: joint force headquarters
+    expansions:
+    - joint force headquarters
+    sources:
+    - JP 3-60
+  JFLCC:
+    expansion: joint force land component commander
+    expansions:
+    - joint force land component commander
+    sources:
+    - JP 5-0
+  JFM:
+    expansion: joint functional manager
+    expansions:
+    - joint functional manager
+    sources:
+    - JP 5-0
+  JFO:
+    expansion: joint field office
+    expansions:
+    - joint field office
+    sources:
+    - JP 2-01
+  JFP:
+    expansion: joint force provider
+    expansions:
+    - joint force provider
+    sources:
+    - JSPS
+    - JP 5-0
+  JFRR:
+    expansion: Joint Force Readiness Review
+    expansions:
+    - Joint Force Readiness Review
+    sources:
+    - JSPS
+  JFSA:
+    expansion: Joint Force Sufficiency Assessment
+    expansions:
+    - Joint Force Sufficiency Assessment
+    sources:
+    - JP 5-0
+  JIA:
+    expansion: joint individual augmentation
+    expansions:
+    - joint individual augmentation
+    sources:
+    - JP 5-0
+  JIDC:
+    expansion: joint interrogation and debriefing center
+    expansions:
+    - joint interrogation and debriefing center
+    sources:
+    - JP 2-01
+  JIOC:
+    expansion: joint intelligence operations center
+    expansions:
+    - joint intelligence operations center
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  JIOWC:
+    expansion: joint information operations warfare center
+    expansions:
+    - joint information operations warfare center
+    sources:
+    - JP 2-01
+  JIPCL:
+    expansion: joint integrated prioritized collection list
+    expansions:
+    - joint integrated prioritized collection list
+    sources:
+    - JP 2-01
+  JIPOE:
+    expansion: joint intelligence preparation of the operational environment
+    expansions:
+    - joint intelligence preparation of the operational environment
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  JIPTL:
+    expansion: joint integrated prioritized target list
+    expansions:
+    - joint integrated prioritized target list
+    sources:
+    - JP 3-60
+  JISE:
+    expansion: joint intelligence support element
+    expansions:
+    - joint intelligence support element
+    sources:
+    - JP 2-01
+  JITF-CT:
+    expansion: Joint Intelligence Task Force for Combating Terrorism
+    expansions:
+    - Joint Intelligence Task Force for Combating Terrorism
+    sources:
+    - JP 2-01
+  JIVU:
+    expansion: Joint Intelligence Virtual University
+    expansions:
+    - Joint Intelligence Virtual University
+    sources:
+    - JP 2-01
+  JLLP:
+    expansion: Joint Lessons Learned Program
+    expansions:
+    - Joint Lessons Learned Program
+    sources:
+    - JSPS
+  JMICS:
+    expansion: Joint Worldwide Intelligence Communications System mobile integrated communications system
+    expansions:
+    - Joint Worldwide Intelligence Communications System mobile integrated communications system
+    sources:
+    - JP 2-01
+  JOA:
+    expansion: joint operations area
+    expansions:
+    - joint operations area
+    sources:
+    - JP 5-0
+    - JP 3-60
+  JOC:
+    expansion: joint operations center
+    expansions:
+    - joint operations center
+    sources:
+    - JP 2-01
+  JOE:
+    expansion: Joint Operating Environment
+    expansions:
+    - Joint Operating Environment
+    sources:
+    - JSPS
+  JOPES:
+    expansion: Joint Operation Planning and Execution System
+    expansions:
+    - Joint Operation Planning and Execution System
+    sources:
+    - JP 5-0
+  JOPP:
+    expansion: joint operation planning process
+    expansions:
+    - joint operation planning process
+    sources:
+    - JP 2-01
+  JP:
+    expansion: Joint Publication
+    expansions:
+    - Joint Publication
+    sources:
+    - JRAM
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  JPEC:
+    expansion: Joint Planning and Execution Community
+    expansions:
+    - Joint Planning and Execution Community
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  JPG:
+    expansion: joint planning group
+    expansions:
+    - joint planning group
+    sources:
+    - JP 5-0
+    - JP 2-01
+  JPME:
+    expansion: joint professional military education
+    expansions:
+    - joint professional military education
+    sources:
+    - JSPS
+  JPP:
+    expansion: joint planning process
+    expansions:
+    - joint planning process
+    sources:
+    - JP 5-0
+    - JP 3-60
+  JRAM:
+    expansion: Joint Risk Analysis Methodology
+    expansions:
+    - Joint Risk Analysis Methodology
+    sources:
+    - JRAM
+  JRIP:
+    expansion: Joint Reserve Intelligence Program
+    expansions:
+    - Joint Reserve Intelligence Program
+    sources:
+    - JP 2-01
+  JROC:
+    expansion: Joint Requirements Oversight Council
+    expansions:
+    - Joint Requirements Oversight Council
+    sources:
+    - JSPS
+  JROCM:
+    expansion: Joint Requirements Oversight Council Memorandum
+    expansions:
+    - Joint Requirements Oversight Council Memorandum
+    sources:
+    - JSPS
+  JRSOI:
+    expansion: joint reception, staging, onward movement, and integration
+    expansions:
+    - joint reception, staging, onward movement, and integration
+    sources:
+    - JP 5-0
+  JS:
+    expansion: Joint Staff
+    expansions:
+    - Joint Staff
+    sources:
+    - JP 5-0
+    - JP 3-60
+  JSCP:
+    expansion: Joint Strategic Campaign Plan
+    expansions:
+    - Joint Strategic Campaign Plan
+    - Joint Strategic Capabilities Plan
+    sources:
+    - JSPS
+    - JP 2-01
+  JSIRA:
+    expansion: Joint Staff Intelligence Risk Assessment
+    expansions:
+    - Joint Staff Intelligence Risk Assessment
+    sources:
+    - JSPS
+  JSM:
+    expansion: Joint Staff Manual
+    expansions:
+    - Joint Staff Manual
+    sources:
+    - JSPS
+  JSPS:
+    expansion: Joint Strategic Planning System
+    expansions:
+    - Joint Strategic Planning System
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+  JSSIG:
+    expansion: Joint Staff Strategy Integration Group
+    expansions:
+    - Joint Staff Strategy Integration Group
+    sources:
+    - JSPS
+  JSTARS:
+    expansion: Joint Surveillance Target Attack Radar System
+    expansions:
+    - Joint Surveillance Target Attack Radar System
+    sources:
+    - JP 2-01
+  JSWG:
+    expansion: Joint Strategy Working Group
+    expansions:
+    - Joint Strategy Working Group
+    sources:
+    - JSPS
+  JTC:
+    expansion: joint targeting cycle
+    expansions:
+    - joint targeting cycle
+    sources:
+    - JP 3-60
+  JTCB:
+    expansion: joint targeting coordination board
+    expansions:
+    - joint targeting coordination board
+    sources:
+    - JP 3-60
+  JTF:
+    expansion: joint task force
+    expansions:
+    - joint task force
+    sources:
+    - JP 5-0
+    - JP 2-01
+  JTL:
+    expansion: joint target list
+    expansions:
+    - joint target list
+    sources:
+    - JP 3-60
+  JTWG:
+    expansion: joint targeting working group
+    expansions:
+    - joint targeting working group
+    sources:
+    - JP 3-60
+  JWAC:
+    expansion: Joint Warfare Analysis Center
+    expansions:
+    - Joint Warfare Analysis Center
+    sources:
+    - JP 3-60
+  JWC:
+    expansion: Joint Warfighting Concept
+    expansions:
+    - Joint Warfighting Concept
+    sources:
+    - JSPS
+  JWICS:
+    expansion: Joint Worldwide Intelligence Communications System
+    expansions:
+    - Joint Worldwide Intelligence Communications System
+    sources:
+    - JP 2-01
+  JWPS:
+    expansion: Joint Worldwide Planners Seminar
+    expansions:
+    - Joint Worldwide Planners Seminar
+    sources:
+    - JSPS
+  KLE:
+    expansion: key leader engagement
+    expansions:
+    - key leader engagement
+    sources:
+    - JP 5-0
+  LAN:
+    expansion: local area network
+    expansions:
+    - local area network
+    sources:
+    - JP 2-01
+  LEIP:
+    expansion: Law Enforcement Intelligence Program (USCG)
+    expansions:
+    - Law Enforcement Intelligence Program (USCG)
+    sources:
+    - JP 2-01
+  LFA:
+    expansion: lead federal agency
+    expansions:
+    - lead federal agency
+    sources:
+    - JP 2-01
+  LNI:
+    expansion: Library of National Intelligence
+    expansions:
+    - Library of National Intelligence
+    sources:
+    - JP 2-01
+  LNO:
+    expansion: liaison officer
+    expansions:
+    - liaison officer
+    sources:
+    - JP 2-01
+  LOC:
+    expansion: line of communications
+    expansions:
+    - line of communications
+    sources:
+    - JP 2-01
+  LOE:
+    expansion: line of effort
+    expansions:
+    - line of effort
+    sources:
+    - JP 5-0
+  LOO:
+    expansion: line of operation
+    expansions:
+    - line of operation
+    sources:
+    - JP 5-0
+  LSA:
+    expansion: logistics supportability analysis
+    expansions:
+    - logistics supportability analysis
+    sources:
+    - JP 5-0
+  LTIOV:
+    expansion: latest time information is of value
+    expansions:
+    - latest time information is of value
+    sources:
+    - JP 2-01
+  MASINT:
+    expansion: measurement and signature intelligence
+    expansions:
+    - measurement and signature intelligence
+    sources:
+    - JP 2-01
+  MASLO:
+    expansion: measurement and signature intelligence liaison officer
+    expansions:
+    - measurement and signature intelligence liaison officer
+    sources:
+    - JP 2-01
+  MCIA:
+    expansion: Marine Corps Intelligence Activity
+    expansions:
+    - Marine Corps Intelligence Activity
+    sources:
+    - JP 2-01
+  MCRP:
+    expansion: Marine Corps reference publication
+    expansions:
+    - Marine Corps reference publication
+    sources:
+    - JP 5-0
+    - JP 3-60
+  MCSB:
+    expansion: Marine Cryptologic Support Battalion
+    expansions:
+    - Marine Cryptologic Support Battalion
+    sources:
+    - JP 2-01
+  MEA:
+    expansion: munitions effectiveness assessment
+    expansions:
+    - munitions effectiveness assessment
+    sources:
+    - JP 3-60
+  METOC:
+    expansion: meteorological and oceanographic
+    expansions:
+    - meteorological and oceanographic
+    sources:
+    - JP 2-01
+  MI:
+    expansion: military intelligence
+    expansions:
+    - military intelligence
+    sources:
+    - JP 2-01
+  MIB:
+    expansion: Military Intelligence Board
+    expansions:
+    - Military Intelligence Board
+    sources:
+    - JP 2-01
+  MIDB:
+    expansion: modernized integrated database
+    expansions:
+    - modernized integrated database
+    sources:
+    - JP 2-01
+    - JP 3-60
+  MILDEC:
+    expansion: military deception
+    expansions:
+    - military deception
+    sources:
+    - JP 2-01
+  MIP:
+    expansion: Military Intelligence Program
+    expansions:
+    - Military Intelligence Program
+    sources:
+    - JP 2-01
+  MISO:
+    expansion: military information support operations
+    expansions:
+    - military information support operations
+    sources:
+    - JP 2-01
+  MNF:
+    expansion: multinational force
+    expansions:
+    - multinational force
+    sources:
+    - JP 5-0
+  MOB:
+    expansion: main operating base
+    expansions:
+    - main operating base
+    sources:
+    - JP 5-0
+  MOE:
+    expansion: measure of effectiveness
+    expansions:
+    - measure of effectiveness
+    sources:
+    - JP 5-0
+    - JP 3-60
+  MOP:
+    expansion: measure of performance
+    expansions:
+    - measure of performance
+    sources:
+    - JP 5-0
+    - JP 3-60
+  MR:
+    expansion: Military Risk
+    expansions:
+    - Military Risk
+    sources:
+    - JRAM
+  MSIC:
+    expansion: Missile and Space Intelligence Center
+    expansions:
+    - Missile and Space Intelligence Center
+    sources:
+    - JP 2-01
+  MSR:
+    expansion: Military Strategic Risk
+    expansions:
+    - Military Strategic Risk
+    sources:
+    - JRAM
+  MTAC:
+    expansion: Multiple Threat Alert Center (DON)
+    expansions:
+    - Multiple Threat Alert Center (DON)
+    sources:
+    - JP 2-01
+  NAI:
+    expansion: named area of interest
+    expansions:
+    - named area of interest
+    sources:
+    - JP 5-0
+  NASIC:
+    expansion: National Air and Space Intelligence Center
+    expansions:
+    - National Air and Space Intelligence Center
+    sources:
+    - JP 2-01
+  NATO:
+    expansion: North Atlantic Treaty Organization
+    expansions:
+    - North Atlantic Treaty Organization
+    sources:
+    - JP 5-0
+    - JP 2-01
+  NCIS:
+    expansion: Naval Criminal Investigative Service
+    expansions:
+    - Naval Criminal Investigative Service
+    sources:
+    - JP 2-01
+  NCMI:
+    expansion: National Center for Medical Intelligence
+    expansions:
+    - National Center for Medical Intelligence
+    sources:
+    - JP 2-01
+  NCR:
+    expansion: National Security Agency/Central Security Service representative
+    expansions:
+    - National Security Agency/Central Security Service representative
+    sources:
+    - JP 2-01
+  NCRDEF:
+    expansion: national cryptologic representative defense
+    expansions:
+    - national cryptologic representative defense
+    sources:
+    - JP 2-01
+  NCS:
+    expansion: National Clandestine Service
+    expansions:
+    - National Clandestine Service
+    sources:
+    - JP 2-01
+  NCTC:
+    expansion: National Counterterrorism Center
+    expansions:
+    - National Counterterrorism Center
+    sources:
+    - JP 2-01
+  NDIC:
+    expansion: National Defense Intelligence College
+    expansions:
+    - National Defense Intelligence College
+    sources:
+    - JP 2-01
+  NDP:
+    expansion: national disclosure policy
+    expansions:
+    - national disclosure policy
+    sources:
+    - JP 2-01
+  NDPC:
+    expansion: National Disclosure Policy Committee
+    expansions:
+    - National Disclosure Policy Committee
+    sources:
+    - JP 2-01
+  NDS:
+    expansion: National Defense Strategy
+    expansions:
+    - National Defense Strategy
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+  NGA:
+    expansion: National Geospatial-Intelligence Agency
+    expansions:
+    - National Geospatial-Intelligence Agency
+    sources:
+    - JP 2-01
+    - JP 3-60
+  NGB:
+    expansion: National Guard Bureau
+    expansions:
+    - National Guard Bureau
+    sources:
+    - JSPS
+    - JP 5-0
+  NGIC:
+    expansion: National Ground Intelligence Center
+    expansions:
+    - National Ground Intelligence Center
+    sources:
+    - JP 2-01
+    - JP 3-60
+  NGO:
+    expansion: nongovernmental organization
+    expansions:
+    - nongovernmental organization
+    sources:
+    - JP 5-0
+    - JP 2-01
+  NGP:
+    expansion: National Geospatial-Intelligence Agency Program
+    expansions:
+    - National Geospatial-Intelligence Agency Program
+    sources:
+    - JP 2-01
+  NICC:
+    expansion: National Intelligence Coordination Center
+    expansions:
+    - National Intelligence Coordination Center
+    sources:
+    - JP 2-01
+  NIP:
+    expansion: National Intelligence Program
+    expansions:
+    - National Intelligence Program
+    sources:
+    - JP 2-01
+  NIPF:
+    expansion: National Intelligence Priority Framework
+    expansions:
+    - National Intelligence Priority Framework
+    sources:
+    - JP 2-01
+  NIPRNET:
+    expansion: Non-classified Internet Protocol Router Network
+    expansions:
+    - Non-classified Internet Protocol Router Network
+    - Nonsecure Internet Protocol Router Network
+    sources:
+    - JSPS
+    - JP 2-01
+  NISP:
+    expansion: national intelligence support plan
+    expansions:
+    - national intelligence support plan
+    sources:
+    - JP 5-0
+    - JP 2-01
+  NIST:
+    expansion: National Institute of Standards and Technology
+    expansions:
+    - National Institute of Standards and Technology
+    - national intelligence support team
+    sources:
+    - JRAM
+    - JP 2-01
+  NJOIC:
+    expansion: National Joint Operations and Intelligence Center
+    expansions:
+    - National Joint Operations and Intelligence Center
+    sources:
+    - JP 2-01
+    - JP 3-60
+  NLRP:
+    expansion: nonlethal reference point
+    expansions:
+    - nonlethal reference point
+    sources:
+    - JP 3-60
+  NMEC:
+    expansion: National Media Exploitation Center
+    expansions:
+    - National Media Exploitation Center
+    sources:
+    - JP 2-01
+  NMIC:
+    expansion: National Maritime Intelligence Center
+    expansions:
+    - National Maritime Intelligence Center
+    sources:
+    - JP 2-01
+  NMO:
+    expansion: National Measurement and Signature Intelligence Office
+    expansions:
+    - National Measurement and Signature Intelligence Office
+    sources:
+    - JP 2-01
+  NMS:
+    expansion: National Military Strategy
+    expansions:
+    - National Military Strategy
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+  NNWC:
+    expansion: Naval Network Warfare Command
+    expansions:
+    - Naval Network Warfare Command
+    sources:
+    - JP 2-01
+  NOC:
+    expansion: National Operations Center (DHS)
+    expansions:
+    - National Operations Center (DHS)
+    sources:
+    - JP 2-01
+  NRC:
+    expansion: National Response Center (USCG)
+    expansions:
+    - National Response Center (USCG)
+    sources:
+    - JP 2-01
+  NRO:
+    expansion: National Reconnaissance Office
+    expansions:
+    - National Reconnaissance Office
+    sources:
+    - JP 2-01
+  NRT:
+    expansion: near real time
+    expansions:
+    - near real time
+    sources:
+    - JP 2-01
+  NSA:
+    expansion: National Security Agency
+    expansions:
+    - National Security Agency
+    sources:
+    - JP 2-01
+    - JP 3-60
+  NSC:
+    expansion: National Security Council
+    expansions:
+    - National Security Council
+    sources:
+    - JP 5-0
+    - JP 2-01
+  NSG:
+    expansion: National System for Geospatial Intelligence
+    expansions:
+    - National System for Geospatial Intelligence
+    sources:
+    - JP 2-01
+  NSL:
+    expansion: no-strike list
+    expansions:
+    - no-strike list
+    sources:
+    - JP 3-60
+  NSOC:
+    expansion: National Security Operations Center
+    expansions:
+    - National Security Operations Center
+    sources:
+    - JP 2-01
+  NSS:
+    expansion: National Security Strategy
+    expansions:
+    - National Security Strategy
+    sources:
+    - JRAM
+    - JSPS
+    - JP 5-0
+  NST:
+    expansion: National Geospatial-Intelligence Agency support team
+    expansions:
+    - National Geospatial-Intelligence Agency support team
+    sources:
+    - JP 2-01
+  NTTP:
+    expansion: Navy tactics, techniques, and procedures
+    expansions:
+    - Navy tactics, techniques, and procedures
+    sources:
+    - JP 5-0
+    - JP 3-60
+  OA:
+    expansion: operational area
+    expansions:
+    - operational area
+    sources:
+    - JP 5-0
+    - JP 3-60
+  OAI:
+    expansion: operations, activities, and investments
+    expansions:
+    - operations, activities, and investments
+    sources:
+    - JSPS
+  OB:
+    expansion: order of battle
+    expansions:
+    - order of battle
+    sources:
+    - JP 2-01
+  OCR:
+    expansion: office of coordinating responsibility
+    expansions:
+    - office of coordinating responsibility
+    sources:
+    - JSPS
+  OCS:
+    expansion: operational contract support
+    expansions:
+    - operational contract support
+    sources:
+    - JP 5-0
+  ODNI:
+    expansion: Office of the Director of National Intelligence
+    expansions:
+    - Office of the Director of National Intelligence
+    sources:
+    - JP 2-01
+  OE:
+    expansion: operational environment
+    expansions:
+    - operational environment
+    sources:
+    - JP 5-0
+    - JP 3-60
+  OMA:
+    expansion: Office of Military Affairs (CIA and USAID)
+    expansions:
+    - Office of Military Affairs (CIA and USAID)
+    sources:
+    - JP 2-01
+  OMB:
+    expansion: Office of Management and Budget
+    expansions:
+    - Office of Management and Budget
+    sources:
+    - JRAM
+  ONI:
+    expansion: Office of Naval Intelligence
+    expansions:
+    - Office of Naval Intelligence
+    sources:
+    - JP 2-01
+  OPCON:
+    expansion: operational control
+    expansions:
+    - operational control
+    sources:
+    - JP 2-01
+  OPLAN:
+    expansion: operation plan
+    expansions:
+    - operation plan
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  OPORD:
+    expansion: operation order
+    expansions:
+    - operation order
+    sources:
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  OPR:
+    expansion: office of primary responsibility OpsDeps Operations Deputies
+    expansions:
+    - office of primary responsibility OpsDeps Operations Deputies
+    sources:
+    - JSPS
+  OPSEC:
+    expansion: operations security
+    expansions:
+    - operations security
+    sources:
+    - JP 2-01
+  OPT:
+    expansion: operational planning team
+    expansions:
+    - operational planning team
+    sources:
+    - JP 5-0
+  OSC:
+    expansion: Open Source Center (CIA)
+    expansions:
+    - Open Source Center (CIA)
+    sources:
+    - JP 2-01
+  OSD:
+    expansion: Office of the Secretary of Defense
+    expansions:
+    - Office of the Secretary of Defense
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  OSINT:
+    expansion: open-source intelligence
+    expansions:
+    - open-source intelligence
+    sources:
+    - JP 2-01
+  OUSD(I):
+    expansion: Office of the Under Secretary of Defense (Intelligence)
+    expansions:
+    - Office of the Under Secretary of Defense (Intelligence)
+    sources:
+    - JP 2-01
+  OUSD(P):
+    expansion: Office of the Under Secretary of Defense for Policy
+    expansions:
+    - Office of the Under Secretary of Defense for Policy
+    sources:
+    - JSPS
+    - JP 5-0
+  P:
+    expansion: Probability
+    expansions:
+    - Probability
+    sources:
+    - JRAM
+  PBR:
+    expansion: Program and Budget Review
+    expansions:
+    - Program and Budget Review
+    sources:
+    - JSPS
+  PDA:
+    expansion: physical damage and change assessment
+    expansions:
+    - physical damage and change assessment
+    sources:
+    - JP 3-60
+  PED:
+    expansion: processing, exploitation, and dissemination
+    expansions:
+    - processing, exploitation, and dissemination
+    sources:
+    - JP 2-01
+  PIAB:
+    expansion: President’s Intelligence Advisory Board
+    expansions:
+    - President’s Intelligence Advisory Board
+    sources:
+    - JP 2-01
+  PID:
+    expansion: positive identification
+    expansions:
+    - positive identification
+    sources:
+    - JP 3-60
+  PIR:
+    expansion: priority intelligence requirement
+    expansions:
+    - priority intelligence requirement
+    sources:
+    - JP 5-0
+    - JP 2-01
+  PLANORD:
+    expansion: planning order
+    expansions:
+    - planning order
+    sources:
+    - JP 5-0
+  PMESII:
+    expansion: political, military, economic, social. information, and infrastructure
+    expansions:
+    - political, military, economic, social. information, and infrastructure
+    sources:
+    - JP 5-0
+  PMGM:
+    expansion: program manager’s guidance memorandum
+    expansions:
+    - program manager’s guidance memorandum
+    sources:
+    - JP 2-01
+  POC:
+    expansion: point of contact
+    expansions:
+    - point of contact
+    sources:
+    - JP 5-0
+    - JP 2-01
+  POM:
+    expansion: Program Objective Memorandum
+    expansions:
+    - Program Objective Memorandum
+    sources:
+    - JSPS
+  POW:
+    expansion: prisoner of war
+    expansions:
+    - prisoner of war
+    sources:
+    - JP 3-60
+  PPBE:
+    expansion: Planning, Programming, Budgeting, and Execution
+    expansions:
+    - Planning, Programming, Budgeting, and Execution
+    sources:
+    - JSPS
+  PR:
+    expansion: production requirement
+    expansions:
+    - production requirement
+    sources:
+    - JP 2-01
+  PRISM:
+    expansion: Planning Tool for Resource Integration, Synchronization, and Management
+    expansions:
+    - Planning Tool for Resource Integration, Synchronization, and Management
+    sources:
+    - JP 2-01
+  PTDO:
+    expansion: prepare to deploy order
+    expansions:
+    - prepare to deploy order
+    sources:
+    - JP 5-0
+  RCP:
+    expansion: regional campaign plan
+    expansions:
+    - regional campaign plan
+    sources:
+    - JP 5-0
+  RF:
+    expansion: Risk-to-Force
+    expansions:
+    - Risk-to-Force
+    sources:
+    - JRAM
+  RFF:
+    expansion: request for forces
+    expansions:
+    - request for forces
+    sources:
+    - JP 5-0
+    - JP 2-01
+  RFI:
+    expansion: request for information
+    expansions:
+    - request for information
+    sources:
+    - JP 2-01
+  RM:
+    expansion: Risk-to-Mission
+    expansions:
+    - Risk-to-Mission
+    sources:
+    - JRAM
+  RMP:
+    expansion: Risk Mitigation Plan
+    expansions:
+    - Risk Mitigation Plan
+    sources:
+    - JRAM
+  ROE:
+    expansion: rules of engagement
+    expansions:
+    - rules of engagement
+    sources:
+    - JP 5-0
+    - JP 3-60
+  RSS:
+    expansion: really simple syndication
+    expansions:
+    - really simple syndication
+    sources:
+    - JP 2-01
+  RTL:
+    expansion: restricted target list
+    expansions:
+    - restricted target list
+    sources:
+    - JP 3-60
+  RUF:
+    expansion: rules for the use of force
+    expansions:
+    - rules for the use of force
+    sources:
+    - JP 5-0
+  RoSDF:
+    expansion: Risk of Strategic Deterrence Failure
+    expansions:
+    - Risk of Strategic Deterrence Failure
+    sources:
+    - JRAM
+  S&T:
+    expansion: scientific and technical
+    expansions:
+    - scientific and technical
+    sources:
+    - JP 2-01
+  S&TI:
+    expansion: scientific and technical intelligence
+    expansions:
+    - scientific and technical intelligence
+    sources:
+    - JP 2-01
+  SAP:
+    expansion: special access program
+    expansions:
+    - special access program
+    sources:
+    - JP 5-0
+  SAWG:
+    expansion: strategic assessment working group
+    expansions:
+    - strategic assessment working group
+    sources:
+    - JP 5-0
+  SC2:
+    expansion: Strategy Coordination Cell
+    expansions:
+    - Strategy Coordination Cell
+    sources:
+    - JSPS
+  SCA:
+    expansion: space coordinating authority
+    expansions:
+    - space coordinating authority
+    sources:
+    - JP 2-01
+  SCC:
+    expansion: service cryptologic component
+    expansions:
+    - service cryptologic component
+    sources:
+    - JP 2-01
+  SCI:
+    expansion: sensitive compartmented information
+    expansions:
+    - sensitive compartmented information
+    sources:
+    - JP 2-01
+  SCIF:
+    expansion: sensitive compartmented information facility
+    expansions:
+    - sensitive compartmented information facility
+    sources:
+    - JP 2-01
+  SDD:
+    expansion: Strategy Development Division
+    expansions:
+    - Strategy Development Division
+    sources:
+    - JSPS
+  SDOB:
+    expansion: Secretary of Defense Orders Book
+    expansions:
+    - Secretary of Defense Orders Book
+    sources:
+    - JSPS
+  SIC:
+    expansion: supporting intelligence center
+    expansions:
+    - supporting intelligence center
+    sources:
+    - JP 2-01
+  SIGINT:
+    expansion: signals intelligence
+    expansions:
+    - signals intelligence
+    sources:
+    - JP 2-01
+  SIO:
+    expansion: senior intelligence officer
+    expansions:
+    - senior intelligence officer
+    sources:
+    - JP 2-01
+  SIPRNET:
+    expansion: SECRET Internet Protocol Router Network
+    expansions:
+    - SECRET Internet Protocol Router Network
+    sources:
+    - JSPS
+    - JP 2-01
+  SJA:
+    expansion: staff judge advocate
+    expansions:
+    - staff judge advocate
+    sources:
+    - JP 3-60
+  SME:
+    expansion: subject matter expert
+    expansions:
+    - subject matter expert
+    sources:
+    - JP 3-60
+  SO:
+    expansion: Strategic Opportunity
+    expansions:
+    - Strategic Opportunity
+    sources:
+    - JSPS
+  SOF:
+    expansion: special operations forces
+    expansions:
+    - special operations forces
+    sources:
+    - JP 2-01
+  SOIC:
+    expansion: senior officer of the intelligence community
+    expansions:
+    - senior officer of the intelligence community
+    sources:
+    - JP 2-01
+  SOTA:
+    expansion: signals intelligence operational tasking authority
+    expansions:
+    - signals intelligence operational tasking authority
+    sources:
+    - JP 2-01
+  SPF:
+    expansion: Strategic Planning Framework
+    expansions:
+    - Strategic Planning Framework
+    sources:
+    - JSPS
+  SPOTREP:
+    expansion: spot report
+    expansions:
+    - spot report
+    sources:
+    - JP 2-01
+  SRRC:
+    expansion: Semi-annual Readiness Report to Congress
+    expansions:
+    - Semi-annual Readiness Report to Congress
+    sources:
+    - JSPS
+  SSA:
+    expansion: special support activity (NSA)
+    expansions:
+    - special support activity (NSA)
+    sources:
+    - JP 2-01
+  SSO:
+    expansion: special security officer
+    expansions:
+    - special security officer
+    sources:
+    - JP 2-01
+  SST:
+    expansion: special support team (National Security Agency)
+    expansions:
+    - special support team (National Security Agency)
+    sources:
+    - JP 2-01
+  SecDef:
+    expansion: Secretary of Defense
+    expansions:
+    - Secretary of Defense
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+    - JP 3-60
+  SecWar:
+    expansion: Secretary of War
+    expansions:
+    - Secretary of War
+    sources:
+    - JRAM
+  TDP:
+    expansion: theater distribution plan
+    expansions:
+    - theater distribution plan
+    sources:
+    - JP 5-0
+  TDWG:
+    expansion: target development working group
+    expansions:
+    - target development working group
+    sources:
+    - JP 3-60
+  TECHINT:
+    expansion: technical intelligence
+    expansions:
+    - technical intelligence
+    sources:
+    - JP 2-01
+  TENCAP:
+    expansion: tactical exploitation of national capabilities program
+    expansions:
+    - tactical exploitation of national capabilities program
+    sources:
+    - JP 2-01
+  TFCICA:
+    expansion: task force counterintelligence coordinating authority
+    expansions:
+    - task force counterintelligence coordinating authority
+    sources:
+    - JP 2-01
+  TIA:
+    expansion: theater intelligence assessment
+    expansions:
+    - theater intelligence assessment
+    sources:
+    - JP 2-01
+  TIM:
+    expansion: toxic industrial material
+    expansions:
+    - toxic industrial material
+    sources:
+    - JP 2-01
+  TLA:
+    expansion: theater logistics analysis
+    expansions:
+    - theater logistics analysis
+    sources:
+    - JP 5-0
+  TLO:
+    expansion: theater logistics overview
+    expansions:
+    - theater logistics overview
+    sources:
+    - JP 5-0
+  TNL:
+    expansion: target nomination list
+    expansions:
+    - target nomination list
+    sources:
+    - JP 3-60
+  TPFDD:
+    expansion: time-phased force and deployment data
+    expansions:
+    - time-phased force and deployment data
+    sources:
+    - JP 5-0
+    - JP 2-01
+  TPFDL:
+    expansion: time-phased force and deployment list
+    expansions:
+    - time-phased force and deployment list
+    sources:
+    - JP 5-0
+  TSA:
+    expansion: target system analysis
+    expansions:
+    - target system analysis
+    sources:
+    - JP 3-60
+  TSDA:
+    expansion: target system damage assessment
+    expansions:
+    - target system damage assessment
+    sources:
+    - JP 3-60
+  TST:
+    expansion: time-sensitive target
+    expansions:
+    - time-sensitive target
+    sources:
+    - JP 3-60
+  TSWA:
+    expansion: temporary secure working area
+    expansions:
+    - temporary secure working area
+    sources:
+    - JP 2-01
+  TTP:
+    expansion: tactics, techniques, and procedures
+    expansions:
+    - tactics, techniques, and procedures
+    sources:
+    - JP 2-01
+  UCP:
+    expansion: Unified Command Plan
+    expansions:
+    - Unified Command Plan
+    sources:
+    - JSPS
+    - JP 5-0
+  UFAC:
+    expansion: Underground Facilities Analysis Center
+    expansions:
+    - Underground Facilities Analysis Center
+    sources:
+    - JP 2-01
+  UN:
+    expansion: United Nations
+    expansions:
+    - United Nations
+    sources:
+    - JP 5-0
+    - JP 2-01
+  US:
+    expansion: United States
+    expansions:
+    - United States
+    sources:
+    - JP 3-60
+  USAF:
+    expansion: United States Air Force
+    expansions:
+    - United States Air Force
+    sources:
+    - JP 2-01
+  USAID:
+    expansion: United States Agency for International Development
+    expansions:
+    - United States Agency for International Development
+    sources:
+    - JP 5-0
+  USARCENT:
+    expansion: United States Army, Central Command
+    expansions:
+    - United States Army, Central Command
+    sources:
+    - JP 2-01
+  USAREUR:
+    expansion: United States Army, European Command
+    expansions:
+    - United States Army, European Command
+    sources:
+    - JP 2-01
+  USARPAC:
+    expansion: United States Army, Pacific Command
+    expansions:
+    - United States Army, Pacific Command
+    sources:
+    - JP 2-01
+  USARSO:
+    expansion: United States Army, Southern Command
+    expansions:
+    - United States Army, Southern Command
+    sources:
+    - JP 2-01
+  USC:
+    expansion: United States Code
+    expansions:
+    - United States Code
+    sources:
+    - JP 5-0
+  USCG:
+    expansion: United States Coast Guard
+    expansions:
+    - United States Coast Guard
+    sources:
+    - JP 5-0
+    - JP 2-01
+  USCS:
+    expansion: United States Cryptologic System
+    expansions:
+    - United States Cryptologic System
+    sources:
+    - JP 2-01
+  USCYBERCOM:
+    expansion: United States Cyber Command
+    expansions:
+    - United States Cyber Command
+    sources:
+    - JP 5-0
+    - JP 2-01
+  USD(I):
+    expansion: Under Secretary of Defense for Intelligence
+    expansions:
+    - Under Secretary of Defense for Intelligence
+    sources:
+    - JP 2-01
+  USD(P):
+    expansion: Under Secretary of Defense for Policy
+    expansions:
+    - Under Secretary of Defense for Policy
+    sources:
+    - JSPS
+    - JP 5-0
+  USELEMNORAD:
+    expansion: U.S. Element North American Aerospace Defense Command
+    expansions:
+    - U.S. Element North American Aerospace Defense Command
+    sources:
+    - JSPS
+  USFK:
+    expansion: United States Forces, Korea
+    expansions:
+    - United States Forces, Korea
+    sources:
+    - JP 2-01
+  USG:
+    expansion: U.S Government
+    expansions:
+    - U.S Government
+    - United States Government
+    sources:
+    - JSPS
+    - JP 5-0
+    - JP 2-01
+  USNORTHCOM:
+    expansion: United States Northern Command
+    expansions:
+    - United States Northern Command
+    sources:
+    - JP 2-01
+  USPACOM:
+    expansion: United States Pacific Command
+    expansions:
+    - United States Pacific Command
+    sources:
+    - JP 2-01
+  USSOCOM:
+    expansion: United States Special Operations Command
+    expansions:
+    - United States Special Operations Command
+    sources:
+    - JP 5-0
+    - JP 2-01
+  USSPACECOM:
+    expansion: United States Space Command
+    expansions:
+    - United States Space Command
+    sources:
+    - JP 5-0
+  USSTRATCOM:
+    expansion: United States Strategic Command
+    expansions:
+    - United States Strategic Command
+    sources:
+    - JP 5-0
+    - JP 2-01
+  USTRANSCOM:
+    expansion: United States Transportation Command
+    expansions:
+    - United States Transportation Command
+    sources:
+    - JP 5-0
+  VCJCS:
+    expansion: Vice Chairman of the Joint Chiefs of Staff
+    expansions:
+    - Vice Chairman of the Joint Chiefs of Staff
+    sources:
+    - JSPS
+  VTC:
+    expansion: video teleconferencing
+    expansions:
+    - video teleconferencing
+    sources:
+    - JP 2-01
+  WAN:
+    expansion: wide-area network
+    expansions:
+    - wide-area network
+    sources:
+    - JP 2-01
+  WARNORD:
+    expansion: warning order
+    expansions:
+    - warning order
+    sources:
+    - JP 5-0
+  WMD:
+    expansion: weapons of mass destruction
+    expansions:
+    - weapons of mass destruction
+    sources:
+    - JP 2-01
+    - JP 3-60
+  WTI:
+    expansion: weapons technical intelligence
+    expansions:
+    - weapons technical intelligence
+    sources:
+    - JP 2-01

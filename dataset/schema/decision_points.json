@@ -1,0 +1,190 @@
+{
+  "$defs": {
+    "AllOf": {
+      "additionalProperties": false,
+      "properties": {
+        "all": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/VarCmp"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "title": "All",
+          "type": "array"
+        }
+      },
+      "required": [
+        "all"
+      ],
+      "title": "AllOf",
+      "type": "object"
+    },
+    "AnyOf": {
+      "additionalProperties": false,
+      "properties": {
+        "any": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/VarCmp"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "title": "Any",
+          "type": "array"
+        }
+      },
+      "required": [
+        "any"
+      ],
+      "title": "AnyOf",
+      "type": "object"
+    },
+    "CmpOp": {
+      "enum": [
+        "==",
+        "!=",
+        "<",
+        "<=",
+        ">",
+        ">=",
+        "abs_le",
+        "in"
+      ],
+      "title": "CmpOp",
+      "type": "string"
+    },
+    "VarCmp": {
+      "additionalProperties": false,
+      "description": "Leaf: compare an observable/state variable (or a claim value) with a constant.",
+      "properties": {
+        "var": {
+          "title": "Var",
+          "type": "string"
+        },
+        "op": {
+          "$ref": "#/$defs/CmpOp"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "var",
+        "op"
+      ],
+      "title": "VarCmp",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "dp_id": {
+      "pattern": "^dp_[a-z0-9_]+$",
+      "title": "Dp Id",
+      "type": "string"
+    },
+    "strategy_id": {
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "condition": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "#/$defs/VarCmp"
+        },
+        {
+          "$ref": "#/$defs/AllOf"
+        },
+        {
+          "$ref": "#/$defs/AnyOf"
+        }
+      ],
+      "title": "Condition"
+    },
+    "branch_rule_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Branch Rule Ids",
+      "type": "array"
+    },
+    "pir_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "PIR tied to this decision point (JP 5-0 Ch. IV \u00a7(b)3)",
+      "title": "Pir Id"
+    },
+    "latest_period": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "latest period at which the decision can be made",
+      "title": "Latest Period"
+    }
+  },
+  "required": [
+    "dp_id",
+    "strategy_id",
+    "name",
+    "condition",
+    "branch_rule_ids"
+  ],
+  "title": "decision_points",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/decision_points.json",
+  "description": "Decision points with their branch rules (JP 5-0 Ch. IV).",
+  "x-primary-key": [
+    "dp_id"
+  ],
+  "x-foreign-keys": {
+    "strategy_id": "strategies.strategy_id",
+    "pir_id": "pirs.pir_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

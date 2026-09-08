@@ -1,0 +1,279 @@
+{
+  "$defs": {
+    "ClaimStatus": {
+      "enum": [
+        "proposed",
+        "approved",
+        "rejected",
+        "superseded"
+      ],
+      "title": "ClaimStatus",
+      "type": "string"
+    },
+    "ConfidenceICD203": {
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ],
+      "title": "ConfidenceICD203",
+      "type": "string"
+    },
+    "LikelihoodICD203": {
+      "enum": [
+        "almost_no_chance",
+        "very_unlikely",
+        "unlikely",
+        "roughly_even_chance",
+        "likely",
+        "very_likely",
+        "almost_certain"
+      ],
+      "title": "LikelihoodICD203",
+      "type": "string"
+    },
+    "Predicate": {
+      "description": "Controlled predicate vocabulary (DATASET). value_type/unit per predicate in PREDICATES.",
+      "enum": [
+        "range_km",
+        "count",
+        "readiness",
+        "status",
+        "throughput_per_day",
+        "alignment",
+        "basing_access",
+        "mobilization_days",
+        "mobilized_brigades",
+        "cyber_capacity",
+        "munitions_stock_days",
+        "posture_state",
+        "capacity_mw",
+        "displaced_persons",
+        "outage_hours",
+        "intent",
+        "mixing_bias",
+        "located_at",
+        "operated_by",
+        "subordinate_to",
+        "supplies",
+        "controls",
+        "hosts"
+      ],
+      "title": "Predicate",
+      "type": "string"
+    },
+    "ValueType": {
+      "enum": [
+        "entity",
+        "number",
+        "string",
+        "bool",
+        "date"
+      ],
+      "title": "ValueType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "predicate": {
+      "$ref": "#/$defs/Predicate"
+    },
+    "object_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Object Id"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value"
+    },
+    "value_type": {
+      "$ref": "#/$defs/ValueType"
+    },
+    "unit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unit"
+    },
+    "valid_from": {
+      "format": "date",
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_to": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid To"
+    },
+    "estimative": {
+      "default": false,
+      "title": "Estimative",
+      "type": "boolean"
+    },
+    "likelihood_icd203": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LikelihoodICD203"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "confidence_icd203": {
+      "$ref": "#/$defs/ConfidenceICD203"
+    },
+    "confidence": {
+      "description": "DERIVED per SCHEMA.md \u00a7confidence",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "claim_id": {
+      "pattern": "^clm_[a-z0-9_]+$",
+      "title": "Claim Id",
+      "type": "string"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "span_start": {
+      "minimum": 0,
+      "title": "Span Start",
+      "type": "integer"
+    },
+    "span_end": {
+      "minimum": 0,
+      "title": "Span End",
+      "type": "integer"
+    },
+    "asserted_at": {
+      "description": "transaction time; = source.published_at unless the doc quotes an older report",
+      "format": "date",
+      "title": "Asserted At",
+      "type": "string"
+    },
+    "likelihood_surface_term": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "the likelihood phrase as written in the span (may be a non-ICD synonym under hedge_drift)",
+      "title": "Likelihood Surface Term"
+    },
+    "status": {
+      "$ref": "#/$defs/ClaimStatus"
+    },
+    "supersedes_claim_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes Claim Id"
+    },
+    "truth_claim_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "truth/ only: the fact this claim instantiates",
+      "title": "Truth Claim Id"
+    }
+  },
+  "required": [
+    "subject_id",
+    "predicate",
+    "value_type",
+    "valid_from",
+    "confidence_icd203",
+    "confidence",
+    "claim_id",
+    "source_id",
+    "span_start",
+    "span_end",
+    "asserted_at",
+    "status"
+  ],
+  "title": "claims",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/claims.json",
+  "description": "The world model (L3): sourced, bitemporal, ICD 203-typed assertions extracted from documents.",
+  "x-primary-key": [
+    "claim_id"
+  ],
+  "x-foreign-keys": {
+    "subject_id": "entities.entity_id",
+    "object_id": "entities.entity_id",
+    "source_id": "sources.source_id",
+    "supersedes_claim_id": "claims.claim_id",
+    "truth_claim_id": "facts.fact_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "confidence"
+  ],
+  "x-truth-only": false
+}

@@ -1,0 +1,2 @@
+{"dims_differing": ["main_effort", "mechanism"], "pass": true, "strategy_a": "str_rps_p1_uniform", "strategy_b": "str_rps_p1_paper"}
+{"dims_differing": ["main_effort", "mechanism"], "pass": true, "strategy_a": "str_rps_p1_paper", "strategy_b": "str_rps_p1_uniform"}

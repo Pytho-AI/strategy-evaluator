@@ -1,0 +1,160 @@
+{
+  "$defs": {
+    "CLevel": {
+      "enum": [
+        "minor",
+        "modest",
+        "major",
+        "extreme"
+      ],
+      "title": "CLevel",
+      "type": "string"
+    },
+    "PLevel": {
+      "enum": [
+        "very_unlikely",
+        "unlikely",
+        "likely",
+        "very_likely"
+      ],
+      "title": "PLevel",
+      "type": "string"
+    },
+    "RiskLevel": {
+      "enum": [
+        "low",
+        "moderate",
+        "significant",
+        "high"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "Trend": {
+      "enum": [
+        "up",
+        "down",
+        "flat"
+      ],
+      "title": "Trend",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "he_id": {
+      "title": "He Id",
+      "type": "string"
+    },
+    "jsps_horizon": {
+      "enum": [
+        "near",
+        "mid",
+        "long"
+      ],
+      "title": "Jsps Horizon",
+      "type": "string"
+    },
+    "world_version": {
+      "title": "World Version",
+      "type": "integer"
+    },
+    "p_raw": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "P Raw",
+      "type": "number"
+    },
+    "p_level": {
+      "$ref": "#/$defs/PLevel"
+    },
+    "forced_choice_applied": {
+      "default": false,
+      "title": "Forced Choice Applied",
+      "type": "boolean"
+    },
+    "posture_rationale": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Posture Rationale"
+    },
+    "dominant_driver_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dominant Driver Id"
+    },
+    "active_driver_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Active Driver Ids",
+      "type": "array"
+    },
+    "c_level": {
+      "$ref": "#/$defs/CLevel"
+    },
+    "risk_level": {
+      "$ref": "#/$defs/RiskLevel"
+    },
+    "trend": {
+      "$ref": "#/$defs/Trend"
+    },
+    "statement_text": {
+      "title": "Statement Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "he_id",
+    "jsps_horizon",
+    "world_version",
+    "p_raw",
+    "p_level",
+    "c_level",
+    "risk_level",
+    "trend",
+    "statement_text"
+  ],
+  "title": "risk_assessments",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/risk_assessments.json",
+  "description": "COMPUTED Pillar-2 assessment per harmful event per horizon, with Fig. 11 statement.",
+  "x-primary-key": [
+    "he_id",
+    "jsps_horizon",
+    "world_version"
+  ],
+  "x-foreign-keys": {
+    "he_id": "harmful_events.he_id",
+    "dominant_driver_id": "risk_drivers.driver_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "p_raw",
+    "p_level",
+    "forced_choice_applied",
+    "posture_rationale",
+    "dominant_driver_id",
+    "active_driver_ids",
+    "c_level",
+    "risk_level",
+    "trend",
+    "statement_text"
+  ],
+  "x-truth-only": false
+}

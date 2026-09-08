@@ -1,0 +1,151 @@
+{
+  "$defs": {
+    "HorizonMapEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "period": {
+          "minimum": 1,
+          "title": "Period",
+          "type": "integer"
+        },
+        "jsps_horizon": {
+          "enum": [
+            "near",
+            "mid",
+            "long"
+          ],
+          "title": "Jsps Horizon",
+          "type": "string"
+        }
+      },
+      "required": [
+        "period",
+        "jsps_horizon"
+      ],
+      "title": "HorizonMapEntry",
+      "type": "object"
+    },
+    "Observable": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "variable": {
+          "title": "Variable",
+          "type": "string"
+        }
+      },
+      "required": [
+        "actor_id",
+        "variable"
+      ],
+      "title": "Observable",
+      "type": "object"
+    },
+    "StateVariable": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "domain": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Domain",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "domain"
+      ],
+      "title": "StateVariable",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "game_id": {
+      "title": "Game Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "actor_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Actor Ids",
+      "type": "array"
+    },
+    "horizon": {
+      "minimum": 1,
+      "title": "Horizon",
+      "type": "integer"
+    },
+    "horizon_map": {
+      "items": {
+        "$ref": "#/$defs/HorizonMapEntry"
+      },
+      "title": "Horizon Map",
+      "type": "array"
+    },
+    "state_variables": {
+      "items": {
+        "$ref": "#/$defs/StateVariable"
+      },
+      "title": "State Variables",
+      "type": "array"
+    },
+    "observables": {
+      "items": {
+        "$ref": "#/$defs/Observable"
+      },
+      "title": "Observables",
+      "type": "array"
+    }
+  },
+  "required": [
+    "game_id",
+    "name",
+    "actor_ids",
+    "horizon",
+    "horizon_map",
+    "state_variables",
+    "observables"
+  ],
+  "title": "games",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/games.json",
+  "description": "Game form G = <N, S, A, T, O, H>: the operational environment, not the strategy.",
+  "x-primary-key": [
+    "game_id"
+  ],
+  "x-foreign-keys": {},
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

@@ -1,0 +1,207 @@
+{
+  "$defs": {
+    "GapType": {
+      "enum": [
+        "missing",
+        "stale",
+        "low_confidence",
+        "contradiction"
+      ],
+      "title": "GapType",
+      "type": "string"
+    },
+    "Predicate": {
+      "description": "Controlled predicate vocabulary (DATASET). value_type/unit per predicate in PREDICATES.",
+      "enum": [
+        "range_km",
+        "count",
+        "readiness",
+        "status",
+        "throughput_per_day",
+        "alignment",
+        "basing_access",
+        "mobilization_days",
+        "mobilized_brigades",
+        "cyber_capacity",
+        "munitions_stock_days",
+        "posture_state",
+        "capacity_mw",
+        "displaced_persons",
+        "outage_hours",
+        "intent",
+        "mixing_bias",
+        "located_at",
+        "operated_by",
+        "subordinate_to",
+        "supplies",
+        "controls",
+        "hosts"
+      ],
+      "title": "Predicate",
+      "type": "string"
+    },
+    "ReqStatus": {
+      "enum": [
+        "research",
+        "validation",
+        "submission",
+        "satisfaction",
+        "closed"
+      ],
+      "title": "ReqStatus",
+      "type": "string"
+    },
+    "RfiDisposition": {
+      "enum": [
+        "answered_from_holdings",
+        "gap_confirmed"
+      ],
+      "title": "RfiDisposition",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "req_id": {
+      "pattern": "^req_[a-z0-9_]+$",
+      "title": "Req Id",
+      "type": "string"
+    },
+    "pir_id": {
+      "title": "Pir Id",
+      "type": "string"
+    },
+    "eei": {
+      "title": "Eei",
+      "type": "string"
+    },
+    "indicators": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Indicators",
+      "type": "array"
+    },
+    "sir": {
+      "title": "Sir",
+      "type": "string"
+    },
+    "gap_type": {
+      "$ref": "#/$defs/GapType"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "predicate": {
+      "$ref": "#/$defs/Predicate"
+    },
+    "assumption_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "assumption whose grounding claim this gap resolves (priority = EVPI_k)",
+      "title": "Assumption Id"
+    },
+    "rfi_disposition": {
+      "$ref": "#/$defs/RfiDisposition"
+    },
+    "routing": {
+      "pattern": "^(JIOC|JCMB|.+ J-2)$",
+      "title": "Routing",
+      "type": "string"
+    },
+    "ltiov": {
+      "format": "date",
+      "title": "Ltiov",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date",
+      "title": "Created At",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ReqStatus"
+    },
+    "answered_by_source_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Answered By Source Id"
+    },
+    "priority": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Priority"
+    },
+    "jipcl_rank": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Jipcl Rank"
+    }
+  },
+  "required": [
+    "req_id",
+    "pir_id",
+    "eei",
+    "indicators",
+    "sir",
+    "gap_type",
+    "subject_id",
+    "predicate",
+    "rfi_disposition",
+    "routing",
+    "ltiov",
+    "created_at",
+    "status"
+  ],
+  "title": "collection_requirements",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/collection_requirements.json",
+  "description": "Gaps as JP 2-01 collection requirements with computed EVPI priority and JIPCL rank.",
+  "x-primary-key": [
+    "req_id"
+  ],
+  "x-foreign-keys": {
+    "pir_id": "pirs.pir_id",
+    "subject_id": "entities.entity_id",
+    "assumption_id": "assumptions.assumption_id",
+    "answered_by_source_id": "sources.source_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "priority",
+    "jipcl_rank"
+  ],
+  "x-truth-only": false
+}

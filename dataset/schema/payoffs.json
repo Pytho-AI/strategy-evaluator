@@ -1,0 +1,48 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "strategy_id": {
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "opponent_strategy_id": {
+      "title": "Opponent Strategy Id",
+      "type": "string"
+    },
+    "world": {
+      "pattern": "^[01]+$",
+      "title": "World",
+      "type": "string"
+    },
+    "utility": {
+      "items": {
+        "type": "number"
+      },
+      "title": "Utility",
+      "type": "array"
+    }
+  },
+  "required": [
+    "strategy_id",
+    "opponent_strategy_id",
+    "world",
+    "utility"
+  ],
+  "title": "payoffs",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/payoffs.json",
+  "description": "truth/: the finite Bayesian game payoff tensor u(sigma_i, sigma_-i, theta).",
+  "x-primary-key": [
+    "strategy_id",
+    "opponent_strategy_id",
+    "world"
+  ],
+  "x-foreign-keys": {
+    "strategy_id": "strategies.strategy_id",
+    "opponent_strategy_id": "strategies.strategy_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": true
+}

@@ -1,0 +1,57 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "edge_id": {
+      "pattern": "^ee_[a-z0-9_]+$",
+      "title": "Edge Id",
+      "type": "string"
+    },
+    "from_he_id": {
+      "title": "From He Id",
+      "type": "string"
+    },
+    "to_he_id": {
+      "title": "To He Id",
+      "type": "string"
+    },
+    "lift": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Lift",
+      "type": "number"
+    },
+    "mechanism": {
+      "title": "Mechanism",
+      "type": "string"
+    },
+    "evidence_claim_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Claim Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "edge_id",
+    "from_he_id",
+    "to_he_id",
+    "lift",
+    "mechanism"
+  ],
+  "title": "escalation_edges",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/escalation_edges.json",
+  "description": "Cascade DAG between harmful events with conditional lift.",
+  "x-primary-key": [
+    "edge_id"
+  ],
+  "x-foreign-keys": {
+    "from_he_id": "harmful_events.he_id",
+    "to_he_id": "harmful_events.he_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

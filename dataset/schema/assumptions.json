@@ -1,0 +1,231 @@
+{
+  "$defs": {
+    "AssumptionOrigin": {
+      "enum": [
+        "higher_hq",
+        "own"
+      ],
+      "title": "AssumptionOrigin",
+      "type": "string"
+    },
+    "AssumptionRole": {
+      "enum": [
+        "state",
+        "transition",
+        "opponent",
+        "means"
+      ],
+      "title": "AssumptionRole",
+      "type": "string"
+    },
+    "AssumptionStatus": {
+      "enum": [
+        "holds",
+        "violated",
+        "stale",
+        "unknown"
+      ],
+      "title": "AssumptionStatus",
+      "type": "string"
+    },
+    "CmpOp": {
+      "enum": [
+        "==",
+        "!=",
+        "<",
+        "<=",
+        ">",
+        ">=",
+        "abs_le",
+        "in"
+      ],
+      "title": "CmpOp",
+      "type": "string"
+    },
+    "Predicate": {
+      "description": "Controlled predicate vocabulary (DATASET). value_type/unit per predicate in PREDICATES.",
+      "enum": [
+        "range_km",
+        "count",
+        "readiness",
+        "status",
+        "throughput_per_day",
+        "alignment",
+        "basing_access",
+        "mobilization_days",
+        "mobilized_brigades",
+        "cyber_capacity",
+        "munitions_stock_days",
+        "posture_state",
+        "capacity_mw",
+        "displaced_persons",
+        "outage_hours",
+        "intent",
+        "mixing_bias",
+        "located_at",
+        "operated_by",
+        "subordinate_to",
+        "supplies",
+        "controls",
+        "hosts"
+      ],
+      "title": "Predicate",
+      "type": "string"
+    },
+    "Tolerance": {
+      "additionalProperties": false,
+      "description": "Assumption tolerance applied to the current approved claim value, e.g. {\"op\":\"<=\",\"value\":300}.",
+      "properties": {
+        "op": {
+          "$ref": "#/$defs/CmpOp"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "op"
+      ],
+      "title": "Tolerance",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assumption_id": {
+      "pattern": "^asm_[a-z0-9_]+$",
+      "title": "Assumption Id",
+      "type": "string"
+    },
+    "strategy_id": {
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "index_k": {
+      "minimum": 0,
+      "title": "Index K",
+      "type": "integer"
+    },
+    "statement": {
+      "title": "Statement",
+      "type": "string"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "predicate": {
+      "$ref": "#/$defs/Predicate"
+    },
+    "tolerance": {
+      "$ref": "#/$defs/Tolerance"
+    },
+    "role": {
+      "$ref": "#/$defs/AssumptionRole"
+    },
+    "jp50_logical": {
+      "title": "Jp50 Logical",
+      "type": "boolean"
+    },
+    "jp50_realistic": {
+      "title": "Jp50 Realistic",
+      "type": "boolean"
+    },
+    "jp50_essential": {
+      "title": "Jp50 Essential",
+      "type": "boolean"
+    },
+    "origin": {
+      "$ref": "#/$defs/AssumptionOrigin"
+    },
+    "in_decision_matrix": {
+      "default": true,
+      "title": "In Decision Matrix",
+      "type": "boolean"
+    },
+    "p_holds": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "P Holds"
+    },
+    "status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AssumptionStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "sensitivity": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sensitivity"
+    },
+    "evpi": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evpi"
+    }
+  },
+  "required": [
+    "assumption_id",
+    "strategy_id",
+    "index_k",
+    "statement",
+    "subject_id",
+    "predicate",
+    "tolerance",
+    "role",
+    "jp50_logical",
+    "jp50_realistic",
+    "jp50_essential",
+    "origin"
+  ],
+  "title": "assumptions",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/assumptions.json",
+  "description": "Theta: planning assumptions as predicates over world-model claims.",
+  "x-primary-key": [
+    "assumption_id"
+  ],
+  "x-foreign-keys": {
+    "strategy_id": "strategies.strategy_id",
+    "subject_id": "entities.entity_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "p_holds",
+    "status",
+    "sensitivity",
+    "evpi"
+  ],
+  "x-truth-only": false
+}

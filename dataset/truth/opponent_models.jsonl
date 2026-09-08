@@ -1,0 +1,2 @@
+{"actor_id": "ent_rps_p2", "distribution": [{"probability": 1.0, "strategy_id": "str_rps_p2_uniform"}], "opponent_model_id": "om_rps_p2"}
+{"actor_id": "ent_rps_p1", "distribution": [{"probability": 1.0, "strategy_id": "str_rps_p1_uniform"}], "opponent_model_id": "om_rps_p1"}

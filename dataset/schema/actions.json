@@ -1,0 +1,239 @@
+{
+  "$defs": {
+    "AllOf": {
+      "additionalProperties": false,
+      "properties": {
+        "all": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/VarCmp"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "title": "All",
+          "type": "array"
+        }
+      },
+      "required": [
+        "all"
+      ],
+      "title": "AllOf",
+      "type": "object"
+    },
+    "AnyOf": {
+      "additionalProperties": false,
+      "properties": {
+        "any": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/VarCmp"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "title": "Any",
+          "type": "array"
+        }
+      },
+      "required": [
+        "any"
+      ],
+      "title": "AnyOf",
+      "type": "object"
+    },
+    "CmpOp": {
+      "enum": [
+        "==",
+        "!=",
+        "<",
+        "<=",
+        ">",
+        ">=",
+        "abs_le",
+        "in"
+      ],
+      "title": "CmpOp",
+      "type": "string"
+    },
+    "Effect": {
+      "additionalProperties": false,
+      "properties": {
+        "variable": {
+          "title": "Variable",
+          "type": "string"
+        },
+        "delta": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Delta"
+        }
+      },
+      "required": [
+        "variable",
+        "delta"
+      ],
+      "title": "Effect",
+      "type": "object"
+    },
+    "TacticClass": {
+      "enum": [
+        "posture",
+        "isr",
+        "strike",
+        "logistics",
+        "information",
+        "diplomatic",
+        "cyber",
+        "signal"
+      ],
+      "title": "TacticClass",
+      "type": "string"
+    },
+    "VarCmp": {
+      "additionalProperties": false,
+      "description": "Leaf: compare an observable/state variable (or a claim value) with a constant.",
+      "properties": {
+        "var": {
+          "title": "Var",
+          "type": "string"
+        },
+        "op": {
+          "$ref": "#/$defs/CmpOp"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "var",
+        "op"
+      ],
+      "title": "VarCmp",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_id": {
+      "pattern": "^act_[a-z0-9_]+$",
+      "title": "Action Id",
+      "type": "string"
+    },
+    "game_id": {
+      "title": "Game Id",
+      "type": "string"
+    },
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "tactic_class": {
+      "$ref": "#/$defs/TacticClass"
+    },
+    "line_of_effort": {
+      "title": "Line Of Effort",
+      "type": "string"
+    },
+    "mechanism": {
+      "description": "primary mechanism for mission accomplishment (JP 5-0 Ch. III \u00a7(q)4.d), e.g. deny, delay, deter_by_denial, defeat, influence, sustain",
+      "title": "Mechanism",
+      "type": "string"
+    },
+    "cost": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "resource_id -> cost c(a)",
+      "title": "Cost",
+      "type": "object"
+    },
+    "preconditions": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "#/$defs/VarCmp"
+        },
+        {
+          "$ref": "#/$defs/AllOf"
+        },
+        {
+          "$ref": "#/$defs/AnyOf"
+        }
+      ],
+      "default": true,
+      "title": "Preconditions"
+    },
+    "effects": {
+      "items": {
+        "$ref": "#/$defs/Effect"
+      },
+      "title": "Effects",
+      "type": "array"
+    }
+  },
+  "required": [
+    "action_id",
+    "game_id",
+    "actor_id",
+    "name",
+    "tactic_class",
+    "line_of_effort",
+    "mechanism"
+  ],
+  "title": "actions",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/actions.json",
+  "description": "Tactics A_i: named, costed, preconditioned.",
+  "x-primary-key": [
+    "action_id"
+  ],
+  "x-foreign-keys": {
+    "game_id": "games.game_id",
+    "actor_id": "entities.entity_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

@@ -1,0 +1,155 @@
+{
+  "$defs": {
+    "Credibility": {
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "title": "Credibility",
+      "type": "string"
+    },
+    "DocType": {
+      "enum": [
+        "reference_entry",
+        "sitrep",
+        "news",
+        "message_traffic",
+        "tabular",
+        "assessment",
+        "risk_context",
+        "collection_plan",
+        "coa_statement",
+        "guidance"
+      ],
+      "title": "DocType",
+      "type": "string"
+    },
+    "Perturbation": {
+      "enum": [
+        "paraphrase",
+        "unit_drift",
+        "stale_echo",
+        "implicit",
+        "distractor",
+        "alias",
+        "typo",
+        "contradiction",
+        "hedge_drift",
+        "mixed_scale"
+      ],
+      "title": "Perturbation",
+      "type": "string"
+    },
+    "Reliability": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "title": "Reliability",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "source_id": {
+      "pattern": "^src_[a-z0-9_]+$",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "doc_type": {
+      "$ref": "#/$defs/DocType"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "published_at": {
+      "format": "date",
+      "title": "Published At",
+      "type": "string"
+    },
+    "author_org": {
+      "description": "fictional unit, or a real organizational role such as 'supported CCMD J-2'",
+      "title": "Author Org",
+      "type": "string"
+    },
+    "reliability": {
+      "$ref": "#/$defs/Reliability"
+    },
+    "credibility": {
+      "$ref": "#/$defs/Credibility"
+    },
+    "real_world": {
+      "default": false,
+      "title": "Real World",
+      "type": "boolean"
+    },
+    "public_reference": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Public Reference"
+    },
+    "path": {
+      "description": "relative path under dataset/ (corpus/ or injects/batch_n/)",
+      "title": "Path",
+      "type": "string"
+    },
+    "batch": {
+      "maximum": 3,
+      "minimum": 0,
+      "title": "Batch",
+      "type": "integer"
+    },
+    "text_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Text Sha256",
+      "type": "string"
+    },
+    "perturbations": {
+      "items": {
+        "$ref": "#/$defs/Perturbation"
+      },
+      "title": "Perturbations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "source_id",
+    "doc_type",
+    "title",
+    "published_at",
+    "author_org",
+    "reliability",
+    "credibility",
+    "path",
+    "batch",
+    "text_sha256"
+  ],
+  "title": "sources",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/sources.json",
+  "description": "L0 provenance: every rendered document/product with reliability, credibility, batch and perturbations.",
+  "x-primary-key": [
+    "source_id"
+  ],
+  "x-foreign-keys": {},
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

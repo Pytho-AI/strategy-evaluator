@@ -1,0 +1,97 @@
+{
+  "$defs": {
+    "DependencyKind": {
+      "enum": [
+        "supports",
+        "contradicts",
+        "grounds",
+        "requires",
+        "enables",
+        "drives",
+        "escalates"
+      ],
+      "title": "DependencyKind",
+      "type": "string"
+    },
+    "NodeType": {
+      "enum": [
+        "claim",
+        "assumption",
+        "strategy",
+        "action",
+        "objective",
+        "problem_set",
+        "harmful_event"
+      ],
+      "title": "NodeType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "edge_id": {
+      "pattern": "^dep_[a-z0-9_]+$",
+      "title": "Edge Id",
+      "type": "string"
+    },
+    "from_type": {
+      "$ref": "#/$defs/NodeType"
+    },
+    "from_id": {
+      "title": "From Id",
+      "type": "string"
+    },
+    "to_type": {
+      "$ref": "#/$defs/NodeType"
+    },
+    "to_id": {
+      "title": "To Id",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/DependencyKind"
+    },
+    "weight": {
+      "maximum": 1.0,
+      "minimum": -1.0,
+      "title": "Weight",
+      "type": "number"
+    },
+    "mechanism": {
+      "title": "Mechanism",
+      "type": "string"
+    },
+    "evidence_claim_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Claim Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "edge_id",
+    "from_type",
+    "from_id",
+    "to_type",
+    "to_id",
+    "kind",
+    "weight",
+    "mechanism"
+  ],
+  "title": "dependencies",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/dependencies.json",
+  "description": "Typed dependency graph over claims, assumptions, strategies, actions, objectives, harmful events.",
+  "x-primary-key": [
+    "edge_id"
+  ],
+  "x-foreign-keys": {},
+  "x-polymorphic-foreign-keys": {
+    "from_id": "from_type",
+    "to_id": "to_type"
+  },
+  "x-computed": [],
+  "x-truth-only": false
+}

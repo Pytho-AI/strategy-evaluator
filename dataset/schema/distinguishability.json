@@ -1,0 +1,64 @@
+{
+  "$defs": {
+    "DistinguishDim": {
+      "enum": [
+        "main_effort",
+        "scheme",
+        "sequencing",
+        "mechanism",
+        "task_org",
+        "reserves"
+      ],
+      "title": "DistinguishDim",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "strategy_a": {
+      "title": "Strategy A",
+      "type": "string"
+    },
+    "strategy_b": {
+      "title": "Strategy B",
+      "type": "string"
+    },
+    "dims_differing": {
+      "items": {
+        "$ref": "#/$defs/DistinguishDim"
+      },
+      "title": "Dims Differing",
+      "type": "array"
+    },
+    "pass": {
+      "description": "COMPUTED: len(dims_differing) >= 2",
+      "title": "Pass",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "strategy_a",
+    "strategy_b",
+    "dims_differing",
+    "pass"
+  ],
+  "title": "distinguishability",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/distinguishability.json",
+  "description": "COMPUTED pairwise JP 5-0 distinguishability dimensions.",
+  "x-primary-key": [
+    "strategy_a",
+    "strategy_b"
+  ],
+  "x-foreign-keys": {
+    "strategy_a": "strategies.strategy_id",
+    "strategy_b": "strategies.strategy_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "dims_differing",
+    "pass"
+  ],
+  "x-truth-only": false
+}

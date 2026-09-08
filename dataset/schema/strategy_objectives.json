@@ -1,0 +1,57 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "strategy_id": {
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "objective_id": {
+      "title": "Objective Id",
+      "type": "string"
+    },
+    "weight": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Weight",
+      "type": "number"
+    },
+    "rating_1_to_3": {
+      "anyOf": [
+        {
+          "maximum": 3,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "COMPUTED rank of E[u_k] among valid strategies of the same actor (3 = best)",
+      "title": "Rating 1 To 3"
+    }
+  },
+  "required": [
+    "strategy_id",
+    "objective_id",
+    "weight"
+  ],
+  "title": "strategy_objectives",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/strategy_objectives.json",
+  "description": "Weight vector w = COA evaluation criteria weights (JP 5-0 App. F).",
+  "x-primary-key": [
+    "strategy_id",
+    "objective_id"
+  ],
+  "x-foreign-keys": {
+    "strategy_id": "strategies.strategy_id",
+    "objective_id": "objectives.objective_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "rating_1_to_3"
+  ],
+  "x-truth-only": false
+}

@@ -1,0 +1,77 @@
+{
+  "$defs": {
+    "RiskLevel": {
+      "enum": [
+        "low",
+        "moderate",
+        "significant",
+        "high"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "problem_set_id": {
+      "title": "Problem Set Id",
+      "type": "string"
+    },
+    "jsps_horizon": {
+      "enum": [
+        "near",
+        "mid",
+        "long"
+      ],
+      "title": "Jsps Horizon",
+      "type": "string"
+    },
+    "world_version": {
+      "title": "World Version",
+      "type": "integer"
+    },
+    "max_risk_level": {
+      "$ref": "#/$defs/RiskLevel"
+    },
+    "he_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "He Ids",
+      "type": "array"
+    },
+    "aggregated_statement_text": {
+      "description": "JRAM Fig. 5 aggregated (complex) risk statement",
+      "title": "Aggregated Statement Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "problem_set_id",
+    "jsps_horizon",
+    "world_version",
+    "max_risk_level",
+    "he_ids",
+    "aggregated_statement_text"
+  ],
+  "title": "problem_set_assessments",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/problem_set_assessments.json",
+  "description": "COMPUTED aggregated (Fig. 5) risk per problem set per horizon.",
+  "x-primary-key": [
+    "problem_set_id",
+    "jsps_horizon",
+    "world_version"
+  ],
+  "x-foreign-keys": {
+    "problem_set_id": "problem_sets.problem_set_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "max_risk_level",
+    "he_ids",
+    "aggregated_statement_text"
+  ],
+  "x-truth-only": false
+}

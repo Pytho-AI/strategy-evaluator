@@ -1,0 +1,452 @@
+{
+  "$defs": {
+    "AssumptionChange": {
+      "additionalProperties": false,
+      "properties": {
+        "assumption_id": {
+          "title": "Assumption Id",
+          "type": "string"
+        },
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "required": [
+        "assumption_id",
+        "from",
+        "to"
+      ],
+      "title": "AssumptionChange",
+      "type": "object"
+    },
+    "ChangeEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_id_old": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fact Id Old"
+        },
+        "fact_id_new": {
+          "title": "Fact Id New",
+          "type": "string"
+        },
+        "subject_id": {
+          "title": "Subject Id",
+          "type": "string"
+        },
+        "predicate": {
+          "$ref": "#/$defs/Predicate"
+        },
+        "old_value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Old Value"
+        },
+        "new_value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "New Value"
+        }
+      },
+      "required": [
+        "fact_id_old",
+        "fact_id_new",
+        "subject_id",
+        "predicate"
+      ],
+      "title": "ChangeEvent",
+      "type": "object"
+    },
+    "ExpectedEffects": {
+      "additionalProperties": false,
+      "properties": {
+        "assumptions_changed": {
+          "items": {
+            "$ref": "#/$defs/AssumptionChange"
+          },
+          "title": "Assumptions Changed",
+          "type": "array"
+        },
+        "strategies_restated": {
+          "items": {
+            "$ref": "#/$defs/StrategyRestated"
+          },
+          "title": "Strategies Restated",
+          "type": "array"
+        },
+        "ranking_before": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Ranking Before",
+          "type": "array"
+        },
+        "ranking_after": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Ranking After",
+          "type": "array"
+        },
+        "requirements_closed": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirements Closed",
+          "type": "array"
+        },
+        "problem_sets_moved": {
+          "items": {
+            "$ref": "#/$defs/ProblemSetMoved"
+          },
+          "title": "Problem Sets Moved",
+          "type": "array"
+        },
+        "risk_assessments_changed": {
+          "items": {
+            "$ref": "#/$defs/RiskAssessmentChanged"
+          },
+          "title": "Risk Assessments Changed",
+          "type": "array"
+        },
+        "validity_changed": {
+          "items": {
+            "$ref": "#/$defs/ValidityChanged"
+          },
+          "title": "Validity Changed",
+          "type": "array"
+        },
+        "jipcl_changed": {
+          "items": {
+            "$ref": "#/$defs/JipclChanged"
+          },
+          "title": "Jipcl Changed",
+          "type": "array"
+        }
+      },
+      "required": [
+        "assumptions_changed",
+        "strategies_restated",
+        "ranking_before",
+        "ranking_after",
+        "requirements_closed",
+        "problem_sets_moved",
+        "risk_assessments_changed",
+        "validity_changed",
+        "jipcl_changed"
+      ],
+      "title": "ExpectedEffects",
+      "type": "object"
+    },
+    "JipclChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "req_id": {
+          "title": "Req Id",
+          "type": "string"
+        },
+        "rank_before": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rank Before"
+        },
+        "rank_after": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rank After"
+        },
+        "status_before": {
+          "title": "Status Before",
+          "type": "string"
+        },
+        "status_after": {
+          "title": "Status After",
+          "type": "string"
+        }
+      },
+      "required": [
+        "req_id",
+        "rank_before",
+        "rank_after",
+        "status_before",
+        "status_after"
+      ],
+      "title": "JipclChanged",
+      "type": "object"
+    },
+    "Predicate": {
+      "description": "Controlled predicate vocabulary (DATASET). value_type/unit per predicate in PREDICATES.",
+      "enum": [
+        "range_km",
+        "count",
+        "readiness",
+        "status",
+        "throughput_per_day",
+        "alignment",
+        "basing_access",
+        "mobilization_days",
+        "mobilized_brigades",
+        "cyber_capacity",
+        "munitions_stock_days",
+        "posture_state",
+        "capacity_mw",
+        "displaced_persons",
+        "outage_hours",
+        "intent",
+        "mixing_bias",
+        "located_at",
+        "operated_by",
+        "subordinate_to",
+        "supplies",
+        "controls",
+        "hosts"
+      ],
+      "title": "Predicate",
+      "type": "string"
+    },
+    "ProblemSetMoved": {
+      "additionalProperties": false,
+      "properties": {
+        "problem_set_id": {
+          "title": "Problem Set Id",
+          "type": "string"
+        },
+        "jsps_horizon": {
+          "title": "Jsps Horizon",
+          "type": "string"
+        },
+        "level_before": {
+          "title": "Level Before",
+          "type": "string"
+        },
+        "level_after": {
+          "title": "Level After",
+          "type": "string"
+        }
+      },
+      "required": [
+        "problem_set_id",
+        "jsps_horizon",
+        "level_before",
+        "level_after"
+      ],
+      "title": "ProblemSetMoved",
+      "type": "object"
+    },
+    "RiskAssessmentChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "he_id": {
+          "title": "He Id",
+          "type": "string"
+        },
+        "horizon": {
+          "title": "Horizon",
+          "type": "string"
+        },
+        "level_before": {
+          "title": "Level Before",
+          "type": "string"
+        },
+        "level_after": {
+          "title": "Level After",
+          "type": "string"
+        },
+        "trend_after": {
+          "title": "Trend After",
+          "type": "string"
+        },
+        "p_before": {
+          "title": "P Before",
+          "type": "number"
+        },
+        "p_after": {
+          "title": "P After",
+          "type": "number"
+        }
+      },
+      "required": [
+        "he_id",
+        "horizon",
+        "level_before",
+        "level_after",
+        "trend_after",
+        "p_before",
+        "p_after"
+      ],
+      "title": "RiskAssessmentChanged",
+      "type": "object"
+    },
+    "StrategyRestated": {
+      "additionalProperties": false,
+      "properties": {
+        "strategy_id": {
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "value_before": {
+          "title": "Value Before",
+          "type": "number"
+        },
+        "value_after": {
+          "title": "Value After",
+          "type": "number"
+        },
+        "status_before": {
+          "title": "Status Before",
+          "type": "string"
+        },
+        "status_after": {
+          "title": "Status After",
+          "type": "string"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "value_before",
+        "value_after",
+        "status_before",
+        "status_after"
+      ],
+      "title": "StrategyRestated",
+      "type": "object"
+    },
+    "ValidityChanged": {
+      "additionalProperties": false,
+      "properties": {
+        "strategy_id": {
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "test": {
+          "$ref": "#/$defs/ValidityTest"
+        },
+        "before": {
+          "title": "Before",
+          "type": "boolean"
+        },
+        "after": {
+          "title": "After",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "test",
+        "before",
+        "after"
+      ],
+      "title": "ValidityChanged",
+      "type": "object"
+    },
+    "ValidityTest": {
+      "enum": [
+        "suitable",
+        "feasible",
+        "acceptable",
+        "distinguishable",
+        "complete"
+      ],
+      "title": "ValidityTest",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "batch": {
+      "maximum": 3,
+      "minimum": 1,
+      "title": "Batch",
+      "type": "integer"
+    },
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "docs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Docs",
+      "type": "array"
+    },
+    "change_events": {
+      "items": {
+        "$ref": "#/$defs/ChangeEvent"
+      },
+      "title": "Change Events",
+      "type": "array"
+    },
+    "expected_effects": {
+      "$ref": "#/$defs/ExpectedEffects"
+    }
+  },
+  "required": [
+    "batch",
+    "as_of",
+    "docs",
+    "change_events",
+    "expected_effects"
+  ],
+  "title": "inject_manifest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "injects/batch_n/manifest.json: documents, change events and COMPUTED expected effects of one inject batch."
+}

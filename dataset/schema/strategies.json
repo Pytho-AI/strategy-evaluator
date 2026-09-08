@@ -1,0 +1,381 @@
+{
+  "$defs": {
+    "AdversaryCoaLabel": {
+      "enum": [
+        "most_likely",
+        "most_dangerous",
+        "alternative"
+      ],
+      "title": "AdversaryCoaLabel",
+      "type": "string"
+    },
+    "Echelon": {
+      "enum": [
+        "national",
+        "theater_strategic",
+        "operational",
+        "tactical"
+      ],
+      "title": "Echelon",
+      "type": "string"
+    },
+    "RiskFunctional": {
+      "enum": [
+        "expected",
+        "cvar",
+        "minimax"
+      ],
+      "title": "RiskFunctional",
+      "type": "string"
+    },
+    "Sequencing": {
+      "enum": [
+        "sequential",
+        "simultaneous"
+      ],
+      "title": "Sequencing",
+      "type": "string"
+    },
+    "StrategyStatus": {
+      "enum": [
+        "valid",
+        "invalid",
+        "stale",
+        "infeasible"
+      ],
+      "title": "StrategyStatus",
+      "type": "string"
+    },
+    "Validity": {
+      "additionalProperties": false,
+      "properties": {
+        "suitable": {
+          "$ref": "#/$defs/ValidityResult"
+        },
+        "feasible": {
+          "$ref": "#/$defs/ValidityResult"
+        },
+        "acceptable": {
+          "$ref": "#/$defs/ValidityResult"
+        },
+        "distinguishable": {
+          "$ref": "#/$defs/ValidityResult"
+        },
+        "complete": {
+          "$ref": "#/$defs/ValidityResult"
+        }
+      },
+      "required": [
+        "suitable",
+        "feasible",
+        "acceptable",
+        "distinguishable",
+        "complete"
+      ],
+      "title": "Validity",
+      "type": "object"
+    },
+    "ValidityResult": {
+      "additionalProperties": false,
+      "properties": {
+        "pass": {
+          "title": "Pass",
+          "type": "boolean"
+        },
+        "evidence": {
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pass",
+        "evidence"
+      ],
+      "title": "ValidityResult",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "strategy_id": {
+      "pattern": "^str_[a-z0-9_]+$",
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "game_id": {
+      "title": "Game Id",
+      "type": "string"
+    },
+    "actor_id": {
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "echelon": {
+      "$ref": "#/$defs/Echelon"
+    },
+    "guidance_source": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "FK guidance; the JSPS product this COA descends from",
+      "title": "Guidance Source"
+    },
+    "adversary_coa_label": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AdversaryCoaLabel"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "set on opponent (Red) strategies only"
+    },
+    "mission_who": {
+      "title": "Mission Who",
+      "type": "string"
+    },
+    "mission_what": {
+      "title": "Mission What",
+      "type": "string"
+    },
+    "mission_when": {
+      "title": "Mission When",
+      "type": "string"
+    },
+    "mission_where": {
+      "title": "Mission Where",
+      "type": "string"
+    },
+    "mission_why": {
+      "title": "Mission Why",
+      "type": "string"
+    },
+    "end_state_objective_id": {
+      "title": "End State Objective Id",
+      "type": "string"
+    },
+    "constraints": {
+      "description": "'must do' (JP 5-0 Ch. III \u00a7(7)(a))",
+      "items": {
+        "type": "string"
+      },
+      "title": "Constraints",
+      "type": "array"
+    },
+    "restraints": {
+      "description": "'cannot do' (JP 5-0 Ch. III \u00a7(7)(b))",
+      "items": {
+        "type": "string"
+      },
+      "title": "Restraints",
+      "type": "array"
+    },
+    "main_effort": {
+      "description": "line of effort that is the main effort (distinguishability dim main_effort)",
+      "title": "Main Effort",
+      "type": "string"
+    },
+    "sequencing": {
+      "$ref": "#/$defs/Sequencing"
+    },
+    "task_org": {
+      "description": "unit entity ids in the task organization",
+      "items": {
+        "type": "string"
+      },
+      "title": "Task Org",
+      "type": "array"
+    },
+    "reserve_policy": {
+      "description": "how reserves are used (distinguishability dim reserves)",
+      "title": "Reserve Policy",
+      "type": "string"
+    },
+    "mitigates_he_ids": {
+      "description": "harmful events this COA mitigates (acceptable test)",
+      "items": {
+        "type": "string"
+      },
+      "title": "Mitigates He Ids",
+      "type": "array"
+    },
+    "risk_functional": {
+      "$ref": "#/$defs/RiskFunctional"
+    },
+    "risk_alpha": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Risk Alpha"
+    },
+    "opponent_model_id": {
+      "title": "Opponent Model Id",
+      "type": "string"
+    },
+    "theory_of_victory": {
+      "description": "ordered dependency edge ids: action -enables-> claim -supports-> objective ... end_state",
+      "items": {
+        "type": "string"
+      },
+      "title": "Theory Of Victory",
+      "type": "array"
+    },
+    "validity": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Validity"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StrategyStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "aspiration": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "COMPUTED w\u00b7\u03c4 over the strategy's objectives",
+      "title": "Aspiration"
+    },
+    "value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value"
+    },
+    "value_ci": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value Ci"
+    },
+    "robustness": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Robustness"
+    },
+    "world_version": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "World Version"
+    }
+  },
+  "required": [
+    "strategy_id",
+    "game_id",
+    "actor_id",
+    "name",
+    "summary",
+    "echelon",
+    "mission_who",
+    "mission_what",
+    "mission_when",
+    "mission_where",
+    "mission_why",
+    "end_state_objective_id",
+    "main_effort",
+    "sequencing",
+    "reserve_policy",
+    "risk_functional",
+    "opponent_model_id"
+  ],
+  "title": "strategies",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/strategies.json",
+  "description": "A strategy sigma = <U, Pi, M, Theta, Sigma_-i, rho>; a JP 5-0 COA nested in the JSPS.",
+  "x-primary-key": [
+    "strategy_id"
+  ],
+  "x-foreign-keys": {
+    "game_id": "games.game_id",
+    "actor_id": "entities.entity_id",
+    "guidance_source": "guidance.guidance_id",
+    "end_state_objective_id": "objectives.objective_id",
+    "opponent_model_id": "opponent_models.opponent_model_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [
+    "validity",
+    "status",
+    "aspiration",
+    "value",
+    "value_ci",
+    "robustness",
+    "world_version"
+  ],
+  "x-truth-only": false
+}

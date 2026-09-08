@@ -1,0 +1,205 @@
+{
+  "$defs": {
+    "AllOf": {
+      "additionalProperties": false,
+      "properties": {
+        "all": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/VarCmp"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "title": "All",
+          "type": "array"
+        }
+      },
+      "required": [
+        "all"
+      ],
+      "title": "AllOf",
+      "type": "object"
+    },
+    "AnyOf": {
+      "additionalProperties": false,
+      "properties": {
+        "any": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/VarCmp"
+              },
+              {
+                "$ref": "#/$defs/AllOf"
+              },
+              {
+                "$ref": "#/$defs/AnyOf"
+              }
+            ]
+          },
+          "title": "Any",
+          "type": "array"
+        }
+      },
+      "required": [
+        "any"
+      ],
+      "title": "AnyOf",
+      "type": "object"
+    },
+    "CmpOp": {
+      "enum": [
+        "==",
+        "!=",
+        "<",
+        "<=",
+        ">",
+        ">=",
+        "abs_le",
+        "in"
+      ],
+      "title": "CmpOp",
+      "type": "string"
+    },
+    "VarCmp": {
+      "additionalProperties": false,
+      "description": "Leaf: compare an observable/state variable (or a claim value) with a constant.",
+      "properties": {
+        "var": {
+          "title": "Var",
+          "type": "string"
+        },
+        "op": {
+          "$ref": "#/$defs/CmpOp"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "var",
+        "op"
+      ],
+      "title": "VarCmp",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "rule_id": {
+      "pattern": "^rule_[a-z0-9_]+$",
+      "title": "Rule Id",
+      "type": "string"
+    },
+    "strategy_id": {
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "priority": {
+      "description": "lower fires first; equal priority + identical condition = one mixed distribution",
+      "minimum": 0,
+      "title": "Priority",
+      "type": "integer"
+    },
+    "condition": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "#/$defs/VarCmp"
+        },
+        {
+          "$ref": "#/$defs/AllOf"
+        },
+        {
+          "$ref": "#/$defs/AnyOf"
+        }
+      ],
+      "title": "Condition"
+    },
+    "action_id": {
+      "title": "Action Id",
+      "type": "string"
+    },
+    "probability": {
+      "exclusiveMinimum": 0.0,
+      "maximum": 1.0,
+      "title": "Probability",
+      "type": "number"
+    },
+    "periods": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "periods in which the rule is active; null = all periods (used by the feasible test)",
+      "title": "Periods"
+    },
+    "rationale_claim_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rationale Claim Ids",
+      "type": "array"
+    },
+    "decision_point_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision Point Id"
+    }
+  },
+  "required": [
+    "rule_id",
+    "strategy_id",
+    "priority",
+    "condition",
+    "action_id",
+    "probability"
+  ],
+  "title": "policy_rules",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/policy_rules.json",
+  "description": "Policy Pi: ordered (condition, action, probability) rules; the condition is the information set.",
+  "x-primary-key": [
+    "rule_id"
+  ],
+  "x-foreign-keys": {
+    "strategy_id": "strategies.strategy_id",
+    "action_id": "actions.action_id",
+    "decision_point_id": "decision_points.dp_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

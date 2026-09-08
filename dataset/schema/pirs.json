@@ -1,0 +1,48 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "pir_id": {
+      "pattern": "^pir_[a-z0-9_]+$",
+      "title": "Pir Id",
+      "type": "string"
+    },
+    "statement": {
+      "title": "Statement",
+      "type": "string"
+    },
+    "commander_role": {
+      "title": "Commander Role",
+      "type": "string"
+    },
+    "priority_rank": {
+      "minimum": 1,
+      "title": "Priority Rank",
+      "type": "integer"
+    },
+    "decision_point_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Decision Point Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "pir_id",
+    "statement",
+    "commander_role",
+    "priority_rank"
+  ],
+  "title": "pirs",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/pirs.json",
+  "description": "Priority intelligence requirements (JP 2-01 Ch. III \u00a75.a).",
+  "x-primary-key": [
+    "pir_id"
+  ],
+  "x-foreign-keys": {},
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

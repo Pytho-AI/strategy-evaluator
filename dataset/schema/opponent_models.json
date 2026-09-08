@@ -1,0 +1,64 @@
+{
+  "$defs": {
+    "OpponentMix": {
+      "additionalProperties": false,
+      "properties": {
+        "strategy_id": {
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "probability": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Probability",
+          "type": "number"
+        }
+      },
+      "required": [
+        "strategy_id",
+        "probability"
+      ],
+      "title": "OpponentMix",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "opponent_model_id": {
+      "pattern": "^om_[a-z0-9_]+$",
+      "title": "Opponent Model Id",
+      "type": "string"
+    },
+    "actor_id": {
+      "description": "the opponent whose strategies are mixed",
+      "title": "Actor Id",
+      "type": "string"
+    },
+    "distribution": {
+      "items": {
+        "$ref": "#/$defs/OpponentMix"
+      },
+      "title": "Distribution",
+      "type": "array"
+    }
+  },
+  "required": [
+    "opponent_model_id",
+    "actor_id",
+    "distribution"
+  ],
+  "title": "opponent_models",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/opponent_models.json",
+  "description": "Sigma_-i: distribution over the opponent's strategies.",
+  "x-primary-key": [
+    "opponent_model_id"
+  ],
+  "x-foreign-keys": {
+    "actor_id": "entities.entity_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

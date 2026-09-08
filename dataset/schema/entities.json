@@ -1,0 +1,83 @@
+{
+  "$defs": {
+    "EntityType": {
+      "enum": [
+        "actor",
+        "unit",
+        "system",
+        "location",
+        "polity",
+        "infrastructure",
+        "problem_set",
+        "organization_role"
+      ],
+      "title": "EntityType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "entity_id": {
+      "pattern": "^ent_[a-z0-9_]+$",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "entity_type": {
+      "$ref": "#/$defs/EntityType"
+    },
+    "canonical_name": {
+      "title": "Canonical Name",
+      "type": "string"
+    },
+    "aliases": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Aliases",
+      "type": "array"
+    },
+    "parent_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Id"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    }
+  },
+  "required": [
+    "entity_id",
+    "entity_type",
+    "canonical_name"
+  ],
+  "title": "entities",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/entities.json",
+  "description": "Named things claims are about.",
+  "x-primary-key": [
+    "entity_id"
+  ],
+  "x-foreign-keys": {
+    "parent_id": "entities.entity_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

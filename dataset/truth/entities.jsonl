@@ -1,0 +1,2 @@
+{"aliases": ["P1"], "canonical_name": "Player 1", "description": "rock-paper-scissors player one", "entity_id": "ent_rps_p1", "entity_type": "actor", "parent_id": null}
+{"aliases": ["P2"], "canonical_name": "Player 2", "description": "rock-paper-scissors player two", "entity_id": "ent_rps_p2", "entity_type": "actor", "parent_id": null}

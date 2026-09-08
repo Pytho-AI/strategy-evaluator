@@ -1,0 +1,39 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "strategy_id": {
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "resource_id": {
+      "title": "Resource Id",
+      "type": "string"
+    },
+    "budget": {
+      "minimum": 0.0,
+      "title": "Budget",
+      "type": "number"
+    }
+  },
+  "required": [
+    "strategy_id",
+    "resource_id",
+    "budget"
+  ],
+  "title": "strategy_resources",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/strategy_resources.json",
+  "description": "Budget m.",
+  "x-primary-key": [
+    "strategy_id",
+    "resource_id"
+  ],
+  "x-foreign-keys": {
+    "strategy_id": "strategies.strategy_id",
+    "resource_id": "resources.resource_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

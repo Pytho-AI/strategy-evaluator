@@ -1,0 +1,57 @@
+{
+  "$defs": {
+    "SourceKind": {
+      "enum": [
+        "threat",
+        "hazard"
+      ],
+      "title": "SourceKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "rs_id": {
+      "pattern": "^rs_[a-z0-9_]+$",
+      "title": "Rs Id",
+      "type": "string"
+    },
+    "he_id": {
+      "title": "He Id",
+      "type": "string"
+    },
+    "source_kind": {
+      "$ref": "#/$defs/SourceKind"
+    },
+    "entity_id": {
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "description": {
+      "title": "Description",
+      "type": "string"
+    }
+  },
+  "required": [
+    "rs_id",
+    "he_id",
+    "source_kind",
+    "entity_id",
+    "description"
+  ],
+  "title": "risk_sources",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/risk_sources.json",
+  "description": "Sources of risk: threats and hazards.",
+  "x-primary-key": [
+    "rs_id"
+  ],
+  "x-foreign-keys": {
+    "he_id": "harmful_events.he_id",
+    "entity_id": "entities.entity_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}

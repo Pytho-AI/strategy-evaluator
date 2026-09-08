@@ -1,0 +1,42 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "resource_id": {
+      "pattern": "^res_[a-z0-9_]+$",
+      "title": "Resource Id",
+      "type": "string"
+    },
+    "game_id": {
+      "title": "Game Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "unit": {
+      "title": "Unit",
+      "type": "string"
+    }
+  },
+  "required": [
+    "resource_id",
+    "game_id",
+    "name",
+    "unit"
+  ],
+  "title": "resources",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimgraph-dataset/schema/resources.json",
+  "description": "Means M resource types.",
+  "x-primary-key": [
+    "resource_id"
+  ],
+  "x-foreign-keys": {
+    "game_id": "games.game_id"
+  },
+  "x-polymorphic-foreign-keys": {},
+  "x-computed": [],
+  "x-truth-only": false
+}
