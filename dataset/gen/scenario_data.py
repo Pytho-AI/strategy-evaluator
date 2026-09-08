@@ -253,7 +253,7 @@ INJECT_CHANGES = {
         ("ent_varenia", "cyber_capacity", "extensive", 62, True, "roughly_even_chance", "moderate"),  # dominant driver -> forced choice
         ("ent_sondria", "displaced_persons", 26000, 63, False, None, "moderate"),
         ("loc_sondria_camps", "displaced_persons", 26000, 63, False, None, "moderate"),
-        ("ent_sondria", "alignment", "red_aligned", 60, True, "likely", "low"),
+        ("ent_sondria", "alignment", "red_aligned", 62, True, "likely", "low"),
         ("unit_son_border_guard", "readiness", 0.35, 64, False, None, "moderate"),
         ("loc_ravel_crossing", "status", "degraded", 63, False, None, "high"),
     ],
