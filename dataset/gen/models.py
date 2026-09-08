@@ -70,7 +70,7 @@ class Source(Strict):
 
 
 class Entity(Strict):
-    entity_id: str = Field(pattern=r"^ent_[a-z0-9_]+$")
+    entity_id: str = Field(pattern=r"^(ent|loc|inf|unit|sys|role)_[a-z0-9_]+$", description="typed readable prefix: ent_ actor/polity/problem set, loc_ location, inf_ infrastructure, unit_ unit, sys_ system, role_ organization role")
     entity_type: V.EntityType
     canonical_name: str
     aliases: list[str] = Field(default_factory=list)

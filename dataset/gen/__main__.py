@@ -22,15 +22,18 @@ DEFAULT_SEED = 20260908
 
 
 def stages():
-    """Ordered generation stages; each is `fn(ctx)` and idempotent."""
-    from gen import rps
-    out = [("rps", rps.build)]
-    try:
-        from gen import scaffold, facts, strategies, risk, plan_docs, render, injects  # noqa: F401
-        out = [("scaffold", scaffold.build), ("facts", facts.build), ("strategies", strategies.build), ("risk", risk.build),
-               ("plan_docs", plan_docs.build), ("render", render.build), ("rps", rps.build), ("injects", injects.build)]
-    except ImportError:
-        pass
+    """Ordered generation stages; each is `fn(ctx)` and idempotent. Stages whose module does not
+    exist yet (later phases) are skipped."""
+    import importlib
+    out = []
+    for name in ("scaffold", "facts", "strategies", "risk", "plan_docs", "render", "rps", "injects"):
+        try:
+            mod = importlib.import_module(f"gen.{name}")
+        except ImportError as ex:
+            if ex.name == f"gen.{name}":
+                continue
+            raise
+        out.append((name, mod.build))
     return out
 
 
@@ -92,6 +95,9 @@ def cmd_check(args) -> int:
                 if not g.exists() or not filecmp.cmp(f, g, shallow=False):
                     diffs.append(str(f.relative_to(DATASET_DIR)))
         results.append(validate.Result("repro", not diffs, f"regeneration with seed {args.seed} is byte-identical" if not diffs else f"differs: {diffs[:5]}"))
+    from gen import denylist
+    hits = denylist.run(DATASET_DIR)
+    results.append(validate.Result("denylist", not hits, "no real nation/alliance/command/weapon names in scenario content" if not hits else f"hits: {hits[:3]}"))
     # extension gates / eval truth-vs-truth are appended by later phases when present
     try:
         from gen import gates_extra

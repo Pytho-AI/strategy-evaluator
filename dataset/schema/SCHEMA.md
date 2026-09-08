@@ -214,7 +214,7 @@ Named things claims are about.
 
 | column | type | required | notes |
 |---|---|---|---|
-| `entity_id` | str | yes |  |
+| `entity_id` | str | yes | typed readable prefix: ent_ actor/polity/problem set, loc_ location, inf_ infrastructure, unit_ unit, sys_ system, role_ organization role |
 | `entity_type` | enum `EntityType` | yes |  |
 | `canonical_name` | str | yes |  |
 | `aliases` | list[str] | no |  |

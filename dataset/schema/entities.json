@@ -18,7 +18,8 @@
   "additionalProperties": false,
   "properties": {
     "entity_id": {
-      "pattern": "^ent_[a-z0-9_]+$",
+      "description": "typed readable prefix: ent_ actor/polity/problem set, loc_ location, inf_ infrastructure, unit_ unit, sys_ system, role_ organization role",
+      "pattern": "^(ent|loc|inf|unit|sys|role)_[a-z0-9_]+$",
       "title": "Entity Id",
       "type": "string"
     },

@@ -1,0 +1,5 @@
+{"game_id": "meridian", "name": "surveillance flight hours", "resource_id": "res_isr_hours", "unit": "hours"}
+{"game_id": "meridian", "name": "strike and patrol sorties", "resource_id": "res_sorties", "unit": "sorties"}
+{"game_id": "meridian", "name": "precision standoff munitions", "resource_id": "res_munitions", "unit": "rounds"}
+{"game_id": "meridian", "name": "sealift and airlift capacity", "resource_id": "res_lift", "unit": "tons"}
+{"game_id": "meridian", "name": "sustainment days of supply", "resource_id": "res_sustain_days", "unit": "days"}

@@ -10,7 +10,21 @@ one command.
 Prints a single table `gate → PASS/FAIL`: schema load, invariants 01–20, reproducibility diff
 against a fresh regeneration. Nothing else on success. `make test` runs the pytest gates per phase.
 
-## Current phase: P0 (schemas and contract)
+## Current phase: P1 (scenario and facts)
+
+Files to open and the question to answer while reading:
+
+1. `dataset/gen/scenario.md` — is the theater coherent, entirely fictional, and does §8 (assumption
+   matrix), §10 (harmful events) and §13 (inject design) give the app team enough to script the demo?
+2. `dataset/truth/facts.jsonl` — filter `sys_dorne_asm` / `range_km` and `ent_corvane` /
+   `basing_access`: do the valid-time windows and `first_asserted_batch` tell the batch-1 and batch-2
+   stories (280 → 340 km valid from 23 September; basing granted valid from 18 October)?
+3. `dataset/gen/denylist.txt` — would you add a real name that the scenario might drift toward?
+
+Gate: `pytest tests/test_p1.py` (4 passed). `make check` shows invariant 03 failing until the corpus
+exists (P2/P4); everything else passes.
+
+## Previous phase: P0 (schemas and contract)
 
 Files to open and the question to answer while reading:
 

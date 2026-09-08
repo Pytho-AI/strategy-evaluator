@@ -45,3 +45,36 @@ repro   PASS  regeneration with seed 20260908 is byte-identical
 `pytest tests/test_p0.py`: 2 passed (schemas export and load as JSON Schema 2020-12; RPS validates
 end-to-end: uniform strategy V = 0, all five validity tests pass, assumption holds with p = 0.97,
 EVPI on the 'always paper' strategy = 0.009 > 0, sensitivity −0.35).
+
+## P1 — scenario, scaffold, facts, guidance, PIRs — PASSED 2026-09-08
+
+Outputs: `gen/scenario.md` (theater design: geography graph, actors/units/systems, timeline, guidance
+chain, ends, game form, three Blue and three Red COAs, the 3×6 assumption matrix, four problem
+sets with risk context paragraphs, nine harmful events with sources/drivers/consequence basis,
+the six-edge escalation DAG, PIRs and T0 requirements, inject design with JRAM effects, document
+plan), `gen/scenario_data.py` (the same design as data), `gen/scaffold.py`, `gen/facts.py`,
+`gen/denylist.txt` + `gen/denylist.py` (now a `gen check` gate).
+
+Gate (`pytest tests/test_p1.py`, 4 passed): denylist grep clean over entity names/aliases/descriptions,
+`scenario.md` and rendered documents; every non-role scenario entity has ≥ 2 facts (as subject or
+object; organization roles and the two RPS players are structural); change events land in three
+clusters (batch 1: 6 at days +14..+18; batch 2: 5 at +38..+42; batch 3: 5 at +60..+64) and every
+change pairs adjoining valid-time intervals; scenario.md anchors match the data.
+
+Counts: 122 entities (2 actors, 3 polities, 12 locations, 10 infrastructure, 20 units, 47 sub-units,
+12 systems, 9 roles, 4 problem-set entities, 2 RPS players), 448 facts of which 421 are valid at T0,
+4 backstory change events, 2 future projections, 16 inject change events, 7 guidance rows, 20
+objectives, 5 resources, 28 actions, 4 PIRs.
+
+Contract amendment (pattern only): `entities.entity_id` accepts the typed readable prefixes
+`ent_`, `loc_`, `inf_`, `unit_`, `sys_`, `role_` instead of `ent_` alone; schema re-exported.
+
+Full `gen check` at P1: invariant 03 (every fact instantiated by a claim) FAILS as expected until the
+corpus is rendered (P2 renders the intelligence documents; P4 the products); every other gate passes.
+
+Ordering decision for P2–P4: theory-of-victory, grounding and driver edges reference claim ids, and
+claims come from rendered documents. The pipeline therefore renders the intelligence-bearing
+documents (reference entries, situation reports, news, message traffic, tabular, intelligence
+assessments) before strategies and risk are built, and renders the products (risk context, risk
+assessments, collection plans, COA statements, guidance) after them. Stage order: scaffold, facts,
+plan_docs, render_intel, strategies, graph, risk, collection, render_products, rps, injects.
