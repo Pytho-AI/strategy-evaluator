@@ -78,3 +78,23 @@ documents (reference entries, situation reports, news, message traffic, tabular,
 assessments) before strategies and risk are built, and renders the products (risk context, risk
 assessments, collection plans, COA statements, guidance) after them. Stage order: scaffold, facts,
 plan_docs, render_intel, strategies, graph, risk, collection, render_products, rps, injects.
+
+## P2–P7 — base release — PASSED 2026-09-08
+
+| Phase | Focused gate | Result |
+|---|---|---|
+| P2 | strategies, payoffs, graph, validity | `pytest tests/test_p2.py`: 2 passed |
+| P3 | risk inputs, cascade, JRAM statements | `pytest tests/test_p3.py`: 2 passed |
+| P4 | corpus, products, perturbations, spans | `pytest tests/test_p4.py`: 2 passed |
+| P5 | three inject batches and computed effects | `pytest tests/test_p5.py`: 1 passed |
+| P6 | extraction/effects scoring and measured baseline | `pytest tests/test_p6.py`: 1 passed |
+| P7 | loader, data card, review pack, deterministic zip | `pytest tests/test_p7.py`: 1 passed |
+
+P7 full gate: `make check` passed schema validation, invariants 01–20, byte-identical regeneration,
+and the denylist. Base counts are 92 documents, 864 claims, 442 facts, 122 entities, 9 strategies,
+600 payoff rows, 9 harmful events, and 3 inject manifests. The measured baseline is the offline
+literal-surface proxy. The live LLM baseline was not run because `ANTHROPIC_API_KEY` was unset.
+
+Temporal fix at the P7 gate: every rendered claim now preserves its fact's `valid_to`. Two redundant
+multi-valued relationship facts were removed because the frozen invariant permits one approved value
+per `(subject, predicate, valid-time)`; unit `located_at` facts preserve those graph connections.

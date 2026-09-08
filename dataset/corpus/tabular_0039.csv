@@ -1,0 +1,86 @@
+UNCLASSIFIED
+SYNTHETIC DATA — FOR EXERCISE AND DEVELOPMENT USE ONLY. NOT A REAL ASSESSMENT.
+Infrastructure and locations table
+entitz,attribute,vauel,unit,as_fo,notes
+Kestrel Strait,status,operational,,2026-03-12,
+Auberon harbour,status,operational,,2026-03-12,alias
+Port Auberon,hosts,Meridian Logistics Group,,2026-07-10,
+Halden Airfield,status,degraded,,2026-03-12,
+Halden Airfield,hosts,Halden Brigade,,2026-07-25,
+Corvane Island,hosts,Task Group Kestrel,,2026-07-25,
+the Ilmaran capital,hosts,Ilmaran 3rd Coastal Division,,2026-03-12,alias
+Cape Dorne,hosts,7th Coastal Missile Brigade,,2026-03-12,
+Novak Naval Base,hosts,Varenian Northern Fleet,,2026-03-12,
+Serath Missile Complex,hosts,Serath Missile Regiment,,2026-03-12,
+Kessary Plain,hosts,12th Mechanized Brigade,,2026-03-12,
+Ravel Crossing,status,operational,,2026-03-12,
+Meridian Sea,status,operational,,2026-03-12,
+the border camps,displaced_persons,4000,persons,2026-07-10,alias
+Sondrian border camps,hosts,Sondrian Border Guard,,2026-03-12,
+Kestrel Strait sea lane,throughput_per_day,120,transits/day,2026-03-12,
+the strait sea lane,status,operational,,2026-03-12,alias
+Southern Passage,throughput_per_day,40,transits/day,2026-03-12,
+Southern Passage,status,operational,,2026-03-12,
+the air bridge,throughput_per_day,18,transits/day,2026-07-10,alias
+the air bridge,status,operational,,2026-07-10,alias
+Ilmaran coastal road,throughput_per_day,900,transits/day,2026-03-12,
+Ilmaran coastal road,status,operational,,2026-03-12,
+Aldis gas terminal,status,operational,,2026-03-12,
+Aldis gas terminal,supplies,Veyra power station,,2026-03-12,
+Veyra power station,capacity_mw,640,MW,2026-03-12,
+Veyra power station,status,operational,,2026-03-12,
+Veyra power station,outage_hours,6,hours,2026-08-09,
+Veyra power station,supplies,Port Auberon,,2026-03-12,
+Ilmara grid control,posture_state,unmitigated,,2026-06-10,alias
+Ilmaran grid control network,status,operational,,2026-03-12,
+Blue logistics network,posture_state,unmitigated,,2026-08-09,
+Blue logistics network,status,operational,,2026-07-10,
+Blue logistics network,supplies,Meridian Logistics Group,,2026-07-10,
+the undersea cable,status,operational,,2026-03-12,alias
+Kestrel undersea cable,supplies,Lisenne,,2026-03-12,
+Dorne coastal radar,status,operational,,2026-05-11,
+Dorne coastal radar,supplies,7th Coastal Missile Brigade,,2026-05-11,
+the island,status,operational,,2026-03-12,alias
+Lisenne,status,operational,,2026-03-12,
+Cape Dorne,status,operational,,2026-03-12,
+Novak Naval Base,status,operational,,2026-03-12,
+Serath Missile Complex,status,operational,,2026-03-12,
+Kessary Plain,status,operational,,2026-03-12,
+Sondrian border camps,status,operational,,2026-03-12,
+the strait sea lane,located_at,Kestrel Strait,,2026-03-12,alias
+Southern Passage,located_at,Corvane Island,,2026-03-12,
+Auberon–Halden air bridge,located_at,Halden Airfield,,2026-03-12,
+Route Lisenne,located_at,Lisenne,,2026-03-12,alias
+Aldis gas terminal,located_at,Port Auberon,,2026-03-12,
+Veyra power station,located_at,Lisenne,,2026-03-12,
+Ilmaran grid control network,located_at,Lisenne,,2026-03-12,
+Blue logistics network,located_at,Port Auberon,,2026-03-12,
+the undersea cable,located_at,Kestrel Strait,,2026-03-12,alias
+Dorne coastal radar,located_at,Cape Dorne,,2026-03-12,
+Maritime chokepoint problem set,status,operational,,2026-08-09,
+the energy problem set,status,operational,,2026-08-09,alias
+Cyber problem set,status,operational,,2026-08-09,
+the humanitarian problem set,status,operational,,2026-08-09,alias
+Maritime chokepoint problem set,located_at,Kestrel Strait,,2026-08-09,
+Energy infrastructure problem set,located_at,Lisenne,,2026-08-09,
+Cyber problem set,located_at,Port Auberon,,2026-08-09,
+Humanitarian problem set,located_at,Ravel Crossing,,2026-08-09,
+Gull-class patrol boat,operated_by,Ilmaran Navy Patrol Squadron,,2026-03-12,
+Gull class,located_at,Port Auberon,,2026-03-12,alias
+Gull-class patrol boat,range_km,60,km,2026-03-12,
+Gull-class patrol boat,count,8,each,2026-03-12,
+Gull boats,status,operational,,2026-03-12,alias
+Ilmaran coastal road,status,operational,,2026-03-12,
+the coastal road,located_at,Lisenne,,2026-03-12,alias
+Halyard air defense system,located_at,Port Auberon,,2026-03-12,
+Halyard air defense system,range_km,120,km,2026-03-12,
+Halyard air defense system,count,2,each,2026-03-12,
+Halyard air defense system,status,operational,,2026-03-12,
+Lark surveillance drone,operated_by,Meridian Surveillance Detachment,,2026-03-12,
+Lark surveillance drone,located_at,Halden Airfield,,2026-03-12,
+Lark surveillance drone,range_km,800,km,2026-03-12,
+Lark surveillance drone,count,6,each,2026-03-12,
+Lark surveillance drone,status,operational,,2026-03-12,
+Gull-class patrol boat,status,operational,,2026-03-12,
+Acronyms used: none
+UNCLASSIFIED

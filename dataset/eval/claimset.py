@@ -43,22 +43,23 @@ class ClaimSet:
         for c in claims:
             self.by_key.setdefault((c["subject_id"], c["predicate"]), []).append(c)
 
-    def all(self, subject_id: str, predicate: str, approved_only: bool = True) -> list[dict]:
+    def all(self, subject_id: str, predicate: str, approved_only: bool = True, known_at: Optional[date] = None) -> list[dict]:
         rows = self.by_key.get((subject_id, predicate), [])
-        return [r for r in rows if (not approved_only) or r.get("status", "approved") == "approved"]
+        return [r for r in rows if ((not approved_only) or r.get("status", "approved") == "approved")
+                and (known_at is None or _d(r.get("asserted_at", r["valid_from"])) <= known_at)]
 
     def current(self, subject_id: str, predicate: str, as_of: date) -> Optional[dict]:
         best = None
-        for c in self.all(subject_id, predicate):
+        for c in self.all(subject_id, predicate, known_at=as_of):
             vf, vt = _d(c["valid_from"]), _d(c.get("valid_to"))
             if vf <= as_of and (vt is None or vt >= as_of):
                 if best is None or _d(c.get("asserted_at", c["valid_from"])) >= _d(best.get("asserted_at", best["valid_from"])):
                     best = c
         return best
 
-    def in_window(self, subject_id: str, predicate: str, start: date, end: date) -> list[dict]:
+    def in_window(self, subject_id: str, predicate: str, start: date, end: date, known_at: Optional[date] = None) -> list[dict]:
         out = []
-        for c in self.all(subject_id, predicate):
+        for c in self.all(subject_id, predicate, known_at=known_at):
             vf, vt = _d(c["valid_from"]), _d(c.get("valid_to"))
             if vf <= end and (vt is None or vt >= start):
                 out.append(c)

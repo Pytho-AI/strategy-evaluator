@@ -69,6 +69,8 @@ def rho_apply(outcomes: list[tuple[float, float]], rho: str, alpha: Optional[flo
         return min(x for pr, x in outcomes if pr > 0)
     if rho == "cvar":
         a = alpha if alpha is not None else 0.2
+        if not 0 < a <= 1:
+            raise ValueError("CVaR alpha must be in (0, 1]")
         xs = sorted(outcomes, key=lambda t: t[1])
         mass, acc = 0.0, 0.0
         for pr, x in xs:
@@ -134,6 +136,8 @@ def value_range(sid: str, idx: PayoffIndex, w, opp, p, K) -> list[float]:
 def evpi(k: int, strategies: list[dict], idx: PayoffIndex, weights: dict[str, list[float]],
          opps: dict[str, dict[str, float]], p: list[float], K: int) -> float:
     """strategies: candidate strategy rows of one actor (each with risk_functional/risk_alpha)."""
+    if not strategies:
+        return 0.0
     def v(s, b):
         return value(s["strategy_id"], idx, weights[s["strategy_id"]], opps[s["strategy_id"]], p, K,
                      s["risk_functional"], s.get("risk_alpha"), {k: b})
@@ -152,7 +156,7 @@ def assumption_state(cs: ClaimSet, a: dict, as_of: date) -> tuple[float, str, Op
            earlier) or confidence_icd203 == low; p computed from the latest claim."""
     c = cs.current(a["subject_id"], a["predicate"], as_of)
     if c is None:
-        past = [r for r in cs.all(a["subject_id"], a["predicate"]) if date.fromisoformat(r["valid_from"]) <= as_of]
+        past = [r for r in cs.all(a["subject_id"], a["predicate"], known_at=as_of) if date.fromisoformat(r["valid_from"]) <= as_of]
         if not past:
             return 0.5, "unknown", None
         c = max(past, key=lambda r: r["valid_from"])

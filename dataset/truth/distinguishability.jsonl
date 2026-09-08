@@ -1,2 +1,14 @@
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_blue_1", "strategy_b": "str_blue_2"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_blue_1", "strategy_b": "str_blue_3"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_blue_2", "strategy_b": "str_blue_1"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_blue_2", "strategy_b": "str_blue_3"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_blue_3", "strategy_b": "str_blue_1"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_blue_3", "strategy_b": "str_blue_2"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_red_ml", "strategy_b": "str_red_md"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_red_ml", "strategy_b": "str_red_alt"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_red_md", "strategy_b": "str_red_ml"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_red_md", "strategy_b": "str_red_alt"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_red_alt", "strategy_b": "str_red_ml"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_red_alt", "strategy_b": "str_red_md"}
 {"dims_differing": ["main_effort", "mechanism"], "pass": true, "strategy_a": "str_rps_p1_uniform", "strategy_b": "str_rps_p1_paper"}
 {"dims_differing": ["main_effort", "mechanism"], "pass": true, "strategy_a": "str_rps_p1_paper", "strategy_b": "str_rps_p1_uniform"}

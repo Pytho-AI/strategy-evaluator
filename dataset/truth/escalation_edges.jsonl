@@ -1,0 +1,6 @@
+{"edge_id": "ee_0001", "evidence_claim_ids": ["clm_0806"], "from_he_id": "he_02", "lift": 0.5, "mechanism": "Missile losses precede strait closure", "to_he_id": "he_01"}
+{"edge_id": "ee_0002", "evidence_claim_ids": ["clm_0806"], "from_he_id": "he_01", "lift": 0.4, "mechanism": "Closure drives displacement", "to_he_id": "he_07"}
+{"edge_id": "ee_0003", "evidence_claim_ids": ["clm_0806"], "from_he_id": "he_07", "lift": 0.6, "mechanism": "Displacement diverts Blue forces", "to_he_id": "he_08"}
+{"edge_id": "ee_0004", "evidence_claim_ids": ["clm_0806"], "from_he_id": "he_06", "lift": 0.3, "mechanism": "Grid compromise enables sabotage", "to_he_id": "he_03"}
+{"edge_id": "ee_0005", "evidence_claim_ids": ["clm_0806"], "from_he_id": "he_03", "lift": 0.6, "mechanism": "Energy strikes cause a blackout", "to_he_id": "he_04"}
+{"edge_id": "ee_0006", "evidence_claim_ids": ["clm_0806"], "from_he_id": "he_05", "lift": 0.5, "mechanism": "Network disruption degrades sustainment", "to_he_id": "he_04"}

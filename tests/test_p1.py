@@ -62,3 +62,13 @@ def test_scenario_md_anchors():
         assert gid in md
     for b, d in S.BATCH_DAYS.items():
         assert f"+{d}" in md
+
+
+def test_expired_information_gap_is_not_a_change_event():
+    from gen.context import Ctx
+    from gen.facts import FactBuilder
+    fb = FactBuilder(Ctx(seed=20260908))
+    old = fb.add("ent_varenia", "mobilization_days", 35, -150, to_day=-20)
+    new = fb.change("ent_varenia", "mobilization_days", 21, 18, 1)
+    assert old["valid_to"] == "2026-08-19"
+    assert new["supersedes_fact_id"] is None

@@ -1,0 +1,268 @@
+{
+  "as_of": "2026-09-28",
+  "batch": 1,
+  "change_events": [
+    {
+      "fact_id_new": "fct_0423",
+      "fact_id_old": "fct_0356",
+      "new_value": 340,
+      "old_value": 280,
+      "predicate": "range_km",
+      "subject_id": "sys_dorne_asm"
+    },
+    {
+      "fact_id_new": "fct_0424",
+      "fact_id_old": "fct_0002",
+      "new_value": 2,
+      "old_value": 0,
+      "predicate": "mobilized_brigades",
+      "subject_id": "ent_varenia"
+    },
+    {
+      "fact_id_new": "fct_0425",
+      "fact_id_old": null,
+      "new_value": 21,
+      "old_value": null,
+      "predicate": "mobilization_days",
+      "subject_id": "ent_varenia"
+    },
+    {
+      "fact_id_new": "fct_0426",
+      "fact_id_old": "fct_0053",
+      "new_value": "vulnerable",
+      "old_value": "postured_to_react",
+      "predicate": "posture_state",
+      "subject_id": "unit_tg_kestrel"
+    },
+    {
+      "fact_id_new": "fct_0427",
+      "fact_id_old": "fct_0061",
+      "new_value": "operational",
+      "old_value": "degraded",
+      "predicate": "status",
+      "subject_id": "unit_var_21_reserve_bde"
+    },
+    {
+      "fact_id_new": "fct_0428",
+      "fact_id_old": "fct_0126",
+      "new_value": 0.82,
+      "old_value": 0.7,
+      "predicate": "readiness",
+      "subject_id": "unit_var_northern_fleet"
+    }
+  ],
+  "docs": [
+    "src_0073",
+    "src_0074",
+    "src_0075",
+    "src_0076",
+    "src_0077",
+    "src_0078"
+  ],
+  "expected_effects": {
+    "assumptions_changed": [
+      {
+        "assumption_id": "asm_blue_3_k1",
+        "from": "unknown",
+        "to": "violated"
+      },
+      {
+        "assumption_id": "asm_blue_1_k0",
+        "from": "holds",
+        "to": "violated"
+      },
+      {
+        "assumption_id": "asm_blue_2_k0",
+        "from": "holds",
+        "to": "violated"
+      }
+    ],
+    "jipcl_changed": [
+      {
+        "rank_after": 4,
+        "rank_before": 3,
+        "req_id": "req_04",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 3,
+        "rank_before": 4,
+        "req_id": "req_03",
+        "status_after": "research",
+        "status_before": "research"
+      }
+    ],
+    "problem_sets_moved": [
+      {
+        "jsps_horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_chokepoint"
+      },
+      {
+        "jsps_horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_chokepoint"
+      },
+      {
+        "jsps_horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_chokepoint"
+      }
+    ],
+    "ranking_after": [
+      "str_blue_2",
+      "str_blue_3"
+    ],
+    "ranking_before": [
+      "str_blue_1",
+      "str_blue_2",
+      "str_blue_3"
+    ],
+    "requirements_closed": [],
+    "risk_assessments_changed": [
+      {
+        "he_id": "he_07",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.487,
+        "p_before": 0.2911,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_07",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.487,
+        "p_before": 0.2911,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_01",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.72,
+        "p_before": 0.325,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_07",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.466,
+        "p_before": 0.2605,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_08",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.36298,
+        "p_before": 0.257194,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_08",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.36298,
+        "p_before": 0.257194,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_08",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.35164,
+        "p_before": 0.24067,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_02",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.6,
+        "p_before": 0.2,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_02",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.6,
+        "p_before": 0.2,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_02",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.6,
+        "p_before": 0.2,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_01",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.79,
+        "p_before": 0.415,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_01",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.79,
+        "p_before": 0.415,
+        "trend_after": "up"
+      }
+    ],
+    "strategies_restated": [
+      {
+        "status_after": "valid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_3",
+        "value_after": 0.539250422,
+        "value_before": 0.57698498
+      },
+      {
+        "status_after": "valid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_2",
+        "value_after": 0.641839912,
+        "value_before": 0.645917355
+      },
+      {
+        "status_after": "invalid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_1",
+        "value_after": 0.369958724,
+        "value_before": 0.657667272
+      }
+    ],
+    "validity_changed": [
+      {
+        "after": false,
+        "before": true,
+        "strategy_id": "str_blue_1",
+        "test": "acceptable"
+      }
+    ]
+  }
+}

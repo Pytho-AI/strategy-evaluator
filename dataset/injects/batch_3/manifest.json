@@ -1,0 +1,353 @@
+{
+  "as_of": "2026-11-17",
+  "batch": 3,
+  "change_events": [
+    {
+      "fact_id_new": "fct_0435",
+      "fact_id_old": "fct_0004",
+      "new_value": "extensive",
+      "old_value": "limited",
+      "predicate": "cyber_capacity",
+      "subject_id": "ent_varenia"
+    },
+    {
+      "fact_id_new": "fct_0436",
+      "fact_id_old": "fct_0011",
+      "new_value": 26000,
+      "old_value": 4000,
+      "predicate": "displaced_persons",
+      "subject_id": "ent_sondria"
+    },
+    {
+      "fact_id_new": "fct_0437",
+      "fact_id_old": "fct_0028",
+      "new_value": 26000,
+      "old_value": 4000,
+      "predicate": "displaced_persons",
+      "subject_id": "loc_sondria_camps"
+    },
+    {
+      "fact_id_new": "fct_0438",
+      "fact_id_old": "fct_0009",
+      "new_value": "red_aligned",
+      "old_value": "neutral",
+      "predicate": "alignment",
+      "subject_id": "ent_sondria"
+    },
+    {
+      "fact_id_new": "fct_0439",
+      "fact_id_old": "fct_0157",
+      "new_value": 0.35,
+      "old_value": 0.5,
+      "predicate": "readiness",
+      "subject_id": "unit_son_border_guard"
+    },
+    {
+      "fact_id_new": "fct_0440",
+      "fact_id_old": "fct_0026",
+      "new_value": "degraded",
+      "old_value": "operational",
+      "predicate": "status",
+      "subject_id": "loc_ravel_crossing"
+    }
+  ],
+  "docs": [
+    "src_0085",
+    "src_0086",
+    "src_0087",
+    "src_0088",
+    "src_0089",
+    "src_0090",
+    "src_0091"
+  ],
+  "expected_effects": {
+    "assumptions_changed": [
+      {
+        "assumption_id": "asm_blue_2_k4",
+        "from": "holds",
+        "to": "violated"
+      }
+    ],
+    "jipcl_changed": [
+      {
+        "rank_after": 2,
+        "rank_before": 1,
+        "req_id": "req_02",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 3,
+        "rank_before": 2,
+        "req_id": "req_04",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 1,
+        "rank_before": null,
+        "req_id": "req_07",
+        "status_after": "validation",
+        "status_before": "validation"
+      },
+      {
+        "rank_after": 4,
+        "rank_before": 3,
+        "req_id": "req_03",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 5,
+        "rank_before": 4,
+        "req_id": "req_05",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 6,
+        "rank_before": 5,
+        "req_id": "req_06",
+        "status_after": "research",
+        "status_before": "research"
+      }
+    ],
+    "problem_sets_moved": [
+      {
+        "jsps_horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_energy"
+      },
+      {
+        "jsps_horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_cyber"
+      },
+      {
+        "jsps_horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_cyber"
+      },
+      {
+        "jsps_horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_energy"
+      },
+      {
+        "jsps_horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_cyber"
+      },
+      {
+        "jsps_horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "problem_set_id": "ps_energy"
+      }
+    ],
+    "ranking_after": [
+      "str_blue_1",
+      "str_blue_2",
+      "str_blue_3"
+    ],
+    "ranking_before": [
+      "str_blue_1",
+      "str_blue_2",
+      "str_blue_3"
+    ],
+    "requirements_closed": [],
+    "risk_assessments_changed": [
+      {
+        "he_id": "he_07",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.7264,
+        "p_before": 0.487,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_07",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.7264,
+        "p_before": 0.487,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_07",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.7152,
+        "p_before": 0.466,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_08",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.633296,
+        "p_before": 0.36298,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_06",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.45,
+        "p_before": 0.25,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_08",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.633296,
+        "p_before": 0.36298,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_06",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.45,
+        "p_before": 0.25,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_08",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.628928,
+        "p_before": 0.35164,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_06",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.45,
+        "p_before": 0.25,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_04",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.593079,
+        "p_before": 0.492764,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_04",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.563392,
+        "p_before": 0.454358,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_04",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.563392,
+        "p_before": 0.454358,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_03",
+        "horizon": "long",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.481,
+        "p_before": 0.445,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_03",
+        "horizon": "mid",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.3945,
+        "p_before": 0.3525,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_03",
+        "horizon": "near",
+        "level_after": "moderate",
+        "level_before": "moderate",
+        "p_after": 0.3945,
+        "p_before": 0.3525,
+        "trend_after": "up"
+      },
+      {
+        "he_id": "he_05",
+        "horizon": "long",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.57,
+        "p_before": 0.27,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_05",
+        "horizon": "mid",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.57,
+        "p_before": 0.27,
+        "trend_after": "flat"
+      },
+      {
+        "he_id": "he_05",
+        "horizon": "near",
+        "level_after": "significant",
+        "level_before": "moderate",
+        "p_after": 0.57,
+        "p_before": 0.27,
+        "trend_after": "flat"
+      }
+    ],
+    "strategies_restated": [
+      {
+        "status_after": "valid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_3",
+        "value_after": 0.595671295,
+        "value_before": 0.595667237
+      },
+      {
+        "status_after": "valid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_2",
+        "value_after": 0.631527325,
+        "value_before": 0.641939174
+      },
+      {
+        "status_after": "valid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_1",
+        "value_after": 0.647330008,
+        "value_before": 0.647275499
+      }
+    ],
+    "validity_changed": []
+  }
+}

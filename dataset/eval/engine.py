@@ -70,7 +70,7 @@ def assess_risk(tables: dict, cs: ClaimSet, as_of: date, world_version: int) -> 
             for d in drivers_by_he.get(he["he_id"], []):
                 if h not in d.get("horizons", HORIZONS):
                     continue
-                hits = [c for c in cs.in_window(d["claim_subject_id"], d["claim_predicate"], start, end)
+                hits = [c for c in cs.in_window(d["claim_subject_id"], d["claim_predicate"], start, end, known_at=as_of)
                         if satisfies(cs.value_of(c), d["op"], d["value"])]
                 if hits:
                     p += d["delta"]
@@ -138,9 +138,11 @@ def assess_risk(tables: dict, cs: ClaimSet, as_of: date, world_version: int) -> 
 def recompute(tables: dict, as_of: date, world_version: int, claims: Optional[list[dict]] = None) -> dict:
     """Returns deep-copied tables with every COMPUTED column filled from `claims` (default: tables['claims'])."""
     t = copy.deepcopy(tables)
-    cs = ClaimSet(claims if claims is not None else t["claims"])
+    if claims is not None:
+        t["claims"] = copy.deepcopy(claims)
     for c in t["claims"] + t["facts"]:
         c["confidence"] = val.derived_confidence(c["estimative"], c.get("likelihood_icd203"), c["confidence_icd203"])
+    cs = ClaimSet(t["claims"])
     idx = val.PayoffIndex(t["payoffs"])
     actions = {a["action_id"]: a for a in t["actions"]}
     deps = {d["edge_id"]: d for d in t["dependencies"]}
@@ -160,12 +162,14 @@ def recompute(tables: dict, as_of: date, world_version: int, claims: Optional[li
     # risk first (acceptable test needs it)
     ra, psa = assess_risk(t, cs, as_of, world_version)
     t["risk_assessments"], t["problem_set_assessments"] = ra, psa
-    he_type = {he["he_id"]: he["risk_type"] for he in t["harmful_events"]}
-    high_mr = sorted({r["he_id"] for r in ra if r["risk_level"] == "high" and he_type[r["he_id"]] == "MR"})
+    events = {he["he_id"]: he for he in t["harmful_events"]}
+    high_mr = sorted({r["he_id"] for r in ra if r["risk_level"] == "high" and events[r["he_id"]]["risk_type"] == "MR"})
 
     dist_rows: list[dict] = []
     for (game_id, actor_id) in sorted({(s["game_id"], s["actor_id"]) for s in t["strategies"]}):
         strategies = [s for s in t["strategies"] if s["game_id"] == game_id and s["actor_id"] == actor_id]
+        relevant_high = [h for h in high_mr
+                         if (obj[events[h]["thing_of_value_id"]]["game_id"], obj[events[h]["thing_of_value_id"]]["actor_id"]) == (game_id, actor_id)]
         order = objective_order(t, game_id, actor_id)
         K, p, by_k = assumption_vector(t, game_id, actor_id, cs, as_of)
         weights = {s["strategy_id"]: weights_for(t, s["strategy_id"], order) for s in strategies}
@@ -177,7 +181,6 @@ def recompute(tables: dict, as_of: date, world_version: int, claims: Optional[li
                 a["p_holds"], a["status"] = pk, st
                 s = next(x for x in strategies if x["strategy_id"] == a["strategy_id"])
                 a["sensitivity"] = round(val.sensitivity(s["strategy_id"], k, idx, weights[s["strategy_id"]], opps[s["strategy_id"]], p, K, s["risk_functional"], s.get("risk_alpha")), 9)
-                a["evpi"] = round(val.evpi(k, strategies, idx, weights, opps, p, K), 9)
         # strategies
         for s in strategies:
             sid = s["strategy_id"]
@@ -191,7 +194,7 @@ def recompute(tables: dict, as_of: date, world_version: int, claims: Optional[li
                 g = dict(g, objective_ids=[o for o in g.get("objective_ids", []) if obj[o]["actor_id"] == actor_id])
             ok_s, ev_s = validity.test_suitable(s, g, deps, rules_by.get(sid, []))
             ok_f, ev_f = validity.test_feasible(s, rules_by.get(sid, []), actions, budgets_by.get(sid, {}), games[game_id]["horizon"])
-            unmit = [h for h in high_mr if h not in set(s.get("mitigates_he_ids", []))]
+            unmit = [h for h in relevant_high if h not in set(s.get("mitigates_he_ids", []))]
             ok_a, ev_a = validity.test_acceptable(s["value"], s["aspiration"], unmit)
             ok_d, ev_d, rows = validity.test_distinguishable(s, [o for o in strategies if o["strategy_id"] != sid], rules_by, actions)
             dist_rows.extend(rows)
@@ -202,8 +205,17 @@ def recompute(tables: dict, as_of: date, world_version: int, claims: Optional[li
                 "complete": {"pass": ok_c, "evidence": ev_c},
             }
             s["status"] = "infeasible" if not ok_f else ("valid" if all([ok_s, ok_a, ok_d, ok_c]) else "invalid")
+        # Learning can change aspiration acceptance, but cannot repair missing guidance,
+        # resources, policy structure, or an unmitigated High event.
+        candidates = [s for s in strategies
+                      if all(s["validity"][test]["pass"] for test in ("suitable", "feasible", "distinguishable", "complete"))
+                      and not set(relevant_high).difference(s.get("mitigates_he_ids", []))]
+        for k, rows in by_k.items():
+            price = round(val.evpi(k, candidates, idx, weights, opps, p, K), 9)
+            for a in rows:
+                a["evpi"] = price
         # App. F ratings: rank of E[u_k] among the actor's valid strategies (3 = best)
-        valid = [s for s in strategies if s["status"] == "valid"] or strategies
+        valid = [s for s in strategies if s["status"] == "valid"]
         wp = val.conditioned_world_probs(p, K)
         contrib = {}
         for s in valid:
@@ -237,15 +249,18 @@ def recompute(tables: dict, as_of: date, world_version: int, claims: Optional[li
             if typ == "claim":
                 deg[nid] = deg.get(nid, 0) + 1
     for r in t["collection_requirements"]:
+        if _d(r["created_at"]) > as_of:
+            r["priority"], r["jipcl_rank"] = None, None
+            continue
         a = asm.get(r.get("assumption_id") or "")
         if a is not None and a.get("evpi") is not None:
             r["priority"] = round(a["evpi"], 9)
         else:
             c = cs.current(r["subject_id"], r["predicate"], as_of)
             conf = c["confidence"] if c else 0.0
-            d = sum(deg.get(x["claim_id"], 0) for x in cs.all(r["subject_id"], r["predicate"])) if c else 1
-            r["priority"] = round((1.0 - conf) * max(1, d), 9)
-    open_reqs = [r for r in t["collection_requirements"] if r["status"] not in ("satisfaction", "closed")]
+            d = deg.get(c["claim_id"], 0) if c is not None else 0
+            r["priority"] = round((1.0 - conf) * d, 9)
+    open_reqs = [r for r in t["collection_requirements"] if _d(r["created_at"]) <= as_of and r["status"] not in ("satisfaction", "closed")]
     for rank, r in enumerate(sorted(open_reqs, key=lambda r: (-r["priority"], r["req_id"])), start=1):
         r["jipcl_rank"] = rank
     for r in t["collection_requirements"]:

@@ -26,7 +26,7 @@ def stages():
     exist yet (later phases) are skipped."""
     import importlib
     out = []
-    for name in ("scaffold", "facts", "strategies", "risk", "plan_docs", "render", "rps", "injects"):
+    for name in ("scaffold", "facts", "plan_docs", "render", "strategies", "payoffs", "graph", "risk", "collection", "rps", "products", "injects"):
         try:
             mod = importlib.import_module(f"gen.{name}")
         except ImportError as ex:
@@ -50,6 +50,9 @@ def generate(seed: int, dataset_dir: Path, only: list[str] | None = None):
     if not getattr(ctx, "computed", False):
         ctx.tables = recompute(ctx.tables, ctx.t0, ctx.world_version)
     ctx.write()
+    if not only:
+        from gen.package import build as build_package
+        build_package(ctx)
     return ctx
 
 

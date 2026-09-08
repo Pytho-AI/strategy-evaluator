@@ -10,19 +10,20 @@ one command.
 Prints a single table `gate → PASS/FAIL`: schema load, invariants 01–20, reproducibility diff
 against a fresh regeneration. Nothing else on success. `make test` runs the pytest gates per phase.
 
-## Current phase: P1 (scenario and facts)
+## Current phase: P7 (base release package)
 
 Files to open and the question to answer while reading:
 
-1. `dataset/gen/scenario.md` — is the theater coherent, entirely fictional, and does §8 (assumption
-   matrix), §10 (harmful events) and §13 (inject design) give the app team enough to script the demo?
-2. `dataset/truth/facts.jsonl` — filter `sys_dorne_asm` / `range_km` and `ent_corvane` /
-   `basing_access`: do the valid-time windows and `first_asserted_batch` tell the batch-1 and batch-2
-   stories (280 → 340 km valid from 23 September; basing granted valid from 18 October)?
-3. `dataset/gen/denylist.txt` — would you add a real name that the scenario might drift toward?
+1. `dataset/DATA_CARD.md` — does it state the contents, limits, model use, fiction notice, license,
+   doctrine, and computable extensions without making an unsupported claim?
+2. `dataset/review/samples/coa_statement_src_0060.md` — could a J-5 planner brief the course of action
+   as written, and do the claim spans below it support the source text?
+3. Open three `dataset/review/samples/risk_context_*.md` products and read their risk statements
+   against JRAM Figure 11. Does each slot map to the figure?
+4. `dataset/injects/batch_2/manifest.json` — does the evidence support closing `req_01`, and are every
+   listed strategy, risk, and collection effect caused by this batch?
 
-Gate: `pytest tests/test_p1.py` (4 passed). `make check` shows invariant 03 failing until the corpus
-exists (P2/P4); everything else passes.
+Gate: `pytest tests/test_p7.py` (1 passed), followed by `make check` (all gates passed).
 
 ## Previous phase: P0 (schemas and contract)
 

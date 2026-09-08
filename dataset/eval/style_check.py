@@ -37,6 +37,8 @@ BULLET = re.compile(r"^\s*([•\-\*]|•)\s+")
 CAUTION = "This numeric method is not the result of a rigorous mathematical analysis; comparing courses of action by criterion is more accurate than comparing total values."
 ACRONYM_TOKEN = re.compile(r"(?<![\w/])([A-Z][A-Za-z0-9&/\-\.\(\)]*[A-Z0-9\)])(?![\w/])")
 ROMAN = re.compile(r"^(?:I|II|III|IV|V|VI|VII|VIII|IX|X)$")
+DTG_MONTHS = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"}
+UNIT_SYMBOLS = {"MW"}
 
 INTEL_PRODUCTS = {"assessment", "reference_entry"}
 RISK_PRODUCTS = {"risk_context", "assessment"}
@@ -181,7 +183,9 @@ def check_acronyms(lines: list[str], body: list[tuple[int, str]], acronyms: dict
             if tok.endswith(")") and "(" not in tok:
                 tok = tok[:-1]
             core = tok[:-1] if tok.endswith("s") and tok[:-1] in acronyms else tok
-            if ROMAN.match(core) or core.isdigit():
+            if ROMAN.match(core) or core.isdigit() or core in UNIT_SYMBOLS or (core in DTG_MONTHS and DTG.search(l)):
+                continue
+            if re.search(r"[a-z]{3,}", core) and core not in acronyms:
                 continue
             caps = sum(1 for c in core if c.isupper())
             if caps < 2 and core not in acronyms:

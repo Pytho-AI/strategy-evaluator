@@ -57,7 +57,7 @@ INFRA = [
 # units: (id, name, aliases, parent actor/polity, location, readiness, description)
 UNITS = [
     # Blue
-    ("unit_tg_kestrel", "Task Group Kestrel", ["TG Kestrel", "the task group", "the maritime group"], "ent_blue", "loc_corvane_island", 0.85, "Blue surface task group of five frigates"),
+    ("unit_tg_kestrel", "Task Group Kestrel", ["Kestrel group", "the task group", "the maritime group"], "ent_blue", "loc_corvane_island", 0.85, "Blue surface task group of five frigates"),
     ("unit_halden_brigade", "Halden Brigade", ["2nd Expeditionary Brigade", "the brigade at Halden"], "ent_blue", "loc_halden_airfield", 0.80, "Blue expeditionary brigade staged on Corvane Island"),
     ("unit_auberon_wing", "Auberon Air Expeditionary Wing", ["the wing", "Auberon Wing"], "ent_blue", "loc_port_auberon", 0.88, "Blue air expeditionary wing at Port Auberon"),
     ("unit_meridian_log_group", "Meridian Logistics Group", ["the logistics group", "Meridian Log Group"], "ent_blue", "loc_port_auberon", 0.90, "Blue sustainment group holding theater munitions and stocks"),
@@ -143,7 +143,6 @@ BASE_FACTS = [
     ("ent_varenia", "mobilization_days", 35, True, "likely", "moderate", -150),   # days to mobilize two brigades; assumption k1 needs >= 45; expires day -20 (see EXPIRES)
     ("ent_varenia", "cyber_capacity", "limited", True, "likely", "moderate", -90),
     ("ent_varenia", "controls", "loc_cape_dorne", False, None, "high", -180),
-    ("ent_varenia", "controls", "loc_novak_base", False, None, "high", -180),
     ("ent_ilmara", "alignment", "blue_aligned", False, None, "high", -180),
     ("ent_ilmara", "basing_access", True, False, None, "high", -180),
     ("ent_corvane", "alignment", "neutral", False, None, "high", -180),
@@ -157,7 +156,6 @@ BASE_FACTS = [
     ("loc_kestrel_strait", "status", "operational", False, None, "high", -180),
     ("loc_port_auberon", "status", "operational", False, None, "high", -180),
     ("loc_port_auberon", "hosts", "unit_meridian_log_group", False, None, "high", -60),
-    ("loc_port_auberon", "hosts", "unit_auberon_wing", False, None, "high", -60),
     ("loc_halden_airfield", "status", "degraded", False, None, "high", -180),
     ("loc_halden_airfield", "hosts", "unit_halden_brigade", False, None, "high", -45),
     ("loc_corvane_island", "hosts", "unit_tg_kestrel", False, None, "high", -45),

@@ -47,7 +47,9 @@ def worst_case_cost(rules: list[dict], actions_by_id: dict[str, dict], horizon: 
     (every trajectory the policy can generate costs at most this)."""
     total: dict[str, float] = {}
     for t in range(1, horizon + 1):
-        active = [r for r in rules if not r.get("periods") or t in r["periods"]]
+        active = [r for r in rules if r.get("condition", True) is not False
+                  and actions_by_id[r["action_id"]].get("preconditions", True) is not False
+                  and (r.get("periods") is None or t in r["periods"])]
         per_res: dict[str, float] = {}
         for r in active:
             for res, c in actions_by_id[r["action_id"]].get("cost", {}).items():

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from math import isfinite
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -25,6 +26,14 @@ class Result:
 
 def _ids(tables, table, col):
     return {r[col] for r in tables[table]}
+
+
+def _condition_variables(condition):
+    if isinstance(condition, bool):
+        return set()
+    if "var" in condition:
+        return {condition["var"]}
+    return set().union(*(_condition_variables(c) for c in condition.get("all", condition.get("any", []))))
 
 
 def inv01_referential_integrity(tables, **_) -> Result:
@@ -61,15 +70,41 @@ def inv01_referential_integrity(tables, **_) -> Result:
                 if v not in valid:
                     bad.append(f"{tn}.{col}∋{v}")
     sids = _ids(tables, "strategies", "strategy_id")
+    strategies = {s["strategy_id"]: s for s in tables["strategies"]}
     for om in tables["opponent_models"]:
+        seen_mix = set()
         for m in om["distribution"]:
             if m["strategy_id"] not in sids:
                 bad.append(f"opponent_models.distribution∋{m['strategy_id']}")
+            elif strategies[m["strategy_id"]]["actor_id"] != om["actor_id"]:
+                bad.append(f"{om['opponent_model_id']}: distribution contains another actor's strategy")
+            if m["strategy_id"] in seen_mix:
+                bad.append(f"{om['opponent_model_id']}: duplicate strategy in distribution")
+            seen_mix.add(m["strategy_id"])
     rids = _ids(tables, "resources", "resource_id")
     for a in tables["actions"]:
         for res in a.get("cost", {}):
             if res not in rids:
                 bad.append(f"actions.cost∋{res}")
+    games = {g["game_id"]: g for g in tables["games"]}
+    actions = {a["action_id"]: a for a in tables["actions"]}
+    for g in games.values():
+        variables = {v["name"] for v in g["state_variables"]}
+        for observation in g["observables"]:
+            if observation["actor_id"] not in g["actor_ids"] or observation["variable"] not in variables:
+                bad.append(f"{g['game_id']}: observable references an unknown actor or variable")
+    for rule in tables["policy_rules"]:
+        s, a = strategies.get(rule["strategy_id"]), actions.get(rule["action_id"])
+        if s is None or a is None or s["game_id"] not in games:
+            continue  # ordinary missing FKs were reported above
+        if (a["game_id"], a["actor_id"]) != (s["game_id"], s["actor_id"]):
+            bad.append(f"{rule['rule_id']}: action belongs to another game or actor")
+        g = games[s["game_id"]]
+        observable = {o["variable"] for o in g["observables"] if o["actor_id"] == s["actor_id"]}
+        if not _condition_variables(rule["condition"]) <= observable:
+            bad.append(f"{rule['rule_id']}: condition uses an unobservable variable")
+        if any(period < 1 or period > g["horizon"] for period in rule.get("periods") or []):
+            bad.append(f"{rule['rule_id']}: period outside the game horizon")
     # PK uniqueness
     for t in TABLES:
         seen = set()
@@ -106,6 +141,8 @@ def inv02_spans(tables, dataset_dir: Path, **_) -> Result:
             vs = [str(v)]
             if isinstance(v, (int, float)):
                 vs += [f"{v:g}", f"{v:,}", str(int(v)) if float(v).is_integer() else f"{v}"]
+                if c.get("unit") == "fraction":
+                    vs += [f"{100 * float(v):g} percent", f"{100 * float(v):g}%"]
             mentions = mentions or any(x.lower() in span for x in vs)
         if not mentions:
             bad.append(f"{c['claim_id']}: span mentions neither subject nor value: {span[:60]!r}")
@@ -202,7 +239,16 @@ def inv08_dag(tables, **_) -> Result:
 def inv09_grounding(tables, **_) -> Result:
     keys = {(f["subject_id"], f["predicate"]) for f in tables["facts"]}
     bad = [a["assumption_id"] for a in tables["assumptions"] if (a["subject_id"], a["predicate"]) not in keys]
-    return Result("09", not bad, "every assumption's (subject, predicate) has >= 1 fact" if not bad else f"ungrounded: {bad}")
+    strategies = {s["strategy_id"]: s for s in tables["strategies"]}
+    propositions = {}
+    for a in tables["assumptions"]:
+        s = strategies[a["strategy_id"]]
+        key = (s["game_id"], s["actor_id"], a["index_k"])
+        proposition = (a["subject_id"], a["predicate"], a["tolerance"])
+        if key in propositions and propositions[key] != proposition:
+            bad.append(f"{a['assumption_id']}: shared index_k has a different proposition")
+        propositions[key] = proposition
+    return Result("09", not bad, "every assumption has a grounding fact; shared indices identify the same proposition" if not bad else f"invalid grounding: {bad}")
 
 
 COMPUTED_TOL = 1e-9
@@ -262,12 +308,13 @@ def _corpus_violations(tables, dataset_dir: Path, codes: set[str]) -> tuple[dict
     negatives = []
     for s in tables["sources"]:
         v = style_check.check_file(Path(dataset_dir) / s["path"], s["doc_type"], acr, invalid_names=invalid_names, assumption_ids=coa_src.get(s["source_id"], []))
-        v = [x for x in v if x.code.rstrip("abcL") in codes or x.code in codes]
         if "mixed_scale" in s.get("perturbations", []):
             negatives.append(s["source_id"])
-            if not any(x.code == "13" for x in v):
-                out[s["source_id"]] = [style_check.Violation(1, "13", "deliberate mixed_scale negative example was NOT caught")]
-            continue
+            caught = any(x.code == "13" for x in v)
+            v = [x for x in v if x.code != "13"]
+            if not caught:
+                v.append(style_check.Violation(1, "13", "deliberate mixed_scale negative example was NOT caught"))
+        v = [x for x in v if x.code.rstrip("abcL") in codes or x.code in codes]
         if v:
             out[s["source_id"]] = v
     return out, negatives
@@ -342,10 +389,11 @@ ALL: list[Callable[..., Result]] = [inv01_referential_integrity, inv02_spans, in
 
 def run_all(tables: dict, dataset_dir: Path, as_of: date, world_version: int, only: set[str] | None = None) -> list[Result]:
     out = []
-    for fn in ALL:
+    for number, fn in enumerate(ALL, start=1):
+        if only is not None and f"{number:02d}" not in only:
+            continue
         r = fn(tables=tables, dataset_dir=dataset_dir, as_of=as_of, world_version=world_version)
-        if only is None or r.id in only:
-            out.append(r)
+        out.append(r)
     return out
 
 
@@ -356,6 +404,22 @@ def schema_load(tables: dict) -> Result:
         for r in tables[t.name]:
             try:
                 t.model(**r)
+                if t.name in ("claims", "facts"):
+                    vt, v = r["value_type"], r.get("value")
+                    if vt == "number" and (type(v) not in (int, float) or not isfinite(v)):
+                        raise ValueError("number value_type requires a finite number")
+                    if vt == "bool" and type(v) is not bool:
+                        raise ValueError("bool value_type requires a boolean")
+                    if vt == "string" and not isinstance(v, str):
+                        raise ValueError("string value_type requires a string")
+                    if vt == "date":
+                        date.fromisoformat(v)
+                    if (vt == "entity" and v is not None) or (vt != "entity" and r.get("object_id") is not None):
+                        raise ValueError("claim must carry either an entity object or an attributive value")
+                if t.name == "actions" and any(not isfinite(c) or c < 0 for c in r.get("cost", {}).values()):
+                    raise ValueError("action costs must be finite and nonnegative")
+                if t.name == "strategies" and r["risk_functional"] == "cvar" and r.get("risk_alpha") is not None and not 0 < r["risk_alpha"] <= 1:
+                    raise ValueError("CVaR alpha must be in (0, 1]")
             except Exception as ex:  # noqa: BLE001
                 bad.append(f"{t.name}: {str(ex)[:80]}")
     return Result("schema", not bad, f"all rows of {len(TABLES)} tables validate" if not bad else f"{bad[:3]}")

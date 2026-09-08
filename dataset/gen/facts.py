@@ -45,7 +45,10 @@ class FactBuilder:
         old = self.latest(subject, pred)
         if old is not None and old["valid_to"] is None:
             old["valid_to"] = (self.ctx.day(from_day) - timedelta(days=1)).isoformat()
-        return self.add(subject, pred, new_value, from_day, estimative, likelihood, confidence, batch=batch, supersedes=old["fact_id"] if old else None)
+        # An expired report followed by a gap is new information, not an adjacent change event.
+        adjacent = old is not None and old["valid_to"] == (self.ctx.day(from_day) - timedelta(days=1)).isoformat()
+        return self.add(subject, pred, new_value, from_day, estimative, likelihood, confidence, batch=batch,
+                        supersedes=old["fact_id"] if adjacent else None)
 
 
 def build(ctx: Ctx) -> None:

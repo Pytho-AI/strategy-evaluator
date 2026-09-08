@@ -1,0 +1,158 @@
+{
+  "as_of": "2026-10-23",
+  "batch": 2,
+  "change_events": [
+    {
+      "fact_id_new": "fct_0429",
+      "fact_id_old": null,
+      "new_value": true,
+      "old_value": null,
+      "predicate": "basing_access",
+      "subject_id": "ent_corvane"
+    },
+    {
+      "fact_id_new": "fct_0430",
+      "fact_id_old": "fct_0018",
+      "new_value": "operational",
+      "old_value": "degraded",
+      "predicate": "status",
+      "subject_id": "loc_halden_airfield"
+    },
+    {
+      "fact_id_new": "fct_0431",
+      "fact_id_old": "fct_0057",
+      "new_value": 41,
+      "old_value": 45,
+      "predicate": "munitions_stock_days",
+      "subject_id": "unit_meridian_log_group"
+    },
+    {
+      "fact_id_new": "fct_0432",
+      "fact_id_old": "fct_0012",
+      "new_value": 41,
+      "old_value": 45,
+      "predicate": "munitions_stock_days",
+      "subject_id": "ent_blue"
+    },
+    {
+      "fact_id_new": "fct_0433",
+      "fact_id_old": "fct_0119",
+      "new_value": 0.78,
+      "old_value": 0.7,
+      "predicate": "readiness",
+      "subject_id": "unit_ilm_patrol_sqn"
+    },
+    {
+      "fact_id_new": "fct_0434",
+      "fact_id_old": "fct_0054",
+      "new_value": "postured_to_react",
+      "old_value": "out_of_position",
+      "predicate": "posture_state",
+      "subject_id": "unit_halden_brigade"
+    }
+  ],
+  "docs": [
+    "src_0079",
+    "src_0080",
+    "src_0081",
+    "src_0082",
+    "src_0083",
+    "src_0084"
+  ],
+  "expected_effects": {
+    "assumptions_changed": [
+      {
+        "assumption_id": "asm_blue_3_k2",
+        "from": "unknown",
+        "to": "holds"
+      },
+      {
+        "assumption_id": "asm_blue_1_k2",
+        "from": "unknown",
+        "to": "holds"
+      }
+    ],
+    "jipcl_changed": [
+      {
+        "rank_after": 1,
+        "rank_before": 2,
+        "req_id": "req_02",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": null,
+        "rank_before": 1,
+        "req_id": "req_01",
+        "status_after": "satisfaction",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 2,
+        "rank_before": 4,
+        "req_id": "req_04",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 4,
+        "rank_before": 5,
+        "req_id": "req_05",
+        "status_after": "research",
+        "status_before": "research"
+      },
+      {
+        "rank_after": 5,
+        "rank_before": 6,
+        "req_id": "req_06",
+        "status_after": "research",
+        "status_before": "research"
+      }
+    ],
+    "problem_sets_moved": [],
+    "ranking_after": [
+      "str_blue_1",
+      "str_blue_2",
+      "str_blue_3"
+    ],
+    "ranking_before": [
+      "str_blue_2",
+      "str_blue_3"
+    ],
+    "requirements_closed": [
+      "req_01"
+    ],
+    "risk_assessments_changed": [],
+    "strategies_restated": [
+      {
+        "status_after": "valid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_3",
+        "value_after": 0.595667237,
+        "value_before": 0.539250422
+      },
+      {
+        "status_after": "valid",
+        "status_before": "valid",
+        "strategy_id": "str_blue_2",
+        "value_after": 0.641939174,
+        "value_before": 0.641839912
+      },
+      {
+        "status_after": "valid",
+        "status_before": "invalid",
+        "strategy_id": "str_blue_1",
+        "value_after": 0.647275499,
+        "value_before": 0.369958724
+      }
+    ],
+    "validity_changed": [
+      {
+        "after": true,
+        "before": false,
+        "strategy_id": "str_blue_1",
+        "test": "acceptable"
+      }
+    ]
+  }
+}

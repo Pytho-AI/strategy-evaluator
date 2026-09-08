@@ -1,0 +1,65 @@
+UNCLASSIFIED
+SYNTHETIC DATA — FOR EXERCISE AND DEVELOPMENT USE ONLY. NOT A REAL ASSESSMENT.
+Systems table
+entity,attribute,value,unit,as_of,notes
+Dorne-3 coastal anti-ship missile,operated_by,7th Coastal Missile Brigade,,2026-03-12,
+the Dorne missile,located_at,Cape Dorne,,2026-03-12,alias
+Dorne-3 coastal anti-ship missile,range_km,280,km,2026-03-12,
+Dorne-3 coastal anti-ship missile,status,operational,,2026-03-12,
+Serath long-range strike system,operated_by,Serath Missile Regiment,,2026-03-12,
+Serath long-range strike system,located_at,Serath Missile Complex,,2026-03-12,
+Serath long-range strike system,range_km,900,km,2026-03-12,
+Serath long-range strike system,count,12,each,2026-03-12,
+Serath long-range strike system,status,operational,,2026-03-12,
+Talon-class frigate,operated_by,Varenian Northern Fleet,,2026-03-12,
+Talon-class frigate,located_at,Novak Naval Base,,2026-03-12,
+Talon-class frigate,range_km,220,km,2026-03-12,
+Talon-class frigate,count,6,each,2026-03-12,
+Talon-class frigate,status,operational,,2026-03-12,
+Sable-class submarine,operated_by,Varenian Northern Fleet,,2026-03-12,
+Sable-class submarine,located_at,Novak Naval Base,,2026-03-12,
+Sable-class submarine,count,4,each,2026-03-12,
+Sable-class submarine,status,operational,,2026-03-12,
+Kite-7 reconnaissance drone,operated_by,Varenian Coastal Air Brigade,,2026-03-12,
+Kite-7 reconnaissance drone,located_at,Novak Naval Base,,2026-03-12,
+the Kite drone,range_km,600,km,2026-03-12,alias
+Kite-7 reconnaissance drone,count,18,each,2026-03-12,
+Kite-7 reconnaissance drone,status,operational,,2026-03-12,
+Varenian Sparrowhawk strike aircraft,operated_by,Varenian Coastal Air Brigade,,2026-03-12,
+Varenian Sparrowhawk strike aircraft,located_at,Novak Naval Base,,2026-03-12,
+Varenian Sparrowhawk strike aircraft,range_km,750,km,2026-03-12,
+Varenian Sparrowhawk strike aircraft,count,20,each,2026-03-12,
+Varenian Sparrowhawk strike aircraft,status,operational,,2026-03-12,
+Vigil-class frigate,operated_by,Task Group Kestrel,,2026-03-12,
+Vigil-class frigate,located_at,Corvane Island,,2026-03-12,
+Vigil frigates,range_km,250,km,2026-03-12,alias
+Vigil-class frigate,count,5,each,2026-03-12,
+Vigil class,status,operational,,2026-03-12,alias
+Halyard air defense system,operated_by,Lantern Battery,,2026-03-12,
+Halyard air defense system,located_at,Port Auberon,,2026-03-12,
+Halyard air defense system,range_km,120,km,2026-03-12,
+Halyard air defense system,count,2,each,2026-03-12,
+Halyard air defense system,status,operational,,2026-03-12,
+Skylark strike aircraft,operated_by,Auberon Air Expeditionary Wing,,2026-03-12,
+Skylark,located_at,Port Auberon,,2026-03-12,alias
+Skylark strike aircraft,range_km,900,km,2026-03-12,
+Skylark strike aircraft,count,24,each,2026-03-12,
+Skylark strike aircraft,status,operational,,2026-03-12,
+Meridian standoff munition,operated_by,Meridian Logistics Group,,2026-03-12,
+Meridian standoff munition,located_at,Port Auberon,,2026-03-12,
+Meridian standoff munition,range_km,400,km,2026-03-12,
+Meridian standoff munition,count,180,each,2026-03-12,
+Meridian standoff munition,status,operational,,2026-03-12,
+Gull boats,operated_by,Ilmaran Navy Patrol Squadron,,2026-03-12,alias
+Gull-class patrol boat,located_at,Port Auberon,,2026-03-12,
+Gull-class patrol boat,range_km,60,km,2026-03-12,
+Gull-class patrol boat,count,8,each,2026-03-12,
+Gull-class patrol boat,status,operational,,2026-03-12,
+Lark surveillance drone,operated_by,Meridian Surveillance Detachment,,2026-03-12,
+Lark surveillance drone,located_at,Halden Airfield,,2026-03-12,
+the Lark drone,range_km,800,km,2026-03-12,alias
+Lark surveillance drone,count,6,each,2026-03-12,
+Lark surveillance drone,status,operational,,2026-03-12,
+Dorne-3 coastal anti-ship missile,count,12,each,2026-07-10,
+Acronyms used: none
+UNCLASSIFIED
