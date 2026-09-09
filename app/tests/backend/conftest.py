@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -15,10 +17,20 @@ if str(REPO_ROOT) not in sys.path:
 
 DATASET_DIR = REPO_ROOT / "dataset"
 
+# Product workspaces go to a throwaway directory for the whole run, so the tests never touch
+# the developer's own app/workspace/. Set before the app is imported: the store reads it per
+# call, but this keeps the intent obvious.
+_WORKSPACES = tempfile.mkdtemp(prefix="strategy-workbench-workspaces-")
+os.environ["STRATEGY_WORKSPACE_DIR"] = _WORKSPACES
+
 from fastapi.testclient import TestClient  # noqa: E402
 
-from app.backend.adapter import DatasetAdapter  # noqa: E402
+from app.backend.adapter import DatasetAdapter, eval_module  # noqa: E402
 from app.backend.main import create_app  # noqa: E402
+
+# Puts dataset/ on sys.path the one supported way, so a test can import the reference
+# evaluator directly (`from eval.engine import recompute`) and use it as an oracle.
+eval_module("tables")
 
 
 def hash_tree(root: Path) -> dict[str, str]:
@@ -45,6 +57,28 @@ def dataset_hashes_before() -> dict[str, str]:
         "the test run modified dataset/: "
         f"{sorted(set(before) ^ set(after)) or [k for k in before if before[k] != after.get(k)]}"
     )
+
+
+@pytest.fixture(scope="session", autouse=True)
+def workspace_root() -> Path:
+    """Where product workspaces live during the run; removed afterwards."""
+    root = Path(_WORKSPACES)
+    yield root
+    shutil.rmtree(root, ignore_errors=True)
+
+
+@pytest.fixture
+def workspace_id(request) -> str:
+    """A workspace of this test's own, so tests never see each other's product state."""
+    from app.backend.product.overlay import clear_cache
+    from app.backend.product.store import Workspace
+
+    import re
+
+    name = re.sub(r"[^A-Za-z0-9_-]", "_", "ws_" + request.node.name)[:64]
+    Workspace(name).reset()
+    clear_cache()
+    return name
 
 
 @pytest.fixture(scope="session")

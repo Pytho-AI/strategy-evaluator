@@ -143,16 +143,18 @@ def test_strategy_lookup_carries_assumptions_and_objective_weights(client):
     body = client.get("/api/strategies/str_blue_1", params={"batch": 1}).json()
     assert body["batch"] == 1
     assert body["marking"] == MARKING
-    assert body["assumptions"]
-    assert {a["strategy_id"] for a in body["assumptions"]} == {"str_blue_1"}
-    assert body["objectives"]
-    assert all(0.0 <= o["weight"] <= 1.0 for o in body["objectives"])
+    strategy = body["strategy"]
+    assert strategy["assumptions"]
+    assert {a["strategy_id"] for a in strategy["assumptions"]} == {"str_blue_1"}
+    assert strategy["objectives"]
+    assert all(0.0 <= o["weight"] <= 1.0 for o in strategy["objectives"])
     snapshot_strategy = next(
         s
         for s in client.get("/api/snapshot", params={"batch": 1}).json()["strategies"]
         if s["strategy_id"] == "str_blue_1"
     )
-    assert body["strategy"] == snapshot_strategy
+    # The detail view is a superset of the snapshot's comparison row.
+    assert {k: strategy[k] for k in snapshot_strategy} == snapshot_strategy
 
 
 def test_strategy_lookup_default_batch_is_0(client):
@@ -176,9 +178,9 @@ def test_claim_lookup_returns_the_claim_row_and_its_source(client):
     body = response.json()
     claim = body["claim"]
     assert claim["claim_id"] == snapshot_claim_id
-    assert claim["source_id"] == body["source"]["source_id"]
-    assert body["source"]["title"]
-    assert body["source"]["path"].endswith(".md")
+    assert claim["source_id"] == claim["source"]["source_id"]
+    assert claim["source"]["title"]
+    assert claim["source"]["path"].endswith(".md")
 
 
 def test_unknown_claim_id_returns_404_unknown_id(client):

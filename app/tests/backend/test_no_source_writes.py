@@ -10,7 +10,11 @@ from app.backend.adapter import DatasetAdapter
 
 def test_serving_every_batch_leaves_dataset_byte_identical(client, dataset_hashes_before):
     for batch in (0, 1, 2, 3):
-        assert client.get("/api/snapshot", params={"batch": batch}).status_code == 200
+        for path in ("/api/snapshot", "/api/strategies", "/api/claims", "/api/risks",
+                     "/api/collection"):
+            assert client.get(path, params={"batch": batch}).status_code == 200, path
+    for batch in (1, 2, 3):
+        assert client.get(f"/api/injects/{batch}/diff").status_code == 200
     client.get("/api/meta")
     client.get("/api/injects")
     client.get("/api/health")

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import importlib
 import json
 import math
 import subprocess
@@ -28,6 +29,10 @@ from .errors import DatasetMissing, SchemaIncompatible
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE_NAME = "strategy-evaluation-dataset-pytho.zip"
 BATCHES = (0, 1, 2, 3)
+
+# Extension layers the collection view reads. Loaded when the checkout has them; a dataset
+# without them still serves every endpoint, with the extension-backed fields empty.
+EXTENSIONS = ("collection_assets", "authority")
 
 # The Blue player of the Meridian Sea scenario. These are dataset IDs, not values:
 # every number attached to them is still computed by the loader.
@@ -54,30 +59,63 @@ class Shape:
 _TEXT = Shape(("string",))
 _COUNT = Shape(("integer",))
 _NUMBER = Shape(("number",))
+_FLAG = Shape(("boolean",))
 _LIST = Shape(("array",))
+_OBJECT = Shape(("object",))
+_ANY = Shape(())  # the schema declares no type: the API passes the value through
+_MAYBE_TEXT = Shape(("null", "string"))
 _MAYBE_NUMBER = Shape(("null", "number"))
 _MAYBE_COUNT = Shape(("integer", "null"))
 _MAYBE_LIST = Shape(("array", "null"))
+_HORIZON = Shape(("string",), enum=("long", "mid", "near"))
+_RISK_LEVEL = Shape(("string",), enum=("high", "low", "moderate", "significant"))
+_NODE_TYPE = Shape(
+    ("string",),
+    enum=(
+        "action", "assumption", "claim", "harmful_event", "objective", "problem_set",
+        "strategy",
+    ),
+)
 _VALIDITY_RESULT = Shape(
     ("object",), properties={"pass": Shape(("boolean",)), "evidence": _TEXT}
 )
 
 # The shapes the API consumes, checked against dataset/schema/*.json before loading.
-# Every entry is a field contracts.py or a route reads; nothing speculative. Risk levels
-# reach the product only through problem_set_assessments.max_risk_level, so RiskLevel is
-# pinned there rather than on risk_assessments, which no route reads yet.
+# Every entry is a field contracts.py or a route reads; nothing speculative. Enums are
+# declared only where the product branches on the value.
 REQUIRED_SHAPES: dict[str, dict[str, Shape]] = {
     "strategies": {
         "strategy_id": _TEXT,
         "game_id": _TEXT,
         "actor_id": _TEXT,
         "name": _TEXT,
+        "summary": _TEXT,
+        "echelon": _TEXT,
         "status": Shape(
             ("null", "string"), enum=("infeasible", "invalid", "stale", "valid")
         ),
         "value": _MAYBE_NUMBER,
         "value_ci": _MAYBE_LIST,
         "robustness": _MAYBE_NUMBER,
+        "aspiration": _MAYBE_NUMBER,
+        "risk_functional": _TEXT,
+        "risk_alpha": _MAYBE_NUMBER,
+        "adversary_coa_label": _MAYBE_TEXT,
+        "opponent_model_id": _TEXT,
+        "end_state_objective_id": _TEXT,
+        "mission_who": _TEXT,
+        "mission_what": _TEXT,
+        "mission_when": _TEXT,
+        "mission_where": _TEXT,
+        "mission_why": _TEXT,
+        "main_effort": _TEXT,
+        "sequencing": _TEXT,
+        "reserve_policy": _TEXT,
+        "task_org": _LIST,
+        "constraints": _LIST,
+        "restraints": _LIST,
+        "mitigates_he_ids": _LIST,
+        "theory_of_victory": _LIST,
         "validity": Shape(
             ("null", "object"),
             properties={name: _VALIDITY_RESULT for name in VALIDITY_TESTS},
@@ -94,15 +132,95 @@ REQUIRED_SHAPES: dict[str, dict[str, Shape]] = {
         "p_holds": _MAYBE_NUMBER,
         "sensitivity": _MAYBE_NUMBER,
         "evpi": _MAYBE_NUMBER,
+        "subject_id": _TEXT,
+        "predicate": _TEXT,
+        "tolerance": Shape(("object",), properties={"op": _TEXT, "value": _ANY}),
+        "role": _TEXT,
+        "origin": Shape(("string",), enum=("higher_hq", "own")),
+        "jp50_logical": _FLAG,
+        "jp50_realistic": _FLAG,
+        "jp50_essential": _FLAG,
+        "in_decision_matrix": _FLAG,
     },
     "problem_set_assessments": {
         "problem_set_id": _TEXT,
-        "jsps_horizon": Shape(("string",), enum=("long", "mid", "near")),
-        "max_risk_level": Shape(
-            ("string",), enum=("high", "low", "moderate", "significant")
-        ),
+        "jsps_horizon": _HORIZON,
+        "max_risk_level": _RISK_LEVEL,
         "he_ids": _LIST,
         "aggregated_statement_text": _TEXT,
+    },
+    "problem_sets": {
+        "problem_set_id": _TEXT,
+        "name": _TEXT,
+        "entity_id": _TEXT,
+        "tier": _COUNT,
+        "thing_of_value_ids": _LIST,
+        "risk_owner_role": _TEXT,
+        "risk_context_source_id": _MAYBE_TEXT,
+        "tolerance_statement": _TEXT,
+        "strategic_context": _TEXT,
+        "scope_and_boundaries": _TEXT,
+        "assumptions_and_constraints": _TEXT,
+        "expected_outputs": _TEXT,
+    },
+    "harmful_events": {
+        "he_id": _TEXT,
+        "problem_set_id": _TEXT,
+        "statement": _TEXT,
+        "risk_type": Shape(("string",), enum=("MR", "MSR")),
+        "risk_subset": _MAYBE_TEXT,
+        "strategic_value": _MAYBE_TEXT,
+        "damage_degree": _MAYBE_TEXT,
+        "fig28_row": _MAYBE_TEXT,
+        "fig28_cell": _MAYBE_TEXT,
+        "base_p": _NUMBER,
+        "condition": _TEXT,
+        "posture_subject_ids": _LIST,
+        "thing_of_value_id": _TEXT,
+        "beneficial_counterpart_he_id": _MAYBE_TEXT,
+        "beneficial_statement": _MAYBE_TEXT,
+        "key_actions": _MAYBE_TEXT,
+    },
+    "risk_assessments": {
+        "he_id": _TEXT,
+        "jsps_horizon": _HORIZON,
+        "p_raw": _NUMBER,
+        "p_level": _TEXT,
+        "c_level": _TEXT,
+        "risk_level": _RISK_LEVEL,
+        "trend": _TEXT,
+        "forced_choice_applied": _FLAG,
+        "posture_rationale": _MAYBE_TEXT,
+        "dominant_driver_id": _MAYBE_TEXT,
+        "active_driver_ids": _LIST,
+        "statement_text": _TEXT,
+    },
+    "risk_drivers": {
+        "driver_id": _TEXT,
+        "he_id": _TEXT,
+        "claim_subject_id": _TEXT,
+        "claim_predicate": _TEXT,
+        "driver_kind": _TEXT,
+        "locus": _TEXT,
+        "op": _TEXT,
+        "value": _ANY,
+        "delta": _NUMBER,
+        "horizons": _LIST,
+        "label": _TEXT,
+    },
+    "risk_sources": {
+        "rs_id": _TEXT,
+        "he_id": _TEXT,
+        "source_kind": _TEXT,
+        "entity_id": _TEXT,
+        "description": _TEXT,
+    },
+    "escalation_edges": {
+        "edge_id": _TEXT,
+        "from_he_id": _TEXT,
+        "to_he_id": _TEXT,
+        "lift": _NUMBER,
+        "mechanism": _TEXT,
     },
     "collection_requirements": {
         "req_id": _TEXT,
@@ -112,15 +230,134 @@ REQUIRED_SHAPES: dict[str, dict[str, Shape]] = {
         ),
         "priority": _MAYBE_NUMBER,
         "jipcl_rank": _MAYBE_COUNT,
+        "pir_id": _TEXT,
+        "eei": _TEXT,
+        "indicators": _LIST,
+        "sir": _TEXT,
+        "gap_type": _TEXT,
+        "subject_id": _TEXT,
+        "predicate": _TEXT,
+        "assumption_id": _MAYBE_TEXT,
+        "rfi_disposition": _TEXT,
+        "routing": _TEXT,
+        "ltiov": _TEXT,
+        "created_at": _TEXT,
+        "answered_by_source_id": _MAYBE_TEXT,
+    },
+    "pirs": {
+        "pir_id": _TEXT,
+        "statement": _TEXT,
+        "commander_role": _TEXT,
+        "priority_rank": _COUNT,
+        "decision_point_ids": _LIST,
     },
     "payoffs": {"strategy_id": _TEXT, "world": _TEXT},
     "strategy_objectives": {
         "strategy_id": _TEXT,
         "objective_id": _TEXT,
         "weight": _NUMBER,
+        "rating_1_to_3": _MAYBE_COUNT,
     },
-    "claims": {"claim_id": _TEXT, "source_id": _TEXT},
-    "sources": {"source_id": _TEXT, "title": _TEXT, "path": _TEXT},
+    "strategy_resources": {
+        "strategy_id": _TEXT,
+        "resource_id": _TEXT,
+        "budget": _NUMBER,
+    },
+    "resources": {"resource_id": _TEXT, "name": _TEXT, "unit": _TEXT},
+    "policy_rules": {
+        "rule_id": _TEXT,
+        "strategy_id": _TEXT,
+        "action_id": _TEXT,
+        "periods": _MAYBE_LIST,
+    },
+    "decision_points": {
+        "dp_id": _TEXT,
+        "strategy_id": _TEXT,
+        "name": _TEXT,
+        "branch_rule_ids": _LIST,
+        "pir_id": _MAYBE_TEXT,
+        "latest_period": _MAYBE_COUNT,
+    },
+    "opponent_models": {
+        "opponent_model_id": _TEXT,
+        "actor_id": _TEXT,
+        "distribution": _LIST,
+    },
+    "actions": {
+        "action_id": _TEXT,
+        "name": _TEXT,
+        "cost": _OBJECT,
+        "mechanism": _TEXT,
+        "tactic_class": _TEXT,
+        "line_of_effort": _TEXT,
+    },
+    "objectives": {
+        "objective_id": _TEXT,
+        "name": _TEXT,
+        "kind": _TEXT,
+        "statement": _MAYBE_TEXT,
+        "aspiration": _MAYBE_NUMBER,
+        "metric": _TEXT,
+    },
+    "games": {"game_id": _TEXT, "horizon": _COUNT},
+    "entities": {
+        "entity_id": _TEXT,
+        "entity_type": _TEXT,
+        "canonical_name": _TEXT,
+    },
+    "dependencies": {
+        "edge_id": _TEXT,
+        "from_type": _NODE_TYPE,
+        "from_id": _TEXT,
+        "to_type": _NODE_TYPE,
+        "to_id": _TEXT,
+        "kind": Shape(
+            ("string",),
+            enum=(
+                "contradicts", "drives", "enables", "escalates", "grounds", "requires",
+                "supports",
+            ),
+        ),
+        "mechanism": _TEXT,
+        "weight": _NUMBER,
+        "evidence_claim_ids": _LIST,
+    },
+    "claims": {
+        "claim_id": _TEXT,
+        "source_id": _TEXT,
+        "subject_id": _TEXT,
+        "predicate": _TEXT,
+        "object_id": _MAYBE_TEXT,
+        "value": Shape(("boolean", "integer", "null", "number", "string")),
+        "value_type": _TEXT,
+        "unit": _MAYBE_TEXT,
+        "valid_from": _TEXT,
+        "valid_to": _MAYBE_TEXT,
+        "asserted_at": _TEXT,
+        "estimative": _FLAG,
+        "likelihood_icd203": _MAYBE_TEXT,
+        "likelihood_surface_term": _MAYBE_TEXT,
+        "confidence_icd203": _TEXT,
+        "confidence": _NUMBER,
+        "span_start": _COUNT,
+        "span_end": _COUNT,
+        "status": Shape(
+            ("string",), enum=("approved", "proposed", "rejected", "superseded")
+        ),
+        "supersedes_claim_id": _MAYBE_TEXT,
+        "truth_claim_id": _MAYBE_TEXT,
+    },
+    "sources": {
+        "source_id": _TEXT,
+        "title": _TEXT,
+        "path": _TEXT,
+        "doc_type": _TEXT,
+        "author_org": _TEXT,
+        "reliability": _TEXT,
+        "credibility": _TEXT,
+        "published_at": _TEXT,
+        "batch": _COUNT,
+    },
 }
 
 REQUIRED_COLUMNS: dict[str, tuple[str, ...]] = {
@@ -131,9 +368,26 @@ REQUIRED_PRIMARY_KEYS: dict[str, list[str]] = {
     "strategies": ["strategy_id"],
     "assumptions": ["assumption_id"],
     "problem_set_assessments": ["problem_set_id", "jsps_horizon", "world_version"],
+    "problem_sets": ["problem_set_id"],
+    "harmful_events": ["he_id"],
+    "risk_assessments": ["he_id", "jsps_horizon", "world_version"],
+    "risk_drivers": ["driver_id"],
+    "risk_sources": ["rs_id"],
+    "escalation_edges": ["edge_id"],
     "collection_requirements": ["req_id"],
+    "pirs": ["pir_id"],
     "payoffs": ["strategy_id", "opponent_strategy_id", "world"],
     "strategy_objectives": ["strategy_id", "objective_id"],
+    "strategy_resources": ["strategy_id", "resource_id"],
+    "resources": ["resource_id"],
+    "policy_rules": ["rule_id"],
+    "decision_points": ["dp_id"],
+    "opponent_models": ["opponent_model_id"],
+    "actions": ["action_id"],
+    "objectives": ["objective_id"],
+    "games": ["game_id"],
+    "entities": ["entity_id"],
+    "dependencies": ["edge_id"],
     "claims": ["claim_id"],
     "sources": ["source_id"],
 }
@@ -195,6 +449,11 @@ class BatchSnapshot:
     def tables(self) -> dict[str, list[dict]]:
         return copy.deepcopy(self._tables)
 
+    @property
+    def raw(self) -> dict[str, list[dict]]:
+        """The cache's own tables, uncopied. Read them; never mutate them."""
+        return self._tables
+
     def table(self, name: str) -> list[dict]:
         return copy.deepcopy(self._tables[name])
 
@@ -221,6 +480,7 @@ class DatasetAdapter:
         self._identity: DatasetIdentity | None = None
         self._checked = False
         self._cache: dict[tuple[str, int], BatchSnapshot] = {}
+        self._indexes: dict[tuple[str, int], Any] = {}
 
     # ------------------------------------------------------------------ identity
     @property
@@ -322,11 +582,23 @@ class DatasetAdapter:
         if cached is not None:
             return cached
         started = time.perf_counter()
+        extensions = [
+            name
+            for name in EXTENSIONS
+            if (self.dataset_dir / "extensions" / name / "truth").is_dir()
+        ]
         try:
             if self.dataset_dir == DATASET_DIR:
-                frames = dataset_load(base=True, through_batch=batch)
+                frames = dataset_load(
+                    base=True, extensions=extensions, through_batch=batch
+                )
             else:
-                frames = _load_from(self.dataset_dir, base=True, through_batch=batch)
+                frames = _load_from(
+                    self.dataset_dir,
+                    base=True,
+                    extensions=extensions,
+                    through_batch=batch,
+                )
         except FileNotFoundError as exc:
             raise DatasetMissing(
                 f"the dataset at {self.dataset_dir} is incomplete: {exc}",
@@ -365,9 +637,21 @@ class DatasetAdapter:
                 )
 
     # ------------------------------------------------------------------ views
+    def index(self, batch: int):
+        """The joined, read-only view of one batch (app/backend/derive.py::Index)."""
+        from .derive import Index
+
+        snapshot = self.snapshot(batch)
+        key = (self.identity.key, batch)
+        cached = self._indexes.get(key)
+        if cached is None:
+            cached = Index(snapshot, self.dataset_dir)
+            self._indexes[key] = cached
+        return cached
+
     def ranking(self, snapshot: BatchSnapshot, game_id: str, actor_id: str) -> list[str]:
         """Ranking of valid strategies by value, from eval/engine.py::ranking."""
-        return list(_engine().ranking(snapshot._tables, game_id, actor_id))
+        return list(eval_module("engine").ranking(snapshot.raw, game_id, actor_id))
 
     def blue_ranking(self, snapshot: BatchSnapshot) -> list[str]:
         return self.ranking(snapshot, BLUE_GAME_ID, BLUE_ACTOR_ID)
@@ -376,11 +660,11 @@ class DatasetAdapter:
         """(worlds available to the Blue actor, distinct world labels across all actors)."""
         actor_of = {
             s["strategy_id"]: (s["game_id"], s["actor_id"])
-            for s in snapshot._tables["strategies"]
+            for s in snapshot.raw["strategies"]
         }
         blue: set[str] = set()
         every: set[str] = set()
-        for row in snapshot._tables["payoffs"]:
+        for row in snapshot.raw["payoffs"]:
             every.add(row["world"])
             if actor_of.get(row["strategy_id"]) == (BLUE_GAME_ID, BLUE_ACTOR_ID):
                 blue.add(row["world"])
@@ -463,11 +747,9 @@ def _git_head(dataset_dir: Path) -> str | None:
     return head if out.returncode == 0 and head else None
 
 
-def _engine():
-    """eval/ is importable only with the dataset package directory on sys.path."""
+def eval_module(name: str):
+    """Import ``eval.<name>``: eval/ resolves only with the dataset package dir on sys.path."""
     package_dir = str(DATASET_DIR)
     if package_dir not in sys.path:
         sys.path.insert(0, package_dir)
-    from eval import engine
-
-    return engine
+    return importlib.import_module(f"eval.{name}")
