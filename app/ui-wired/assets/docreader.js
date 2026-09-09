@@ -52,24 +52,12 @@ export async function readDocument(file) {
 
 // Lightweight structure extraction from plan text (JP 5-0 paragraph headings).
 export function extractPlan(text) {
-  const grab = re => { const m = text.match(re); return m ? m[1].replace(/\s+/g, ' ').trim().slice(0, 700) : ''; };
-  const block = (start, len) => { const i = text.search(start); if (i < 0) return ''; return text.slice(i, i + len); };
-  // Assumptions: explicit lines, or the numbered list under an "Assumptions" heading
-  let assumptions = (text.match(/(?:^|\n)\s*(?:\(?[a-z0-9]\)?[.)]\s*)?(?:Assumption|It is assumed)[^\n]{10,240}/gi) || []).map(s => s.trim());
-  if (!assumptions.length) { let b = block(/Assumptions?[.:]?\s*\n/i, 4000); const cutAt = b.slice(20).search(/\n\s*(?:\d\.\s*(?:\(U\)\s*)?(?:MISSION|EXECUTION|SUSTAINMENT)|[a-z]\.\s*\(U\)|Commander'?s Intent|Key Tasks)/i); if (cutAt >= 0) b = b.slice(0, cutAt + 20); assumptions = (b.match(/\n\s*\d{1,2}[.)]\s*[^\n]{20,400}/g) || []).map(s => s.replace(/^\s*\d{1,2}[.)]\s*/, '').trim()); }
-  // PIRs: explicit PIR lines, else questions derived from enemy most likely / most dangerous COAs
-  let pirs = (text.match(/(?:PIR|Priority Intelligence Requirement)[^\n]{10,240}/gi) || []).map(s => s.replace(/^(PIR|Priority Intelligence Requirements?)[\s#\d.:)-]*/i, '').trim());
-  if (!pirs.length) {
-    const ml = grab(/Most Likely (?:COA|Course of Action)[^:]*:\s*([\s\S]{20,600}?)(?:\n)/i), md = grab(/Most Dangerous (?:COA|Course of Action)[^:]*:\s*([\s\S]{20,600}?)(?:\n)/i);
-    const actor = (text.match(/\b([A-Z][A-Za-z]+ (?:People'?s )?(?:Army|Forces|Navy))\b/) || [])[1] || 'the adversary';
-    const q = s => s.split(/;\s*/).map(x => x.replace(/\.$/, '').trim()).filter(x => x.length > 15).slice(0, 2).map(x => `Will ${actor} ${x.replace(/^(OPA|the enemy|enemy|adversary)\s+/i, '').replace(/^(launches|conducts|employs|consolidates|shifts)/i, m => ({ launches: 'launch', conducts: 'conduct', employs: 'employ', consolidates: 'consolidate', shifts: 'shift' })[m.toLowerCase()] || m)}?`);
-    pirs = [...q(md), ...q(ml)].slice(0, 4);
-  }
+  const grab = re => { const m = text.match(re); return m ? m[1].trim().slice(0, 400) : ''; };
   return {
-    mission: grab(/(?:^|\n)\s*(?:2\.\s*)?(?:\(U\)\s*)?Mission[.:\s]+([\s\S]{20,900}?)(?:\n\s*\n|\n\s*(?:3\.|Execution))/i),
-    intent: grab(/Commander'?s Intent[.:\s]*(?:\(1\)\s*)?(?:Purpose[.:\s]*)?([\s\S]{20,800}?)(?:\n\s*\n|\n\s*\(2\)|\n\s*Key Tasks)/i),
-    endState: grab(/End State[.:\s]+([\s\S]{10,600}?)(?:\n\s*\n|\n)/i),
-    assumptions: assumptions.slice(0, 8), pirs,
+    mission: grab(/(?:^|\n)\s*(?:2\.\s*)?Mission[.:\s]+([\s\S]{20,600}?)(?:\n\s*\n|\n\s*(?:3\.|Execution))/i),
+    intent: grab(/Commander'?s Intent[.:\s]+([\s\S]{20,600}?)(?:\n\s*\n)/i),
+    endState: grab(/End State[.:\s]+([\s\S]{10,400}?)(?:\n\s*\n|\n)/i),
+    assumptions: (text.match(/(?:^|\n)\s*(?:\(?[a-z0-9]\)?[.)]\s*)?(?:Assumption|It is assumed)[^\n]{10,240}/gi) || []).slice(0, 6).map(s => s.trim()),
     phases: (text.match(/Phase\s+(?:[0IVX]+|\d)[^\n]{0,80}/g) || []).slice(0, 6),
   };
 }

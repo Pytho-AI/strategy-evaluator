@@ -1,13 +1,14 @@
 {
   "startView": {
     "editor": "enum",
-    "default": "coa",
+    "default": "docs",
     "options": [
       "coa",
-      "intel",
       "docs",
-      "posture",
+      "intel",
       "collection",
+      "rfi",
+      "posture",
       "doctrine"
     ],
     "tsType": "string",

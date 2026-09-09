@@ -178,3 +178,36 @@ of the decoded content and are unchanged by the move.
 | root | `97ceecaa-8d01-4f91-bc09-d72e05f0d4b6` | script | 300 | `7d1ad60da19d57381ba6fc862d52a5501a2038938d13037f3e6e0f751b5e678d` | `vendor/ds-bundle-industry.js` | `@ds-bundle` stub declaring design-system namespace `Industry_indust` with zero components. A no-op; kept because the artifact shipped it. |
 | root | `https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js` | script | 131835 | `35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d` | `vendor/react-dom.production.min.js` | ReactDOM 18.3.1 UMD, pinned. Same. |
 | root | `https://unpkg.com/react@18.3.1/umd/react.production.min.js` | script | 10751 | `d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd` | `vendor/react.production.min.js` | React 18.3.1 UMD, pinned. Loaded by `index.html` so dc-runtime `loadReactUmd()` short-circuits and no CDN is contacted. |
+
+## v3 recovery — 09 September 2026
+
+Source artifact: `~/Downloads/Stratistics Wargaming System-v3.html`
+SHA-256 `862e0e94a852cf4276213804e13f12ad6e4d06eb1c79cc1710aad7f2d92e5f02`, 1,138,702 bytes.
+
+Reproduce:
+
+```sh
+.venv/bin/python app/ui/tools/extract.py "~/Downloads/Stratistics Wargaming System-v3.html" /tmp/v3
+.venv/bin/python app/ui/tools/lay_out_source.py /tmp/v3 /tmp/v3-staged
+```
+
+`tools/lay_out_source.py` gained the v3 resource uuids (dc-runtime `e4442ba4`, react
+`67de73d8`, react-dom `afe94f78`, ds-bundle `fb9a67ac`, docreader `d86d631a`; map bundle
+d3 `5f0251e3`, topojson `a818376d`, world atlas `dc61f461`). Four hand edits on top of its
+output, the same ones the earlier recovery needed:
+
+| File | Change |
+|---|---|
+| `src/app.logic.js` l.82 | docreader import → `'./assets/docreader.js'` |
+| `src/app.logic.js` l.484 | `mapSrc` blob lookup → `'./assets/jipoe-map/index.html?threat='` |
+| `src/app.dc.html` l.253 | `<iframe src="{{ mapSrc }}">` → `sc-camel-src` (kills the `{{ mapSrc }}` 404) |
+| `assets/jipoe-map/index.html` l.203 | world-atlas CDN fetch → `'./data/countries-110m.json'` |
+
+`index.html` and `src/boot.js` are recovery scaffolding, not artifact code: they load the
+three style islands, the pinned React 18.3.1 UMD bundles, the template and the logic, then
+dc-runtime. The classification pill is added by `index.html`.
+
+**Scenario note.** v3 carries its own scenario (USEUCOM OPORD 26-004, Operation Amber Shield,
+Baltic/Russia) with hard-coded demo data. It is not the Meridian Sea dataset. Nothing on these
+screens is API-backed. The API-backed workbench built against the dataset is preserved at
+`app/ui-wired/` and served at `/wired/`.

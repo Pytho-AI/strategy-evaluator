@@ -62,8 +62,13 @@ def create_app(adapter: DatasetAdapter | None = None) -> FastAPI:
 
     for router in ROUTERS:
         app.include_router(router)
-    ui_dir = Path(__file__).resolve().parents[1] / "ui"
-    app.mount("/", StaticFiles(directory=ui_dir, html=True), name="workbench")
+    app_dir = Path(__file__).resolve().parents[1]
+    wired_dir = app_dir / "ui-wired"
+    if wired_dir.is_dir():
+        # The API-backed workbench (Meridian Sea dataset). Mounted before "/" so it
+        # keeps its own path while the demo shell owns the root.
+        app.mount("/wired", StaticFiles(directory=wired_dir, html=True), name="wired")
+    app.mount("/", StaticFiles(directory=app_dir / "ui", html=True), name="workbench")
     return app
 
 

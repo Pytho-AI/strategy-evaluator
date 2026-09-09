@@ -27,18 +27,30 @@ STYLE_FILES = [
 
 # Root-bundle scripts, by the decoded filename prefix extract.py assigns.
 VENDOR = {
+    # V2 bundle
     "15a49b3a": "vendor/dc-runtime.js",
     "296a0e32": "vendor/react.production.min.js",
     "9b33a968": "vendor/react-dom.production.min.js",
     "97ceecaa": "vendor/ds-bundle-industry.js",
     "0d967fce": "assets/docreader.js",
+    # v3 bundle (same roles, new uuids)
+    "e4442ba4": "vendor/dc-runtime.js",
+    "67de73d8": "vendor/react.production.min.js",
+    "afe94f78": "vendor/react-dom.production.min.js",
+    "fb9a67ac": "vendor/ds-bundle-industry.js",
+    "d86d631a": "assets/docreader.js",
 }
 
 # jipoeMap-bundle scripts and data.
 MAP_VENDOR = {
+    # V2 map bundle
     "8b0e78de": "vendor/d3.v7.9.0.min.js",
     "e498e85a": "vendor/topojson-client.v3.1.0.min.js",
     "927c98b3": "data/countries-110m.json",
+    # v3 map bundle (same roles, new uuids)
+    "5f0251e3": "vendor/d3.v7.9.0.min.js",
+    "a818376d": "vendor/topojson-client.v3.1.0.min.js",
+    "dc61f461": "data/countries-110m.json",
 }
 
 FONT_FACE_RE = re.compile(
