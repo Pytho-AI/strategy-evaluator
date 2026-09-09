@@ -1,0 +1,10 @@
+.git
+.venv
+**/__pycache__
+app/tests
+app/workspace
+app/ui/tools
+docs/reviews
+doctrine
+*.zip
+.pytest_cache

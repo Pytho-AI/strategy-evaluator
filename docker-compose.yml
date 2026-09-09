@@ -1,0 +1,17 @@
+services:
+  workbench:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: strategy-evaluation-workbench:latest
+    container_name: strategy-workbench
+    restart: unless-stopped
+    ports:
+      - "${HOST_PORT:-8790}:8765"
+    environment:
+      PORT: 8765
+      STRATEGY_WORKSPACE_DIR: /data/workspace
+    volumes:
+      - workbench-state:/data
+volumes:
+  workbench-state:
