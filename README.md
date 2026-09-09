@@ -1,108 +1,122 @@
-# strategy-evaluation-workbench
+<div align="center">
 
-A locally runnable Strategy Option Evaluation workbench, built for a hackathon demo. An operator
-loads the fictional Meridian Sea scenario at T0, compares three Blue strategy options against
-their five JP 5-0 validity tests, scrubs through three timed inject batches, and traces every
-number back to the claim and source span that produced it.
+# Strategy Adjudicator
 
-The repository holds both halves: the frozen `strategy-evaluation-dataset-pytho` release under
-`dataset/`, and the product that reads it under `app/`.
+**Course-of-action evaluation that shows its work — every score traced to a sourced claim, an exact span, and a doctrinal test.**
 
-This is a **standalone** effort. It does not use, modify or depend on coa-engine, pytho-arena,
-pytho-vite or pytho-app. Their simulators are recorded as not used, with the evidence, in
-[`docs/CAPABILITY_MATRIX.md`](docs/CAPABILITY_MATRIX.md).
+Built for the J2 hackathon by **Pytho**. UI shell: *Stratistics Wargaming System*.
 
-## Layout
+[**Live demo → http://54.90.137.38:9010/**](http://54.90.137.38:9010/) · [Dataset-backed workbench](http://54.90.137.38:9010/wired/) · [API](http://54.90.137.38:9010/api/meta)
+
+`313 tests` · `29 dataset gates` · `20 doctrinal invariants` · `byte-identical regeneration` · `offline, no model key`
+
+</div>
+
+---
+
+![Strategy Option Evaluation](docs/images/01-strategy-inputs.jpg)
+
+## The problem
+
+A planner comparing courses of action has to answer three questions under time pressure: **which option is best, why, and what new information would change the answer.** Today that reasoning lives in slides and in people's heads. When an assumption turns out to be wrong, nothing recomputes, and nobody can trace the recommendation back to the reporting that produced it.
+
+## What this does
+
+Four connected capabilities over one claim graph:
+
+| Stage | What it does |
+|---|---|
+| **1 · Strategy Option Evaluation** | Scores each COA against its assumptions and the five JP 5-0 validity tests, and shows exactly where the analysis rests on thin evidence. |
+| **2 · Collection Management** | Turns decision-relevant gaps into draft requirements — tagged, routed, tracked — priced by the expected value of the information. |
+| **3 · Predictive Interconnected Risk** | Propagates a change along the graph's edges: which option degrades if this assumption fails, and how far the effect travels. |
+| **4 · Option Recommendation** | Presents the recommended COA with its assumptions, tradeoffs, and the risk being accepted. |
+
+Beneath all four: **foundational data ingestion** maintains the sourced claim graph — source span, validity window, confidence — that everything else reads.
+
+## Why the engineering is interesting
+
+**Nothing on screen is typed in.** Every value is recomputed by a reference evaluator from the claim graph. The API refuses to serve a number it cannot derive.
+
+**Provenance reaches the exact character.** Any claim returns the sentence that produced it, with both time axes kept separate:
+
+```json
+{ "claim_id": "clm_0001",
+  "span_text": "Dorne-3 is operated by the coastal missile brigade.",
+  "asserted_at": "2026-09-05",   "valid_from": "2026-03-12",  "valid_to": null,
+  "likelihood_icd203": null, "confidence_icd203": "high", "confidence": 0.97,
+  "status": "approved" }
+```
+
+**Doctrine is implemented, not name-dropped.** 168 verbatim extracts from CJCSM 3105.01C (JRAM), JP 5-0, CJCSI 3100.01F, JP 2-01 and JP 3-60 are machine-checked against the source PDFs on every run. The JRAM risk contour, the ICD 203 → JRAM crosswalk with its forced-choice rule, the JP 5-0 App. F comparison and its caution sentence are code paths with tests, each citing its figure.
+
+**Uncertainty is modelled honestly.** Options are evaluated over 64 assumption worlds; `value_ci` is the min/max across adversary courses of action and is labelled an adversary-scenario range, never a confidence interval. Likelihood and confidence are never merged into one number.
+
+**Change propagates and is explained.** Three timed inject batches move the world. An assumption flips, an option fails its *acceptable* gate, the ranking changes, a risk cascades across problem sets, and a collection requirement closes — each with a before/after diff computed from the graph, not scripted.
+
+**It is reproducible.** `python -m gen --seed 20260908` regenerates the entire dataset byte-for-byte, verified in CI-style gates along with 20 invariants covering referential integrity, span validity, non-overlapping valid time, DAG acyclicity, and recomputation of every derived column to 1e-9.
+
+![Dataset-backed workbench](docs/images/02-wired-live-data.jpg)
+<div align="center"><sub>The same workflow at <code>/wired</code>, every field served by the API from the claim graph.</sub></div>
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph Frontend
+    UI["Operator workbench<br/>4-stage workflow"]
+  end
+  subgraph Backend["FastAPI · one offline process"]
+    API["Typed API<br/>/api/snapshot · strategies · claims<br/>risks · collection · injects"]
+    EVAL["Reference evaluator<br/>JP 5-0 validity · JRAM risk<br/>EVPI · noisy-OR cascade"]
+    WS["Product workspace<br/>reports · review · audit"]
+  end
+  subgraph Data["Frozen dataset — a contract"]
+    CG["Claim graph<br/>864 claims · 122 entities · 92 documents"]
+    INJ["Inject batches 1–3"]
+  end
+  UI --> API --> EVAL --> CG
+  API --> WS
+  EVAL --> INJ
+```
+
+The dataset is frozen and versioned by the SHA-256 of its archive; the API embeds that identity in its cache key, so a snapshot can never be served from stale data.
+
+## Run it
+
+```sh
+make app-run        # http://127.0.0.1:8765/ — UI and API, one process, no network
+make image && make image-run   # or in a container
+```
+
+Deploy to a host: `HOST=user@box ./deploy/deploy-ec2.sh` (see [docs/DEPLOY.md](docs/DEPLOY.md); it refuses to take a port another service uses and verifies no pre-existing container stopped).
+
+## Verify the claims in this README
+
+```sh
+make check        # 29 dataset gates: 20 invariants, byte-identical regeneration, denylist
+make test         # 35 dataset tests
+make app-test     # 278 backend contract tests + browser tests
+```
+
+## Repository
 
 | Path | Contents |
 |---|---|
-| `dataset/` | The frozen dataset release: `schema/`, `truth/`, `corpus/`, `injects/`, `eval/`, `extensions/`, `gen/`, `doctrine/EXTRACTS.md`, `DATA_CARD.md`, `USE_CASE_MATRIX.md`, `loader.py`, and the archive. A contract — read only. |
-| `app/backend` | FastAPI service on Python 3.12, importing `dataset.load` and `dataset/eval` directly. Owns loading, filtering, recomputation, joins and trace construction. |
-| `app/ui` | The UI V2 operator shell with API-backed screens, served by FastAPI. Renders typed API responses; no dataset formula is copied into it. |
-| `docs/` | [`STATE.md`](docs/STATE.md) — precheck, architecture decision, dataset facts, phase table, risks. [`CAPABILITY_MATRIX.md`](docs/CAPABILITY_MATRIX.md) — every submitted claim against what exists. [`DEMO.md`](docs/DEMO.md) — the guided demo script. |
-| `doctrine/` | The five source PDFs, read-only and not committed. Copy them here. |
+| `app/backend/` | FastAPI service: read API, ingestion, review, collection workflow, product state |
+| `app/ui/` | Operator workbench (recovered from the design artifact; see `RECOVERY.md`) |
+| `dataset/` | Frozen claim graph, schemas as contracts, reference evaluator, generator, inject batches |
+| `dataset/doctrine/EXTRACTS.md` | 168 verbatim doctrine extracts, machine-verified against the PDFs |
+| `docs/` | [State](docs/STATE.md) · [Capability matrix](docs/CAPABILITY_MATRIX.md) · [Demo](docs/DEMO.md) · [Deploy](docs/DEPLOY.md) · independent [reviews](docs/reviews) |
 
-## Running the product
+## What is real, and what is not
 
-    make app-run     # serves the workbench at http://127.0.0.1:8765
-    make app-test    # the product's own test suite
+We would rather be checked than believed, so the boundaries are written down:
 
-One command, offline, no credentials. Verified at 1440x900 against the production
-server with the full T0 → batch 1 → batch 2 → batch 3 → T0 flow and no console or
-network failures.
-
-## The dataset
-
-`dataset/` is the frozen `strategy-evaluation-dataset-pytho` release: a deterministic synthetic
-corpus and relational truth set for testing claim extraction, collection management,
-interconnected risk assessment, and strategy option evaluation. It contains a fictional theater,
-dated claims, structured decision data, three update batches, and reference scoring code.
-
-Doctrine-grounded: CJCSM 3105.01C (JRAM), JP 5-0, CJCSI 3100.01F (JSPS), JP 2-01, JP 3-60, and
-ICD 203 as reproduced in JRAM Fig. 19. Extracts and page citations are in
-`dataset/doctrine/EXTRACTS.md`; schemas and formulas in `dataset/schema/SCHEMA.md`.
-
-Size: 92 documents, 864 claims, 122 entities, 9 strategies, 64 Blue worlds. Counts include the
-three inject batches. Shipped extensions: `rag_qa`, `target_systems`, `capability`, `authority`,
-`collection_assets`, and the optional `events` layer.
-
-Archive SHA-256, immutable:
-
-    fc5c9d311fd1392d0af367f4522842afa807b29ad60ba41cda446cbbeac54418
-
-The dataset's schemas and computed results are frozen contracts. Do not modify them to make the
-product easier to build.
-
-### Dataset setup
-
-Python 3.11+ (the venv here is 3.12):
-
-    uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
-
-### Regenerate and gate
-
-    make gen      # == (cd dataset && python -m gen --seed 20260908)
-    make check    # == (cd dataset && python -m gen check --seed 20260908)
-    make test     # == pytest -q tests
-
-`make check` runs schema load, invariants 01-20, eval truth-against-truth, the reproducibility
-diff and the denylist grep, plus the six extension gates — 28 gates. Regeneration with seed
-`20260908` is byte-identical. `make check` writes into a temporary directory and never touches
-`dataset/`.
-
-### Load from Python
-
-Run from the repository root:
-
-    from dataset import load
-    d = load(base=True, extensions=["rag_qa"], through_batch=1)
-    d["claims"].head()
-
-All three arguments are keyword-only; `through_batch` is 0-3. Every base load calls
-`eval.engine.recompute`, so values, statuses, rankings, risk levels, EVPI priorities and JIPCL
-ranks in the returned frames are computed on the spot, not read from disk. Some state — the ICD
-203 forced-choice flag and its posture rationale — exists **only** in that recomputed result;
-reading `truth/*.jsonl` directly will show it as absent. Always go through `load()`.
-
-`load(base=True, extensions=<all six>, through_batch=3)` measures at about 0.04 s.
+- **The scenario is fictional and synthetic**, marked `UNCLASSIFIED — SYNTHETIC` on every screen and in every generated product. The dataset's theater, actors, units and systems are invented; a denylist gate keeps real nations, alliances and weapon designators out of it.
+- **The evaluation is a finite decision model, not a prediction of combat.** Expected value is a scenario-relative decision-support output.
+- **The demo shell and the dataset-backed workbench are different scenarios.** `/` runs the design shell with its own demo content; [`/wired`](http://54.90.137.38:9010/wired/) is the same workflow driven entirely by the dataset and the evaluator. Aligning them is the current work.
+- **Every unmet claim is tracked in the open** in [docs/CAPABILITY_MATRIX.md](docs/CAPABILITY_MATRIX.md), including dynamic wargaming and adversary-model source grounding, with the evidence for each row.
 
 ## License
 
-CC BY 4.0 — see `LICENSE`. The synthetic scenario, generated corpus, schemas, and team-authored
-code and documentation are licensed under it. The cited doctrine source documents are not
-relicensed and remain subject to their source terms.
-
-## Notices
-
-- **Standalone.** Nothing outside this repository is modified. The other Pytho repositories, and
-  the user work in them, are listed as protected in `docs/STATE.md`.
-- **Fiction.** All scenario content — the Meridian Sea theater, its entities, documents, claims,
-  strategies and adversary courses of action — is fictional and team-authored. No real persons,
-  polities, organizations or systems. Doctrine, processes and product formats are real and cited.
-- **UNCLASSIFIED, synthetic.** That marking is visible in the application and in every export.
-- **Decision support, not prediction.** The model is a finite payoff tensor over enumerated
-  worlds. Values are scenario-relative decision-support outputs, not predictions of real combat
-  outcomes. The `value_ci` field is the min/max expected value across adversary courses of
-  action — an adversary-scenario range, not a statistical confidence interval — and dataset
-  utility is not a probability of success. Likelihood and confidence are separate quantities and
-  are never displayed as one.
+Code and dataset released under CC BY 4.0. See [LICENSE](LICENSE).

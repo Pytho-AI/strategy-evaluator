@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir -r /srv/deploy/requirements-runtime.txt
 COPY dataset/ /srv/dataset/
 COPY app/backend/ /srv/app/backend/
 COPY app/ui/ /srv/app/ui/
+COPY app/ui-wired/ /srv/app/ui-wired/
 
 RUN useradd --create-home --uid 10001 workbench \
  && mkdir -p /data/workspace \

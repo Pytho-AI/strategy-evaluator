@@ -11,3 +11,6 @@ app/**/__pycache__/
 docs/reviews/pytest-*/
 docs/reviews/xcrun_db
 app/workspace/
+.DS_Store
+docs/reviews/pytest-*/
+docs/reviews/xcrun_db
