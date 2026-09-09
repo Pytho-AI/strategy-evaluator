@@ -31,8 +31,8 @@ async function unzipEntry(buf, wanted) {
 export async function readDocx(buf) {
   const xml = await unzipEntry(buf, 'word/document.xml');
   const paras = [];
-  xml.replace(/<w:p[ >][\s\S]*?<\/w:p>/g, m => { const t = (m.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []).map(x => x.replace(/<[^>]+>/g, '')).join(''); if (t.trim()) paras.push(t.trim()); return ''; });
-  return paras.join('\n');
+  xml.replace(/<w:p[ >][\s\S]*?<\/w:p>/g, m => { const t = (m.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []).map(x => x.replace(/<[^>]+>/g, '')).join(''); paras.push(t.trim()); return ''; });
+  return paras.join('\n').replace(/\n{3,}/g, '\n\n');
 }
 
 export async function readDocument(file) {
@@ -51,12 +51,22 @@ export async function readDocument(file) {
 }
 
 // Lightweight structure extraction from plan text (JP 5-0 paragraph headings).
-export function extractPlan(text) {
+const normalize = s => (s || '')
+  .replace(/[\u2018\u2019\u02BC\u2032]/g, "'")
+  .replace(/[\u201C\u201D\u2033]/g, '"')
+  .replace(/[\u2013\u2014]/g, '-')
+  .replace(/\u00A0/g, ' ')
+  .replace(/\r\n?/g, '\n');
+
+const SECTION_END = "(?:\\n\\s*\\n|\\n\\s*(?:\\d{1,2}\\s*[.)]|\\([a-z0-9]\\)|Key Tasks|End ?State|Purpose|Method|Concept|Execution|Assumptions?|Tasks|Scheme|Commander|Annex|Appendix|PIR|Phase)|$)";
+
+export function extractPlan(rawText) {
+  const text = normalize(rawText);
   const grab = re => { const m = text.match(re); return m ? m[1].trim().slice(0, 400) : ''; };
   return {
-    mission: grab(/(?:^|\n)\s*(?:2\.\s*)?Mission[.:\s]+([\s\S]{20,600}?)(?:\n\s*\n|\n\s*(?:3\.|Execution))/i),
-    intent: grab(/Commander'?s Intent[.:\s]+([\s\S]{20,600}?)(?:\n\s*\n)/i),
-    endState: grab(/End State[.:\s]+([\s\S]{10,400}?)(?:\n\s*\n|\n)/i),
+    mission: grab(new RegExp("(?:^|\\n)\\s*(?:\\d{1,2}\\.\\s*)?(?:\\(U\\)\\s*)?Mission[.:\\s]+([\\s\\S]{20,900}?)" + SECTION_END, "i")),
+    intent: grab(new RegExp("Commander'?s?\\s*Intent[.:\\s]*(?:\\(1\\)\\s*)?(?:Purpose[.:\\s]*)?([\\s\\S]{20,800}?)" + SECTION_END, "i")),
+    endState: grab(new RegExp("(?:Military\\s+)?End ?State[.:\\s]+([\\s\\S]{10,600}?)" + SECTION_END, "i")),
     assumptions: (text.match(/(?:^|\n)\s*(?:\(?[a-z0-9]\)?[.)]\s*)?(?:Assumption|It is assumed)[^\n]{10,240}/gi) || []).slice(0, 6).map(s => s.trim()),
     phases: (text.match(/Phase\s+(?:[0IVX]+|\d)[^\n]{0,80}/g) || []).slice(0, 6),
   };

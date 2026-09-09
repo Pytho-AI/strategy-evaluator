@@ -33,3 +33,17 @@ class UnknownId(DatasetError):
 
     code = "unknown_id"
     http_status = 404
+
+
+class UnknownScenario(DatasetError):
+    """A request named a scenario the registry does not have."""
+
+    code = "unknown_scenario"
+    http_status = 422
+
+
+class ScenarioUnavailable(DatasetError):
+    """A registered scenario's package is not importable yet, or is incomplete."""
+
+    code = "scenario_unavailable"
+    http_status = 503

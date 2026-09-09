@@ -31,8 +31,9 @@ async function unzipEntry(buf, wanted) {
 export async function readDocx(buf) {
   const xml = await unzipEntry(buf, 'word/document.xml');
   const paras = [];
-  xml.replace(/<w:p[ >][\s\S]*?<\/w:p>/g, m => { const t = (m.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []).map(x => x.replace(/<[^>]+>/g, '')).join(''); if (t.trim()) paras.push(t.trim()); return ''; });
-  return paras.join('\n');
+  xml.replace(/<w:p[ >][\s\S]*?<\/w:p>/g, m => { const t = (m.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []).map(x => x.replace(/<[^>]+>/g, '')).join(''); paras.push(t.trim()); return ''; });
+  // Empty paragraphs are kept as blank lines: they are the section breaks a plan relies on.
+  return paras.join('\n').replace(/\n{3,}/g, '\n\n');
 }
 
 export async function readDocument(file) {
@@ -51,14 +52,30 @@ export async function readDocument(file) {
 }
 
 // Lightweight structure extraction from plan text (JP 5-0 paragraph headings).
-export function extractPlan(text) {
+const normalize = s => (s || '')
+  .replace(/[\u2018\u2019\u02BC\u2032]/g, "'")
+  .replace(/[\u201C\u201D\u2033]/g, '"')
+  .replace(/[\u2013\u2014]/g, '-')
+  .replace(/\u00A0/g, ' ')
+  .replace(/\r\n?/g, '\n');
+
+// A section ends at a blank line, the next numbered or lettered heading, or one of the
+// headings a plan actually uses. A .docx often supplies none of these except the headings.
+const SECTION_END = "(?:\\n\\s*\\n|\\n\\s*(?:\\d{1,2}\\s*[.)]|\\([a-z0-9]\\)|Key Tasks|End ?State|Purpose|Method|Concept|Execution|Assumptions?|Tasks|Scheme|Commander|Annex|Appendix|PIR|Phase)|$)";
+
+export function extractPlan(rawText) {
+  const text = normalize(rawText);
   const grab = re => { const m = text.match(re); return m ? m[1].replace(/\s+/g, ' ').trim().slice(0, 700) : ''; };
   const block = (start, len) => { const i = text.search(start); if (i < 0) return ''; return text.slice(i, i + len); };
   // Assumptions: explicit lines, or the numbered list under an "Assumptions" heading
   let assumptions = (text.match(/(?:^|\n)\s*(?:\(?[a-z0-9]\)?[.)]\s*)?(?:Assumption|It is assumed)[^\n]{10,240}/gi) || []).map(s => s.trim());
   if (!assumptions.length) { let b = block(/Assumptions?[.:]?\s*\n/i, 4000); const cutAt = b.slice(20).search(/\n\s*(?:\d\.\s*(?:\(U\)\s*)?(?:MISSION|EXECUTION|SUSTAINMENT)|[a-z]\.\s*\(U\)|Commander'?s Intent|Key Tasks)/i); if (cutAt >= 0) b = b.slice(0, cutAt + 20); assumptions = (b.match(/\n\s*\d{1,2}[.)]\s*[^\n]{20,400}/g) || []).map(s => s.replace(/^\s*\d{1,2}[.)]\s*/, '').trim()); }
   // PIRs: explicit PIR lines, else questions derived from enemy most likely / most dangerous COAs
-  let pirs = (text.match(/(?:PIR|Priority Intelligence Requirement)[^\n]{10,240}/gi) || []).map(s => s.replace(/^(PIR|Priority Intelligence Requirements?)[\s#\d.:)-]*/i, '').trim());
+  // Anchored to the start of a line and word-bounded: an unanchored /PIR/i also matches
+  // inside ordinary words ("aspirational", "expiration") and swallows the rest of the sentence.
+  let pirs = [...text.matchAll(/(?:^|\n)[ \t]*(?:\(U\)[ \t]*)?(?:PIRs?|Priority Intelligence Requirements?)\b[ \t]*#?[ \t]*\d{0,2}[.):\-\s]*([^\n]{10,240})/gi)]
+    .map(m => m[1].trim())
+    .filter(q => /[a-z]/.test(q));
   if (!pirs.length) {
     const ml = grab(/Most Likely (?:COA|Course of Action)[^:]*:\s*([\s\S]{20,600}?)(?:\n)/i), md = grab(/Most Dangerous (?:COA|Course of Action)[^:]*:\s*([\s\S]{20,600}?)(?:\n)/i);
     const actor = (text.match(/\b([A-Z][A-Za-z]+ (?:People'?s )?(?:Army|Forces|Navy))\b/) || [])[1] || 'the adversary';
@@ -66,16 +83,17 @@ export function extractPlan(text) {
     pirs = [...q(md), ...q(ml)].slice(0, 4);
   }
   return {
-    mission: grab(/(?:^|\n)\s*(?:2\.\s*)?(?:\(U\)\s*)?Mission[.:\s]+([\s\S]{20,900}?)(?:\n\s*\n|\n\s*(?:3\.|Execution))/i),
-    intent: grab(/Commander'?s Intent[.:\s]*(?:\(1\)\s*)?(?:Purpose[.:\s]*)?([\s\S]{20,800}?)(?:\n\s*\n|\n\s*\(2\)|\n\s*Key Tasks)/i),
-    endState: grab(/End State[.:\s]+([\s\S]{10,600}?)(?:\n\s*\n|\n)/i),
+    mission: grab(new RegExp("(?:^|\\n)\\s*(?:\\d{1,2}\\.\\s*)?(?:\\(U\\)\\s*)?Mission[.:\\s]+([\\s\\S]{20,900}?)" + SECTION_END, "i")),
+    intent: grab(new RegExp("Commander'?s?\\s*Intent[.:\\s]*(?:\\(1\\)\\s*)?(?:Purpose[.:\\s]*)?([\\s\\S]{20,800}?)" + SECTION_END, "i")),
+    endState: grab(new RegExp("(?:Military\\s+)?End ?State[.:\\s]+([\\s\\S]{10,600}?)" + SECTION_END, "i")),
     assumptions: assumptions.slice(0, 8), pirs,
     phases: (text.match(/Phase\s+(?:[0IVX]+|\d)[^\n]{0,80}/g) || []).slice(0, 6),
   };
 }
 
 // Keyword-based signal scoring used by the risk comparison. Returns 0–1 indices.
-export function signalIndex(text) {
+export function signalIndex(rawText) {
+  const text = normalize(rawText);
   const t = text.toLowerCase(); const n = Math.max(1, t.split(/\s+/).length / 1000);
   const c = re => ((t.match(re) || []).length) / n;
   return {
