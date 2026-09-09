@@ -6,3 +6,7 @@ doctrine/*.pdf
 dataset/gen/cache/*.json
 *.zip
 .DS_Store
+app/tests/ui/screenshots/
+app/**/__pycache__/
+docs/reviews/pytest-*/
+docs/reviews/xcrun_db

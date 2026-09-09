@@ -1,0 +1,16 @@
+
+    :root{--color-bg:rgb(2,6,23);--color-surface:rgb(15,23,42);--color-text:rgb(248,250,252);--color-accent:rgb(0,145,255);--color-divider:rgb(51,65,85);
+      --color-neutral-100:rgb(30,41,59);--color-neutral-600:rgb(148,163,184);--color-neutral-700:rgb(148,163,184);--color-neutral-800:rgb(226,232,240);
+      --color-accent-100:rgb(16,42,76);--color-accent-200:rgb(15,48,88);--color-accent-300:rgb(9,84,165);--color-accent-600:rgb(0,145,255);--color-accent-700:rgb(54,158,255);--color-accent-800:rgb(82,169,255);--color-accent-900:rgb(234,246,255);
+      --font-heading:'Source Sans 3',system-ui,sans-serif;--font-body:'Source Sans 3',system-ui,sans-serif;--font-heading-weight:600}
+    body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}
+    h1,h2,h3{letter-spacing:0}
+    .blueprint{border-radius:8px;background:var(--color-surface)} .blueprint>.corner{display:none}
+    .btn,.input,.tag,.seg{border-radius:6px} .input{background:rgb(15,23,42)} .input::placeholder{color:rgb(100,116,139)}
+    .btn-primary,.btn-primary.blueprint{background:var(--color-accent);color:#fff} .btn-primary:hover{background:rgb(54,158,255)}
+    .btn-secondary{background:rgb(15,23,42)} .btn-secondary:hover{background:rgb(30,41,59)}
+    .seg-opt:has(input:checked){color:#fff} .table th{color:rgb(148,163,184)} .table tbody tr:hover{background:rgb(30,41,59)}
+    a{color:var(--color-accent-700)} a:hover{color:var(--color-accent-900)}
+    input[type=range]{accent-color:var(--color-accent)}
+    @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+  

@@ -1,0 +1,26 @@
+{
+  "startView": {
+    "editor": "enum",
+    "default": "coa",
+    "options": [
+      "coa",
+      "docs",
+      "intel",
+      "collection",
+      "rfi",
+      "posture",
+      "doctrine"
+    ],
+    "tsType": "string",
+    "section": "Prototype"
+  },
+  "startStep": {
+    "editor": "range",
+    "default": 1,
+    "min": 1,
+    "max": 5,
+    "step": 1,
+    "tsType": "number",
+    "section": "Prototype"
+  }
+}
