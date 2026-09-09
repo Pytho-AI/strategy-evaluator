@@ -7,7 +7,6 @@ import time
 
 from fastapi import APIRouter, Depends, Query, Request
 
-from ..adapter import DatasetAdapter
 from ..contracts import (
     ClaimDecisionRequest,
     ClaimDecisionResponse,
@@ -23,6 +22,7 @@ from ..product import ingest as ingest_module
 from ..product import review as review_module
 from ..product.ingest import UnsupportedFormat
 from ..product.store import Workspace
+from ..scenarios import ScenarioRegistry
 from ..views import (
     diff,
     instruction_span_views,
@@ -31,7 +31,15 @@ from ..views import (
     report_view,
     requirement_by_id,
 )
-from .common import BATCH_QUERY, WORKSPACE_QUERY, elapsed_ms, get_adapter, view
+from .common import (
+    BATCH_QUERY,
+    SCENARIO_QUERY,
+    WORKSPACE_QUERY,
+    elapsed_ms,
+    get_registry,
+    scenario_adapter,
+    view,
+)
 
 router = APIRouter()
 
@@ -71,17 +79,19 @@ async def create_report(
     filename: str | None = Query(None, description="required for a raw (non-JSON) upload"),
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> ReportIngestResponse:
     started = time.perf_counter()
     payload, name, content_type, actor = await _payload(request, filename)
+    _, adapter = scenario_adapter(registry, scenario)
     adapter.check()
     store = Workspace(workspace)
     result = ingest_module.ingest(
         adapter, store, payload=payload, filename=name, content_type=content_type,
         actor=actor, batch=batch,
     )
-    index = view(adapter, batch, workspace).index
+    index = view(registry, batch, workspace, scenario).index
     text = result["report"]["text"]
     return ReportIngestResponse(
         workspace=workspace,
@@ -97,9 +107,10 @@ async def create_report(
 @router.get("/api/reports", response_model=ReportsResponse)
 def reports(
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> ReportsResponse:
-    adapter.check()
+    scenario_adapter(registry, scenario)[1].check()
     store = Workspace(workspace)
     return ReportsResponse(
         workspace=workspace, reports=[report_view(r) for r in store.reports()]
@@ -111,7 +122,8 @@ def report(
     report_id: str,
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> ReportDetailResponse:
     store = Workspace(workspace)
     record = store.report(report_id)
@@ -120,7 +132,7 @@ def report(
             f"no report {report_id!r} in workspace {workspace!r}.",
             {"report_id": report_id, "workspace": workspace},
         )
-    index = view(adapter, batch, workspace).index
+    index = view(registry, batch, workspace, scenario).index
     claims = store.claims(report_id=report_id)
     return ReportDetailResponse(
         workspace=workspace,
@@ -138,15 +150,18 @@ def decide_claim(
     body: ClaimDecisionRequest,
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> ClaimDecisionResponse:
     """Accept or reject one proposed claim, and answer with everything it changed."""
     started = time.perf_counter()
+    scenario_id, adapter = scenario_adapter(registry, scenario)
     adapter.check()
     store = Workspace(workspace)
     result = review_module.decide(
         adapter, store, batch=batch, claim_id=claim_id, decision=body.decision,
         actor=body.actor, reason=body.reason, revision=body.revision,
+        scenario_id=scenario_id,
     )
     after = result["after"]
     return ClaimDecisionResponse(

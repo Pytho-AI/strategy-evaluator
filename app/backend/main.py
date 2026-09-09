@@ -15,6 +15,7 @@ from .contracts import ErrorResponse
 from .errors import DatasetError
 from .routes import ROUTERS
 from .routes.meta import DATASET_NAME
+from .scenarios import ScenarioRegistry
 
 
 def create_app(adapter: DatasetAdapter | None = None) -> FastAPI:
@@ -31,6 +32,9 @@ def create_app(adapter: DatasetAdapter | None = None) -> FastAPI:
         version="0.2.0",
     )
     app.state.adapter = adapter
+    # The scenario registry. ``meridian`` is served by exactly this adapter, so a test that
+    # points the app at a copied dataset directory still gets that copy.
+    app.state.scenarios = ScenarioRegistry(adapter)
 
     @app.exception_handler(DatasetError)
     async def _dataset_error(_: Request, exc: DatasetError) -> JSONResponse:
@@ -49,11 +53,7 @@ def create_app(adapter: DatasetAdapter | None = None) -> FastAPI:
                 {
                     "error": {
                         "code": "invalid_request",
-                        "message": (
-                            "batch must be an integer 0, 1, 2 or 3."
-                            if any("batch" in str(e.get("loc", ())) for e in exc.errors())
-                            else "request parameters failed validation."
-                        ),
+                        "message": _validation_message(exc),
                         "detail": {"errors": _jsonable_errors(exc)},
                     }
                 }
@@ -70,6 +70,15 @@ def create_app(adapter: DatasetAdapter | None = None) -> FastAPI:
         app.mount("/wired", StaticFiles(directory=wired_dir, html=True), name="wired")
     app.mount("/", StaticFiles(directory=app_dir / "ui", html=True), name="workbench")
     return app
+
+
+def _validation_message(exc: RequestValidationError) -> str:
+    locations = [str(error.get("loc", ())) for error in exc.errors()]
+    if any("batch" in location for location in locations):
+        return "batch must be an integer 0, 1, 2 or 3."
+    if any("scenario" in location for location in locations):
+        return "scenario must be a registered scenario id; GET /api/meta lists them."
+    return "request parameters failed validation."
 
 
 def _jsonable_errors(exc: RequestValidationError) -> list[dict]:

@@ -1,0 +1,8 @@
+{"description": "PLACEHOLDER: divergent national caveats inside the Alliance", "entity_id": "ent_nato", "he_id": "he_ph_consensus", "rs_id": "rs_ph_consensus", "source_kind": "hazard"}
+{"description": "PLACEHOLDER: sabotage and unmanned-aircraft pressure on the rail corridor", "entity_id": "unit_blr_rgf", "he_id": "he_ph_force_flow", "rs_id": "rs_ph_force_flow", "source_kind": "threat"}
+{"description": "PLACEHOLDER: cruise-missile strikes on reception nodes", "entity_id": "sys_kalibr", "he_id": "he_ph_iamd", "rs_id": "rs_ph_iamd", "source_kind": "threat"}
+{"description": "PLACEHOLDER: prepositioned stock issue rate", "entity_id": "inf_aps2_powidz", "he_id": "he_ph_closure", "rs_id": "rs_ph_closure", "source_kind": "hazard"}
+{"description": "PLACEHOLDER: mining and coastal-missile threat to the ports", "entity_id": "unit_rus_baltic_fleet", "he_id": "he_ph_spod", "rs_id": "rs_ph_spod", "source_kind": "threat"}
+{"description": "PLACEHOLDER: non-strategic nuclear signalling", "entity_id": "unit_rus_152_msl_bde", "he_id": "he_ph_escalation", "rs_id": "rs_ph_escalation", "source_kind": "threat"}
+{"description": "PLACEHOLDER: converging attack on the corridor", "entity_id": "unit_rus_11_ac", "he_id": "he_ph_suwalki", "rs_id": "rs_ph_suwalki", "source_kind": "threat"}
+{"description": "PLACEHOLDER: federated network interoperability", "entity_id": "inf_mpe_fmn", "he_id": "he_ph_c2", "rs_id": "rs_ph_c2", "source_kind": "hazard"}

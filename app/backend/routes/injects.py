@@ -1,21 +1,26 @@
-"""The inject timeline: the three manifests, and what one batch changed."""
+"""The inject timeline: the scenario's manifests, and what one batch changed."""
 from __future__ import annotations
 
 import time
 
 from fastapi import APIRouter, Depends, Path
 
-from ..adapter import BATCHES, DatasetAdapter
+from ..adapter import BATCHES
 from ..branding import MARKING
 from ..contracts import DiffResponse, InjectManifestView, InjectsResponse
+from ..scenarios import ScenarioRegistry
 from ..views import diff
-from .common import elapsed_ms, get_adapter
+from .common import SCENARIO_QUERY, elapsed_ms, get_registry, scenario_adapter
 
 router = APIRouter()
 
 
 @router.get("/api/injects", response_model=InjectsResponse)
-def injects(adapter: DatasetAdapter = Depends(get_adapter)) -> InjectsResponse:
+def injects(
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
+) -> InjectsResponse:
+    _, adapter = scenario_adapter(registry, scenario)
     adapter.check()
     return InjectsResponse(
         injects=[
@@ -36,10 +41,14 @@ def inject_diff(
     batch: int = Path(
         ..., ge=min(BATCHES) + 1, le=max(BATCHES), description="inject batch 1, 2 or 3"
     ),
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> DiffResponse:
     """Computed from the two loaded snapshots. The manifest is the test oracle, not an input."""
     started = time.perf_counter()
+    scenario_id, adapter = scenario_adapter(registry, scenario)
+    registry.check_batch(scenario_id, batch)
+    registry.check_batch(scenario_id, batch - 1)
     before, after = adapter.index(batch - 1), adapter.index(batch)
     return DiffResponse(
         batch=batch,

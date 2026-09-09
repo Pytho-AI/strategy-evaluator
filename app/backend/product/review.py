@@ -124,6 +124,7 @@ def decide(
     actor: str,
     reason: str | None,
     revision: dict | None,
+    scenario_id: str = "meridian",
 ) -> dict:
     record = workspace.claim(claim_id)
     if record is None:
@@ -142,7 +143,7 @@ def decide(
             "decision must be 'accept' or 'reject'.", {"decision": decision}
         )
     revision = {k: v for k, v in (revision or {}).items() if k in EDITABLE_FIELDS}
-    before = overlay.evaluate(adapter, batch, workspace.workspace_id)
+    before = overlay.evaluate(adapter, batch, workspace.workspace_id, scenario_id)
 
     if decision == "reject":
         workspace.set_claim(claim_id, status="rejected")
@@ -151,7 +152,7 @@ def decide(
             actor=actor, reason=reason, revision=revision,
         )
         workspace.log(actor, "claim_rejected", "proposed_claim", claim_id, {"reason": reason})
-        after = overlay.evaluate(adapter, batch, workspace.workspace_id)
+        after = overlay.evaluate(adapter, batch, workspace.workspace_id, scenario_id)
         return {
             "claim": workspace.claim(claim_id), "decision": review_decision,
             "before": before, "after": after, "contradicts": [], "chosen_claim_id": None,
@@ -183,9 +184,9 @@ def decide(
         "graph_version": version, "contradicts": contradicts, "revision": revision,
     })
 
-    mid = overlay.evaluate(adapter, batch, workspace.workspace_id)
+    mid = overlay.evaluate(adapter, batch, workspace.workspace_id, scenario_id)
     requirements_changed = collection.reconcile(workspace, mid.index, actor)
-    after = overlay.evaluate(adapter, batch, workspace.workspace_id)
+    after = overlay.evaluate(adapter, batch, workspace.workspace_id, scenario_id)
     current = after.index.current_claim(merged["subject_id"], merged["predicate"])
     return {
         "claim": workspace.claim(claim_id),

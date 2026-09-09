@@ -10,9 +10,11 @@ from ..contracts import (
     DatasetIdentityView,
     HealthResponse,
     MetaResponse,
+    ScenarioMeta,
     WorldsMeta,
 )
-from .common import get_adapter
+from ..scenarios import ScenarioRegistry
+from .common import get_adapter, get_registry
 
 DATASET_NAME = "strategy-evaluation-dataset-pytho"
 
@@ -45,7 +47,10 @@ def health(adapter: DatasetAdapter = Depends(get_adapter)) -> HealthResponse:
 
 
 @router.get("/api/meta", response_model=MetaResponse)
-def meta(adapter: DatasetAdapter = Depends(get_adapter)) -> MetaResponse:
+def meta(
+    adapter: DatasetAdapter = Depends(get_adapter),
+    registry: ScenarioRegistry = Depends(get_registry),
+) -> MetaResponse:
     snapshots = [adapter.snapshot(b) for b in BATCHES]
     blue_worlds, distinct_labels = adapter.world_counts(snapshots[-1])
     return MetaResponse(
@@ -53,6 +58,8 @@ def meta(adapter: DatasetAdapter = Depends(get_adapter)) -> MetaResponse:
         dataset_name=DATASET_NAME,
         marking=MARKING,
         dataset=identity_view(adapter),
+        scenarios=[ScenarioMeta(**row) for row in registry.describe()],
+        default_scenario=registry.default_id(),
         batches=[
             BatchMeta(batch=s.batch, as_of=s.as_of, table_counts=s.table_counts)
             for s in snapshots

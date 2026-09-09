@@ -9,7 +9,6 @@ import time
 
 from fastapi import APIRouter, Depends
 
-from ..adapter import DatasetAdapter
 from ..contracts import (
     CollectionDraftRequest,
     CollectionDraftResponse,
@@ -21,8 +20,18 @@ from ..contracts import (
 )
 from ..product import collection as workflow
 from ..product.store import Workspace
+from ..scenarios import ScenarioRegistry
 from ..views import requirement_by_id, requirement_views
-from .common import BATCH_QUERY, WORKSPACE_QUERY, elapsed_ms, envelope, get_adapter, view
+from .common import (
+    BATCH_QUERY,
+    SCENARIO_QUERY,
+    WORKSPACE_QUERY,
+    elapsed_ms,
+    envelope,
+    get_registry,
+    scenario_adapter,
+    view,
+)
 
 router = APIRouter()
 
@@ -31,17 +40,18 @@ router = APIRouter()
 def collection(
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> CollectionResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     return CollectionResponse(
         **envelope(overlay, started), requirements=requirement_views(overlay.index)
     )
 
 
-def _requirement_response(adapter, batch, workspace, req_id, started):
-    overlay = view(adapter, batch, workspace)
+def _requirement_response(registry, batch, workspace, scenario, req_id, started):
+    overlay = view(registry, batch, workspace, scenario)
     return RequirementUpdateResponse(
         workspace=workspace,
         batch=batch,
@@ -55,10 +65,11 @@ def create_draft(
     body: CollectionDraftRequest,
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> CollectionDraftResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     store = Workspace(workspace)
     record, duplicate = workflow.create_draft(
         store, overlay.index, strategy_question=body.strategy_question, pir_id=body.pir_id,
@@ -68,7 +79,7 @@ def create_draft(
         proposed_owner=body.proposed_owner, ltiov=body.ltiov, sir=body.sir,
         indicators=body.indicators, actor=body.actor,
     )
-    after = view(adapter, batch, workspace)
+    after = view(registry, batch, workspace, scenario)
     return CollectionDraftResponse(
         workspace=workspace,
         batch=batch,
@@ -85,16 +96,17 @@ def route_requirement(
     body: RouteRequest,
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> RequirementUpdateResponse:
     """Assign the requirement to an internal queue. Nothing is sent to an external recipient."""
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     workflow.route(
         Workspace(workspace), overlay.index, req_id, queue=body.queue, actor=body.actor,
         reason=body.reason,
     )
-    return _requirement_response(adapter, batch, workspace, req_id, started)
+    return _requirement_response(registry, batch, workspace, scenario, req_id, started)
 
 
 @router.post("/api/collection/{req_id}/status", response_model=RequirementUpdateResponse)
@@ -103,11 +115,12 @@ def set_requirement_status(
     body: RequirementStatusRequest,
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> RequirementUpdateResponse:
     started = time.perf_counter()
-    adapter.check()
+    scenario_adapter(registry, scenario)[1].check()
     workflow.set_status(
         Workspace(workspace), req_id, status=body.status, actor=body.actor, reason=body.reason
     )
-    return _requirement_response(adapter, batch, workspace, req_id, started)
+    return _requirement_response(registry, batch, workspace, scenario, req_id, started)

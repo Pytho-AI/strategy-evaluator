@@ -1233,9 +1233,11 @@ class LevelThresholdView(BaseModel):
 
 
 class AdversaryRangeView(BaseModel):
+    """Never a confidence interval: a spread over adversary behaviour."""
+
     min: float
     max: float
-    basis: str = Field(description=ADVERSARY_RANGE)
+    basis: str = Field(default=ADVERSARY_RANGE, description=ADVERSARY_RANGE)
 
 
 class OptionAssumptionView(BaseModel):
@@ -1374,7 +1376,9 @@ class OutcomeDistributionResponse(Envelope):
     scenario_name: str
     bin_domain: list[float]
     bin_note: str
-    aspiration_basis: str = Field(description=P_MEETS_ASPIRATION)
+    aspiration_basis: str = Field(
+        default=P_MEETS_ASPIRATION, description=P_MEETS_ASPIRATION
+    )
     options: list[OutcomeDistributionView]
 
 

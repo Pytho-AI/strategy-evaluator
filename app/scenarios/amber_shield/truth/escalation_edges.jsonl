@@ -1,0 +1,4 @@
+{"edge_id": "ee_ph_suwalki_flow", "evidence_claim_ids": [], "from_he_id": "he_ph_suwalki", "lift": 0.35, "mechanism": "PLACEHOLDER: closing the corridor pushes the whole force flow onto sea and air lines", "to_he_id": "he_ph_force_flow"}
+{"edge_id": "ee_ph_spod_flow", "evidence_claim_ids": [], "from_he_id": "he_ph_spod", "lift": 0.3, "mechanism": "PLACEHOLDER: losing the sea ports throws reception back onto Polish rail", "to_he_id": "he_ph_force_flow"}
+{"edge_id": "ee_ph_flow_closure", "evidence_claim_ids": [], "from_he_id": "he_ph_force_flow", "lift": 0.45, "mechanism": "PLACEHOLDER: a reception slip becomes a closure slip", "to_he_id": "he_ph_closure"}
+{"edge_id": "ee_ph_iamd_flow", "evidence_claim_ids": [], "from_he_id": "he_ph_iamd", "lift": 0.25, "mechanism": "PLACEHOLDER: a successful strike on a reception node halts onward movement", "to_he_id": "he_ph_force_flow"}

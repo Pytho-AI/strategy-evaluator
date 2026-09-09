@@ -46,6 +46,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+import inspect
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -116,43 +117,72 @@ class Criterion:
 #: The order the v3 UI lists them in, and the keys it sends weights under.
 CRITERION_KEYS = ("mission", "personnel", "escalation", "time", "resources")
 
+#: The labels the v3 UI prints, used when a scenario declares only the member ids.
+CRITERION_LABELS = {
+    "mission": "Risk to mission",
+    "personnel": "Risk to personnel",
+    "escalation": "Risk of escalation",
+    "time": "Time to end state",
+    "resources": "Force demand vs GFM",
+}
+
 # Meridian's map. Every objective the Blue options carry weight on appears exactly once;
 # ``time`` and ``resources`` are read off the resource budgets because the Meridian
 # objectives do not measure schedule or force demand.
 MERIDIAN_CRITERIA: tuple[Criterion, ...] = (
     Criterion(
         "mission",
-        "Risk to mission",
+        CRITERION_LABELS["mission"],
         objectives=("obj_deter", "obj_navigation"),
     ),
-    Criterion("personnel", "Risk to personnel", objectives=("obj_preserve_force",)),
-    Criterion("escalation", "Risk of escalation", objectives=("obj_limit_escalation",)),
-    Criterion("time", "Time to end state", resources=("res_sustain_days",)),
+    Criterion("personnel", CRITERION_LABELS["personnel"],
+              objectives=("obj_preserve_force",)),
+    Criterion("escalation", CRITERION_LABELS["escalation"],
+              objectives=("obj_limit_escalation",)),
+    Criterion("time", CRITERION_LABELS["time"], resources=("res_sustain_days",)),
     Criterion(
         "resources",
-        "Force demand",
+        CRITERION_LABELS["resources"],
         resources=("res_isr_hours", "res_lift", "res_munitions", "res_sorties"),
     ),
 )
 
 
 def coerce_criteria(raw: Any, scenario_id: str) -> tuple[Criterion, ...]:
-    """Accept ``Criterion`` rows or plain dicts from a scenario package."""
+    """Accept any of the three shapes a scenario package may declare ``CRITERIA`` in.
+
+    * ``Criterion`` rows -- the full form;
+    * dicts ``{key, label, objectives | resources}`` -- the same thing without importing us;
+    * five objective ids in the UI's own order, when the scenario authors one objective per
+      criterion (which is what ``amber_shield`` does: ``obj_mission`` .. ``obj_resources``).
+    """
+    items = list(raw or ())
+    if items and all(isinstance(item, str) for item in items):
+        if len(items) != len(CRITERION_KEYS):
+            raise ScenarioUnavailable(
+                f"scenario {scenario_id!r} declares CRITERIA as {len(items)} objective ids; "
+                f"the five UI criteria {list(CRITERION_KEYS)} need five, in that order.",
+                {"scenario": scenario_id, "found": items},
+            )
+        items = [
+            {"key": key, "label": CRITERION_LABELS[key], "objectives": [objective_id]}
+            for key, objective_id in zip(CRITERION_KEYS, items)
+        ]
     out: list[Criterion] = []
-    for item in raw or ():
+    for item in items:
         if isinstance(item, Criterion):
             out.append(item)
             continue
         if not isinstance(item, dict):
             raise ScenarioUnavailable(
                 f"scenario {scenario_id!r} declares a criterion that is neither a "
-                f"Criterion nor a dict: {item!r}.",
+                f"Criterion, a dict nor an objective id: {item!r}.",
                 {"scenario": scenario_id},
             )
         out.append(
             Criterion(
                 key=item["key"],
-                label=item.get("label", item["key"]),
+                label=item.get("label") or CRITERION_LABELS.get(item["key"], item["key"]),
                 objectives=tuple(item.get("objectives") or ()),
                 resources=tuple(item.get("resources") or ()),
             )
@@ -167,6 +197,50 @@ def coerce_criteria(raw: Any, scenario_id: str) -> tuple[Criterion, ...]:
     return tuple(out)
 
 
+# ---------------------------------------------------------------- package attributes
+def package_attr(module: Any, *names: str, default: Any = None) -> Any:
+    """Read a declaration off a scenario package, in the three places one can sit.
+
+    ``build.<NAME>`` first, then ``build.SCENARIO[<name lowercased>]`` (the dict shape
+    ``amber_shield`` uses), then ``<package>.scenario.<NAME>``. Everything is optional; the
+    first hit wins, and ``None`` counts as absent.
+    """
+    for name in names:
+        value = getattr(module, name, None)
+        if value is not None:
+            return value
+    scenario_dict = getattr(module, "SCENARIO", None)
+    if isinstance(scenario_dict, dict):
+        for name in names:
+            value = scenario_dict.get(name.lower())
+            if value is not None:
+                return value
+    package = getattr(module, "__package__", "") or ""
+    if package:
+        try:
+            sibling = importlib.import_module(f"{package}.scenario")
+        except Exception:
+            sibling = None
+        if sibling is not None:
+            for name in names:
+                value = getattr(sibling, name, None)
+                if value is not None:
+                    return value
+    return default
+
+
+def call_load(module: Any, batch: int) -> dict:
+    """``load(through_batch=batch)`` when the package takes batches, else ``load()``."""
+    load = module.load
+    try:
+        parameters = inspect.signature(load).parameters
+    except (TypeError, ValueError):
+        parameters = {}
+    if "through_batch" in parameters:
+        return load(through_batch=batch)
+    return load()
+
+
 # ---------------------------------------------------------------- package adapter
 class PackageAdapter(DatasetAdapter):
     """A ``DatasetAdapter`` whose tables come from a scenario package, not from ``dataset/``.
@@ -177,11 +251,11 @@ class PackageAdapter(DatasetAdapter):
     """
 
     def __init__(self, scenario_id: str, module: Any) -> None:
-        root = getattr(module, "ROOT", None) or Path(module.__file__).resolve().parent
+        root = package_attr(module, "ROOT") or Path(module.__file__).resolve().parent
         super().__init__(Path(root))
         self.scenario_id = scenario_id
         self.module = module
-        self._batches = tuple(getattr(module, "BATCHES", None) or (0,))
+        self._batches = tuple(package_attr(module, "BATCHES", default=(0,)))
 
     @property
     def batches(self) -> tuple[int, ...]:
@@ -190,7 +264,7 @@ class PackageAdapter(DatasetAdapter):
     @property
     def identity(self) -> DatasetIdentity:
         if self._identity is None:
-            version = getattr(self.module, "VERSION", None)
+            version = package_attr(self.module, "VERSION")
             if version is None:
                 identity_fn = getattr(self.module, "identity", None)
                 version = identity_fn() if callable(identity_fn) else None
@@ -216,9 +290,12 @@ class PackageAdapter(DatasetAdapter):
         as_of_fn = getattr(self.module, "as_of", None)
         if callable(as_of_fn):
             return str(as_of_fn(batch))
-        table = getattr(self.module, "AS_OF", None)
-        if isinstance(table, dict) and batch in table:
-            return str(table[batch])
+        table = package_attr(self.module, "AS_OF")
+        if isinstance(table, dict):
+            if batch in table:
+                return str(table[batch])
+        elif table is not None:
+            return str(table)
         raise ScenarioUnavailable(
             f"scenario {self.scenario_id!r} states no as-of date for batch {batch}. "
             "Define as_of(batch) or AS_OF = {batch: 'YYYY-MM-DD'}.",
@@ -253,7 +330,7 @@ class PackageAdapter(DatasetAdapter):
             return cached
         started = time.perf_counter()
         try:
-            frames = self.module.load(through_batch=batch)
+            frames = call_load(self.module, batch)
         except Exception as exc:  # the package is still being written
             raise ScenarioUnavailable(
                 f"scenario {self.scenario_id!r} failed to load batch {batch}: "
@@ -307,6 +384,7 @@ class Scenario:
     batches: tuple[int, ...] = DATASET_BATCHES
     _adapter: DatasetAdapter | None = field(default=None, repr=False)
     _error: str | None = field(default=None, repr=False)
+    _available: bool | None = field(default=None, repr=False)
 
 
 def _load_meridian(registry: "ScenarioRegistry") -> DatasetAdapter:
@@ -382,13 +460,17 @@ class ScenarioRegistry:
             entry.batches = tuple(getattr(adapter, "batches", entry.batches))
             module = getattr(adapter, "module", None)
             if module is not None:
-                entry.name = str(getattr(module, "NAME", None) or entry.name)
-                entry.marking = str(getattr(module, "MARKING", None) or entry.marking)
-                entry.game_id = str(getattr(module, "GAME_ID", None) or entry.game_id)
-                entry.actor_id = str(getattr(module, "ACTOR_ID", None) or entry.actor_id)
+                entry.name = str(package_attr(module, "NAME", default=entry.name))
+                entry.marking = str(package_attr(module, "MARKING", default=entry.marking))
+                entry.game_id = str(package_attr(module, "GAME_ID", default=entry.game_id))
+                # ``BLUE`` is what a package that names its actors by colour calls the
+                # friendly one; ``ACTOR_ID`` is the neutral spelling.
+                entry.actor_id = str(
+                    package_attr(module, "ACTOR_ID", "BLUE", default=entry.actor_id)
+                )
                 if entry.criteria is None:
                     entry.criteria = coerce_criteria(
-                        getattr(module, "CRITERIA", None), entry.id
+                        package_attr(module, "CRITERIA"), entry.id
                     )
         return entry._adapter
 
@@ -404,16 +486,24 @@ class ScenarioRegistry:
         return entry.criteria
 
     def is_available(self, scenario_id: str) -> bool:
+        """Can this scenario actually be served?
+
+        Importing the package is not enough -- a half-written ``load()`` imports fine and
+        then raises. The probe loads the scenario's first batch, which is what every
+        endpoint needs, and caches the answer. It is why an unfinished package cannot
+        become the default and 503 every request.
+        """
         entry = self.scenarios[scenario_id]
-        if entry._adapter is not None:
-            return True
-        if entry._error is not None:
-            return False
+        if entry._available is not None:
+            return entry._available
         try:
-            self.adapter(scenario_id)
+            adapter = self.adapter(scenario_id)
+            adapter.snapshot(min(entry.batches))
         except Exception as exc:
             entry._error = str(exc)
+            entry._available = False
             return False
+        entry._available = True
         return True
 
     def check_batch(self, scenario_id: str, batch: int) -> None:
@@ -445,13 +535,8 @@ class ScenarioRegistry:
                 "unavailable_reason": entry._error,
             }
             if available:
-                try:
-                    adapter = self.adapter(scenario_id)
-                    snapshot = adapter.snapshot(max(entry.batches))
-                    row["as_of"] = snapshot.as_of
-                    row["counts"] = snapshot.table_counts
-                except Exception as exc:  # a package that imports but cannot load
-                    row["available"] = False
-                    row["unavailable_reason"] = str(exc)
+                snapshot = self.adapter(scenario_id).snapshot(max(entry.batches))
+                row["as_of"] = snapshot.as_of
+                row["counts"] = snapshot.table_counts
             out.append(row)
         return out

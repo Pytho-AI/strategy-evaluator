@@ -1,0 +1,26 @@
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "reserves"], "pass": true, "strategy_a": "str_rus_ml", "strategy_b": "str_rus_md"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "reserves"], "pass": true, "strategy_a": "str_rus_ml", "strategy_b": "str_rus_alt"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "reserves"], "pass": true, "strategy_a": "str_rus_md", "strategy_b": "str_rus_ml"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_rus_md", "strategy_b": "str_rus_alt"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "reserves"], "pass": true, "strategy_a": "str_rus_alt", "strategy_b": "str_rus_ml"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "reserves"], "pass": true, "strategy_a": "str_rus_alt", "strategy_b": "str_rus_md"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_1", "strategy_b": "str_coa_2"}
+{"dims_differing": ["main_effort", "sequencing", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_1", "strategy_b": "str_coa_3"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_1", "strategy_b": "str_coa_4"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_1", "strategy_b": "str_coa_5"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_2", "strategy_b": "str_coa_1"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_2", "strategy_b": "str_coa_3"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_2", "strategy_b": "str_coa_4"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_2", "strategy_b": "str_coa_5"}
+{"dims_differing": ["main_effort", "sequencing", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_3", "strategy_b": "str_coa_1"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_3", "strategy_b": "str_coa_2"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_3", "strategy_b": "str_coa_4"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_3", "strategy_b": "str_coa_5"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_4", "strategy_b": "str_coa_1"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_4", "strategy_b": "str_coa_2"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_4", "strategy_b": "str_coa_3"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_4", "strategy_b": "str_coa_5"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_5", "strategy_b": "str_coa_1"}
+{"dims_differing": ["main_effort", "scheme", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_5", "strategy_b": "str_coa_2"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_5", "strategy_b": "str_coa_3"}
+{"dims_differing": ["main_effort", "scheme", "sequencing", "mechanism", "task_org", "reserves"], "pass": true, "strategy_a": "str_coa_5", "strategy_b": "str_coa_4"}

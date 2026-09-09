@@ -5,7 +5,6 @@ import time
 
 from fastapi import APIRouter, Depends
 
-from ..adapter import DatasetAdapter
 from ..contracts import (
     AuditEntryView,
     PlanningResponse,
@@ -17,8 +16,17 @@ from ..contracts import (
 from ..product import overlay as overlay_module
 from ..product import planning as planning_module
 from ..product.store import Workspace
+from ..scenarios import ScenarioRegistry
 from ..views import planning_flag_views, planning_object_view
-from .common import BATCH_QUERY, WORKSPACE_QUERY, elapsed_ms, envelope, get_adapter, view
+from .common import (
+    BATCH_QUERY,
+    SCENARIO_QUERY,
+    WORKSPACE_QUERY,
+    elapsed_ms,
+    envelope,
+    get_registry,
+    view,
+)
 
 router = APIRouter()
 
@@ -27,10 +35,11 @@ router = APIRouter()
 def planning(
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> PlanningResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     store = Workspace(workspace)
     return PlanningResponse(
         **envelope(overlay, started),
@@ -48,10 +57,11 @@ def review_planning_object(
     body: PlanningReviewRequest,
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> PlanningReviewResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     record = planning_module.review(
         overlay.index, Workspace(workspace), object_id,
         review_status=body.review_status,

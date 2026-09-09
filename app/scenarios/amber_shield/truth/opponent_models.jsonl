@@ -1,0 +1,2 @@
+{"actor_id": "ent_rus", "distribution": [{"probability": 0.5, "strategy_id": "str_rus_ml"}, {"probability": 0.25, "strategy_id": "str_rus_md"}, {"probability": 0.25, "strategy_id": "str_rus_alt"}], "opponent_model_id": "om_blue"}
+{"actor_id": "ent_useucom", "distribution": [{"probability": 0.2, "strategy_id": "str_coa_1"}, {"probability": 0.2, "strategy_id": "str_coa_2"}, {"probability": 0.2, "strategy_id": "str_coa_3"}, {"probability": 0.2, "strategy_id": "str_coa_4"}, {"probability": 0.2, "strategy_id": "str_coa_5"}], "opponent_model_id": "om_rus"}

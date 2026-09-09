@@ -1,0 +1,5 @@
+{"game_id": "amber_shield", "name": "strategic airlift", "resource_id": "res_airlift", "unit": "C-17 equivalent sorties"}
+{"game_id": "amber_shield", "name": "strategic sealift and Army Prepositioned Stocks draw", "resource_id": "res_sealift", "unit": "ship equivalents and equipment sets"}
+{"game_id": "amber_shield", "name": "combat air sorties", "resource_id": "res_sorties", "unit": "sorties"}
+{"game_id": "amber_shield", "name": "precision munitions", "resource_id": "res_munitions", "unit": "rounds"}
+{"game_id": "amber_shield", "name": "sustainment days of supply", "resource_id": "res_sustain_days", "unit": "days"}

@@ -28,10 +28,23 @@ async function unzipEntry(buf, wanted) {
   throw new Error(wanted + ' not found');
 }
 
+// Word writes apostrophes and ampersands as XML entities. The run text is pulled out
+// with a regex rather than a parser, so entities have to be decoded here or the text
+// literally contains "Commander&apos;s Intent" and no heading pattern can match it.
+function unescapeXml(s) {
+  return (s || '')
+    .replace(/&apos;/g, "'").replace(/&#0*39;/g, "'").replace(/&#x0*27;/gi, "'")
+    .replace(/&quot;/g, '"').replace(/&#0*34;/g, '"').replace(/&#x0*22;/gi, '"')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d))
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&amp;/g, '&');
+}
+
 export async function readDocx(buf) {
   const xml = await unzipEntry(buf, 'word/document.xml');
   const paras = [];
-  xml.replace(/<w:p[ >][\s\S]*?<\/w:p>/g, m => { const t = (m.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []).map(x => x.replace(/<[^>]+>/g, '')).join(''); paras.push(t.trim()); return ''; });
+  xml.replace(/<w:p[ >][\s\S]*?<\/w:p>/g, m => { const t = unescapeXml((m.match(/<w:t[^>]*>([^<]*)<\/w:t>/g) || []).map(x => x.replace(/<[^>]+>/g, '')).join('')); paras.push(t.trim()); return ''; });
   return paras.join('\n').replace(/\n{3,}/g, '\n\n');
 }
 
@@ -58,15 +71,17 @@ const normalize = s => (s || '')
   .replace(/\u00A0/g, ' ')
   .replace(/\r\n?/g, '\n');
 
-const SECTION_END = "(?:\\n\\s*\\n|\\n\\s*(?:\\d{1,2}\\s*[.)]|\\([a-z0-9]\\)|Key Tasks|End ?State|Purpose|Method|Concept|Execution|Assumptions?|Tasks|Scheme|Commander|Annex|Appendix|PIR|Phase)|$)";
+// A section ends at a blank line, the next heading in the CJCS scheme (1. / a. / (1) /
+// (a), each optionally carrying a "(U)" marking), or a named plan heading.
+const SECTION_END = "(?:\\n\\s*\\n|\\n\\s*(?:\\d{1,2}\\s*[.)]|[a-z]\\s*[.)]\\s|\\([a-z0-9]{1,3}\\)|Key Tasks|End ?State|Purpose|Method|Concept|Execution|Assumptions?|Tasks|Scheme|Commander|Annex|Appendix|PIR|Phase)|$)";
 
 export function extractPlan(rawText) {
   const text = normalize(rawText);
   const grab = re => { const m = text.match(re); return m ? m[1].trim().slice(0, 400) : ''; };
   return {
-    mission: grab(new RegExp("(?:^|\\n)\\s*(?:\\d{1,2}\\.\\s*)?(?:\\(U\\)\\s*)?Mission[.:\\s]+([\\s\\S]{20,900}?)" + SECTION_END, "i")),
-    intent: grab(new RegExp("Commander'?s?\\s*Intent[.:\\s]*(?:\\(1\\)\\s*)?(?:Purpose[.:\\s]*)?([\\s\\S]{20,800}?)" + SECTION_END, "i")),
-    endState: grab(new RegExp("(?:Military\\s+)?End ?State[.:\\s]+([\\s\\S]{10,600}?)" + SECTION_END, "i")),
+    mission: grab(new RegExp("(?:^|\\n)\\s*(?:\\d{1,2}\\s*[.)]\\s*)?(?:\\(U\\)\\s*)?Mission\\s*[.:]\\s+([\\s\\S]{20,1400}?)" + SECTION_END, "i")),
+    intent: grab(new RegExp("Commander'?s?\\s*Intent\\s*[.:]?\\s*(?:\\(1\\)\\s*)?(?:\\(U\\)\\s*)?(?:Purpose\\s*[.:]\\s*)?([\\s\\S]{20,1400}?)" + SECTION_END, "i")),
+    endState: grab(new RegExp("(?:Military\\s+|Desired\\s+)?End ?State\\s*[.:]\\s+([\\s\\S]{10,1400}?)" + SECTION_END, "i")),
     assumptions: (text.match(/(?:^|\n)\s*(?:\(?[a-z0-9]\)?[.)]\s*)?(?:Assumption|It is assumed)[^\n]{10,240}/gi) || []).slice(0, 6).map(s => s.trim()),
     phases: (text.match(/Phase\s+(?:[0IVX]+|\d)[^\n]{0,80}/g) || []).slice(0, 6),
   };

@@ -5,11 +5,18 @@ import time
 
 from fastapi import APIRouter, Depends, Query
 
-from ..adapter import DatasetAdapter
 from ..contracts import ClaimDetailResponse, ClaimsResponse
 from ..errors import UnknownId
+from ..scenarios import ScenarioRegistry
 from ..views import claim_trace, claim_view, filter_claims
-from .common import BATCH_QUERY, WORKSPACE_QUERY, envelope, get_adapter, view
+from .common import (
+    BATCH_QUERY,
+    SCENARIO_QUERY,
+    WORKSPACE_QUERY,
+    envelope,
+    get_registry,
+    view,
+)
 
 router = APIRouter()
 
@@ -27,10 +34,11 @@ def claims(
     limit: int = Query(50, ge=1, le=1000),
     offset: int = Query(0, ge=0),
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> ClaimsResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     index = overlay.index
     rows = filter_claims(
         index,
@@ -56,10 +64,11 @@ def claim(
     claim_id: str,
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> ClaimDetailResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     index = overlay.index
     row = index.claims.get(claim_id)
     if row is None:
