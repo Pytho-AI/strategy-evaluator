@@ -49,10 +49,10 @@ def _dependencies(strategies: list[dict], assumptions: list[dict], rules: list[d
     for key, objective_id in PH.TOV_OBJECTIVE.items():
         edge_id = f"dep_sup_{key}"
         supports_edge[objective_id] = edge_id
-        edges.append(dict(edge_id=edge_id, from_type="claim", from_id=f"clm_ph_tov_{key}",
+        edges.append(dict(edge_id=edge_id, from_type="claim", from_id=PH.tov_claim_id(key),
                           to_type="objective", to_id=objective_id, kind="supports", weight=0.6,
                           mechanism="the waypoint condition is evidence the objective is being met",
-                          evidence_claim_ids=[f"clm_ph_tov_{key}"]))
+                          evidence_claim_ids=[PH.tov_claim_id(key)]))
     for objective_id in PH.TOV_OBJECTIVE.values():
         actor = next(o for o in S.OBJECTIVES if o[0] == objective_id)[1]
         edges.append(dict(edge_id=f"dep_end_{objective_id[4:]}", from_type="objective", from_id=objective_id,
@@ -72,16 +72,17 @@ def _dependencies(strategies: list[dict], assumptions: list[dict], rules: list[d
             key = next(k for k, v in PH.TOV_OBJECTIVE.items() if v == objective_id)
             edge_id = f"dep_en_{sid[4:]}_{key}"
             edges.append(dict(edge_id=edge_id, from_type="action", from_id=acts[i % len(acts)],
-                              to_type="claim", to_id=f"clm_ph_tov_{key}", kind="enables", weight=0.5,
+                              to_type="claim", to_id=PH.tov_claim_id(key), kind="enables", weight=0.5,
                               mechanism="the action produces the waypoint condition", evidence_claim_ids=[]))
             tov.extend([edge_id, supports_edge[objective_id]])
         s["theory_of_victory"] = tov
     for a in assumptions:
-        key = f"a{a['index_k'] + 1}" if a["strategy_id"].startswith("str_coa") else "rus_k0"
-        edges.append(dict(edge_id=f"dep_gr_{a['assumption_id'][4:]}", from_type="claim", from_id=f"clm_ph_{key}",
+        cid = (PH.grounding_claim_id(a["index_k"]) if a["strategy_id"].startswith("str_coa")
+               else PH.claim_id(PH.RED_GROUNDING_KEY))
+        edges.append(dict(edge_id=f"dep_gr_{a['assumption_id'][4:]}", from_type="claim", from_id=cid,
                           to_type="assumption", to_id=a["assumption_id"], kind="grounds", weight=0.8,
                           mechanism="the approved claim decides whether the assumption holds",
-                          evidence_claim_ids=[f"clm_ph_{key}"]))
+                          evidence_claim_ids=[cid]))
         edges.append(dict(edge_id=f"dep_rq_{a['assumption_id'][4:]}", from_type="assumption", from_id=a["assumption_id"],
                           to_type="strategy", to_id=a["strategy_id"], kind="requires", weight=0.7,
                           mechanism="the course of action depends on this assumption (COA_LIB deps)",
@@ -97,13 +98,17 @@ def tables(as_of: date | None = None) -> dict[str, list[dict]]:
     models = gen_module("models")
 
     strategies, sobj, sres, rules, dps, assumptions = S.strategy_rows()
-    he_ids = PH.all_he_ids()
+    # The harmful events each COA actually mitigates (placeholders.MITIGATES), derived from the
+    # actions in its own policy. This is the lever the JP 5-0 acceptable test turns on: a COA that
+    # leaves a High Military Risk event unmitigated fails `acceptable` whatever its value, and
+    # drops out of the EVPI candidate set. Red COAs mitigate nothing on Blue's board.
     for s in strategies:
-        # HOOK (risk agent): replace with the harmful events this COA actually mitigates. While the
-        # placeholders stand, every COA mitigates every placeholder event so the acceptable test is
-        # decided by value against aspiration and not by an unowned High event.
-        s["mitigates_he_ids"] = list(he_ids)
+        s["mitigates_he_ids"] = list(PH.MITIGATES.get(s["strategy_id"], []))
     edges = _dependencies(strategies, assumptions, rules)
+
+    guidance_rows = S.guidance()
+    for g in guidance_rows:
+        g["source_id"] = PH.GUIDANCE_SOURCE.get(g["guidance_id"])
 
     pir_rows = PH.pirs()
     by_pir: dict[str, list[str]] = {}
@@ -126,7 +131,7 @@ def tables(as_of: date | None = None) -> dict[str, list[dict]]:
         "entities": S.entities(),
         "claims": PH.claims(),
         "facts": PH.facts(),
-        "guidance": S.guidance(),
+        "guidance": guidance_rows,
         "games": S.games(),
         "actions": S.actions(),
         "objectives": S.objectives(),

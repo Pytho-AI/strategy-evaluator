@@ -15,7 +15,9 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from app.scenarios.amber_shield import build as build_module  # noqa: E402
+from app.scenarios.amber_shield import corpus_docs as corpus_module  # noqa: E402
 from app.scenarios.amber_shield import payoffs as payoffs_module  # noqa: E402
+from app.scenarios.amber_shield import placeholders as rows_module  # noqa: E402
 from app.scenarios.amber_shield import scenario as scenario_module  # noqa: E402
 from app.scenarios.amber_shield._dataset import DATASET_DIR, eval_module, gen_module  # noqa: E402
 
@@ -34,6 +36,17 @@ def S():
 @pytest.fixture(scope="session")
 def P():
     return payoffs_module
+
+
+@pytest.fixture(scope="session")
+def rows():
+    """`placeholders`: the claim, risk and collection rows derived from evidence."""
+    return rows_module
+
+
+@pytest.fixture(scope="session")
+def corpus():
+    return corpus_module
 
 
 @pytest.fixture(scope="session")
@@ -64,6 +77,13 @@ def claimset():
 @pytest.fixture(scope="session")
 def dataset_dir() -> Path:
     return DATASET_DIR
+
+
+@pytest.fixture(scope="session")
+def scenario_root() -> Path:
+    """`sources.path` is relative to the scenario package, not to `dataset/`; the corpus-reading
+    invariants (02, 11-13, 15-17, 20) resolve document paths against this."""
+    return build_module.ROOT
 
 
 @pytest.fixture(scope="session")

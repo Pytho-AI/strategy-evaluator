@@ -3,8 +3,7 @@ from __future__ import annotations
 
 import time
 
-from conftest import MeridianClient
-from fastapi.testclient import TestClient
+from support import MeridianClient
 from reports_fixture import dorne_report
 from test_review import BATCH, decide, ingest, range_claim_id
 

@@ -21,6 +21,9 @@
     text("./src/app.logic.js" + v),
     text("./src/app.props.json" + v).catch(() => "{}"),
   ]);
+  // The API client is a module; the logic script is evaluated by dc-runtime as a
+  // classic script and cannot `import`. Load it here and hand it over on `window`.
+  window.WorkbenchApi = await import("./api.js" + v);
   const host = document.querySelector("x-dc");
   host.innerHTML = markup;
   try { host.setAttribute("props", props.trim()); } catch (_) {}

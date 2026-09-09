@@ -109,10 +109,6 @@ class Criterion:
             return "objectives"
         return "resources"
 
-    @property
-    def members(self) -> tuple[str, ...]:
-        return self.objectives or self.resources
-
 
 #: The order the v3 UI lists them in, and the keys it sends weights under.
 CRITERION_KEYS = ("mission", "personnel", "escalation", "time", "resources")

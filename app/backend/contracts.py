@@ -1305,6 +1305,18 @@ class RankedOptionView(BaseModel):
     criteria: list[CriterionOutcomeView]
 
 
+class ExcludedOptionView(BaseModel):
+    """An option a comparison may not rank, and the JP 5-0 test that says so."""
+
+    strategy_id: str
+    number: int
+    title: str
+    status: str
+    gate_failed: str | None
+    gates_failed: list[str]
+    reason: str
+
+
 class OptionStabilityShareView(BaseModel):
     strategy_id: str
     number: int
@@ -1312,7 +1324,9 @@ class OptionStabilityShareView(BaseModel):
 
 
 class WeightStabilityView(BaseModel):
-    top_option_id: str
+    top_option_id: str | None = Field(
+        description="null when no option passed every validity test"
+    )
     fraction_top: float = Field(
         description="fraction of the enumerated perturbed weightings in which the top option stays first"
     )
@@ -1328,7 +1342,12 @@ class RankResponse(Envelope):
     weights: dict[str, int]
     weighted_max: int
     level_thresholds: list[LevelThresholdView]
-    ranked: list[RankedOptionView]
+    ranked: list[RankedOptionView] = Field(
+        description="valid options only, best weighted total first"
+    )
+    excluded: list[ExcludedOptionView] = Field(
+        description="options a validity gate keeps out of the ranking, and which gate"
+    )
     weight_stability: WeightStabilityView
 
 

@@ -1,0 +1,13 @@
+DEPLOY HOLD — set 09 September 2026 by the user.
+
+Reason: the demo presentation is not finished. The live site must stay on the build
+that is already running until the user says otherwise.
+
+Live build: commit 5804e82 ("Scroll to the top of a stage when the stage changes"),
+deployed 2026-09-09 18:27Z. It contains the real-OPORD parsing fixes, the live
+document upload, and the stage-scroll fix.
+
+Work continuing on main after that commit (backend scenario alignment, UI rewiring)
+is NOT live and must not be deployed until the hold is lifted.
+
+To lift: delete this file, or run one deploy with DEPLOY_OVERRIDE=1.

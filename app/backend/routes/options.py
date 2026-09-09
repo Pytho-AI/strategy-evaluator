@@ -14,6 +14,7 @@ from fastapi import APIRouter, Body, Depends, Query
 
 from ..contracts import (
     AdversaryRangeView,
+    ExcludedOptionView,
     CriterionMemberView,
     CriterionOutcomeView,
     LevelThresholdView,
@@ -220,6 +221,27 @@ def _rank(registry, batch, workspace, scenario, weights, started) -> RankRespons
                 criteria=criteria,
             )
         )
+    excluded = []
+    for strategy_id in options.ids:
+        row = index.strategies[strategy_id]
+        if row["status"] == "valid":
+            continue
+        failed = [name for name in VALIDITY_TESTS if not row["validity"][name]["pass"]]
+        excluded.append(
+            ExcludedOptionView(
+                strategy_id=strategy_id,
+                number=options.numbers[strategy_id],
+                title=row["name"],
+                status=row["status"],
+                gate_failed=failed[0] if failed else None,
+                gates_failed=failed,
+                reason=(
+                    f"status {row['status']}: failed the JP 5-0 "
+                    f"{', '.join(failed)} test{'s' if len(failed) != 1 else ''}. "
+                    "An option that fails a validity test is not ranked."
+                ),
+            )
+        )
     stability = options.weight_stability(scores, weights)
     return RankResponse(
         **envelope(overlay, started),
@@ -230,6 +252,7 @@ def _rank(registry, batch, workspace, scenario, weights, started) -> RankRespons
         weighted_max=weighted_max,
         level_thresholds=[LevelThresholdView(**t) for t in level_thresholds()],
         ranked=ranked,
+        excluded=excluded,
         weight_stability=WeightStabilityView(
             top_option_id=stability["top_option_id"],
             fraction_top=stability["fraction_top"],

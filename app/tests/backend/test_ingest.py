@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 import pytest
-from conftest import DATASET_DIR, REPO_ROOT, hash_tree
+from support import DATASET_DIR, REPO_ROOT, hash_tree
 from reports_fixture import AUTHORED, DORNE_360, TEXTS
 
 from app.backend.product import extract as rules

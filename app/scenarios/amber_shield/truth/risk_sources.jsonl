@@ -1,8 +1,19 @@
-{"description": "PLACEHOLDER: divergent national caveats inside the Alliance", "entity_id": "ent_nato", "he_id": "he_ph_consensus", "rs_id": "rs_ph_consensus", "source_kind": "hazard"}
-{"description": "PLACEHOLDER: sabotage and unmanned-aircraft pressure on the rail corridor", "entity_id": "unit_blr_rgf", "he_id": "he_ph_force_flow", "rs_id": "rs_ph_force_flow", "source_kind": "threat"}
-{"description": "PLACEHOLDER: cruise-missile strikes on reception nodes", "entity_id": "sys_kalibr", "he_id": "he_ph_iamd", "rs_id": "rs_ph_iamd", "source_kind": "threat"}
-{"description": "PLACEHOLDER: prepositioned stock issue rate", "entity_id": "inf_aps2_powidz", "he_id": "he_ph_closure", "rs_id": "rs_ph_closure", "source_kind": "hazard"}
-{"description": "PLACEHOLDER: mining and coastal-missile threat to the ports", "entity_id": "unit_rus_baltic_fleet", "he_id": "he_ph_spod", "rs_id": "rs_ph_spod", "source_kind": "threat"}
-{"description": "PLACEHOLDER: non-strategic nuclear signalling", "entity_id": "unit_rus_152_msl_bde", "he_id": "he_ph_escalation", "rs_id": "rs_ph_escalation", "source_kind": "threat"}
-{"description": "PLACEHOLDER: converging attack on the corridor", "entity_id": "unit_rus_11_ac", "he_id": "he_ph_suwalki", "rs_id": "rs_ph_suwalki", "source_kind": "threat"}
-{"description": "PLACEHOLDER: federated network interoperability", "entity_id": "inf_mpe_fmn", "he_id": "he_ph_c2", "rs_id": "rs_ph_c2", "source_kind": "hazard"}
+{"description": "divergent national caveats on the employment of Allied forces outside their own territory", "entity_id": "ent_nato", "he_id": "he_consensus_fracture", "rs_id": "rs_consensus_caveats", "source_kind": "hazard"}
+{"description": "Russian state messaging aimed at the Allied publics furthest from the fighting", "entity_id": "ent_rus", "he_id": "he_consensus_narrative", "rs_id": "rs_consensus_messaging", "source_kind": "threat"}
+{"description": "unresolved rail gauge transfer and customs clearance on the Polish reception network", "entity_id": "inf_polish_rail_corridor", "he_id": "he_flow_rail_slip", "rs_id": "rs_flow_rail", "source_kind": "hazard"}
+{"description": "national decisions on transit, overflight and basing that the command does not control", "entity_id": "ent_poland", "he_id": "he_flow_host_nation", "rs_id": "rs_flow_hn", "source_kind": "hazard"}
+{"description": "intelligence-service and proxy networks positioned against the rail and undersea infrastructure", "entity_id": "unit_socceur", "he_id": "he_flow_rail_sabotage", "rs_id": "rs_flow_sabotage", "source_kind": "threat"}
+{"description": "sea-launched land-attack cruise missiles ranging the reception corridor", "entity_id": "sys_kalibr", "he_id": "he_iamd_node_strike", "rs_id": "rs_iamd_kalibr", "source_kind": "threat"}
+{"description": "fleet shooters at sea able to strike Alliance territory beyond the Baltic States", "entity_id": "unit_rus_baltic_fleet", "he_id": "he_iamd_horizontal", "rs_id": "rs_iamd_horizontal", "source_kind": "threat"}
+{"description": "prepositioned stock issue and validation rate at the Powidz site", "entity_id": "inf_aps2_powidz", "he_id": "he_closure_c21", "rs_id": "rs_closure_sealift", "source_kind": "hazard"}
+{"description": "airfield clearance rate at the principal air port of debarkation", "entity_id": "inf_powidz_apod", "he_id": "he_closure_aps2", "rs_id": "rs_closure_apod", "source_kind": "hazard"}
+{"description": "minelaying and coastal-missile fires against the Baltic sea ports of debarkation", "entity_id": "unit_rus_baltic_fleet", "he_id": "he_spod_closed", "rs_id": "rs_spod_mines", "source_kind": "threat"}
+{"description": "the number of mine countermeasures hulls available for the Q-route clearance task", "entity_id": "unit_snmcmg1", "he_id": "he_spod_throughput", "rs_id": "rs_spod_mcm", "source_kind": "hazard"}
+{"description": "submarine and corvette activity astride the Danish Straits transit lane", "entity_id": "unit_rus_baltic_fleet", "he_id": "he_spod_straits", "rs_id": "rs_spod_straits", "source_kind": "threat"}
+{"description": "dual-capable Iskander launch units dispersed from the Chernyakhovsk garrison", "entity_id": "unit_rus_152_msl_bde", "he_id": "he_esc_demonstration", "rs_id": "rs_esc_iskander", "source_kind": "threat"}
+{"description": "non-strategic and intermediate-range systems associated with nuclear signalling", "entity_id": "sys_oreshnik", "he_id": "he_esc_employment", "rs_id": "rs_esc_employment", "source_kind": "threat"}
+{"description": "the political approval the deep fight requires and does not yet have", "entity_id": "role_nac", "he_id": "he_esc_authority", "rs_id": "rs_esc_authority", "source_kind": "hazard"}
+{"description": "a converging attack on the corridor from Kaliningrad Oblast", "entity_id": "unit_rus_11_ac", "he_id": "he_suwalki_closed", "rs_id": "rs_suwalki_11ac", "source_kind": "threat"}
+{"description": "the Regional Grouping of Forces staging in the Grodno area", "entity_id": "unit_blr_rgf", "he_id": "he_suwalki_belarus", "rs_id": "rs_suwalki_belarus", "source_kind": "threat"}
+{"description": "federated network interoperability between United States and Allied headquarters", "entity_id": "inf_mpe_fmn", "he_id": "he_c2_network", "rs_id": "rs_c2_network", "source_kind": "hazard"}
+{"description": "liaison manning and reporting discipline across the transfer of authority", "entity_id": "unit_mnc_ne", "he_id": "he_c2_liaison", "rs_id": "rs_c2_liaison", "source_kind": "hazard"}

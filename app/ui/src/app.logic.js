@@ -3,16 +3,8 @@ class Component extends DCLogic {
     view: 'coa', step: 1, runId: 'R-0417',
     planType: 'OPORD', level: 3, ccmd: 'EUCOM', threat: 'RUS',
     worldState: '', intent: '', endState: '',
-    assumptions: [
-      { text: 'Article 5 remains invoked and the North Atlantic Council sustains political consensus for the restoration of Estonian and Latvian territorial integrity by force if necessary.', status: 0, conf: 85, link: 'OPORD 1.g.1 · NAC 06 SEP', valid: 'Duration of operation' , pir: 4 },
-      { text: 'Germany, Poland, Denmark, the Netherlands, Belgium, Finland and Sweden grant unrestricted transit, overflight, basing and host-nation support for US force flow; EU military-mobility procedures are expedited.', status: 1, conf: 75, link: 'OPORD 1.g.2', valid: 'Through Phase II' , pir: 9 },
-      { text: 'Russia does not conduct conventional strikes against CONUS; strikes against NATO territory outside the Baltic States remain possible and are covered under NATO air and missile defense planning.', status: 1, conf: 65, link: 'OPORD 1.g.3', valid: 'Operational period' , pir: 2 },
-      { text: 'Strategic sealift and APS-2 stocks are sufficient to deliver 1AD with two ABCTs combat-ready in Poland NLT C+21 and the full division NLT C+45; airlift delivers advance parties, 173rd ABN and time-critical enablers NLT C+7.', status: 1, conf: 55, link: 'OPORD 1.g.4', valid: 'Expires C+21 / C+45' , pir: 1 },
-      { text: 'The Baltic Sea will be contested but not closed; Danish Straits transit remains possible under Allied escort. Klaipėda and Gdańsk/Gdynia remain usable as SPODs with MCM support.', status: 1, conf: 50, link: 'OPORD 1.g.5', valid: 'Through D-Day' , pir: 7 },
-      { text: 'Russia will employ non-strategic nuclear signaling and may conduct a demonstrative detonation; deliberate nuclear employment against Allied forces is less likely but planned for in Annex C App 4.', status: 1, conf: 60, link: 'OPORD 1.g.6 · ATP 7-100.1', valid: 'Operational period' , pir: 4 },
-      { text: 'Belarusian forces remain uncommitted absent a Russian decision to expand the war; Belarusian territory will be used by Russia for basing and fires.', status: 1, conf: 55, link: 'OPORD 1.g.7', valid: 'Through Phase II' , pir: 2 },
-      { text: 'Mission Partner Environment (MPE) and NATO Federated Mission Networking (FMN) provide adequate C2 interoperability for US forces under NATO command.', status: 0, conf: 80, link: 'OPORD 1.g.8 · Annex H', valid: 'From TOA' , pir: 9 }
-    ],
+    // Local drafts only. The evaluated assumptions come from /api/options.
+    assumptions: [],
     scenario: 0,
     newAssumption: '',
     constraints: [
@@ -26,8 +18,12 @@ class Component extends DCLogic {
       { kind: 'R', text: 'Minimize collateral damage in Russophone urban terrain (Narva, Daugavpils) to deny the Russian pretext narrative' }
     ],
     newConstraint: '', constraintKind: 'C',
-    numCoas: 3, numSims: 2000, aggression: 0.5,
-    coas: [], results: null, simRunning: false, simProgress: 0, simStatus: '', sel: 0,
+    // Everything numeric on these screens is fetched from /api. `null` means
+    // "not fetched yet"; it is never rendered as a value.
+    opts: null, rank: null, dist: null, risks: null, collection: null,
+    apiError: null, loading: true, rankBusy: false, distBusy: false,
+    whatIfId: null, whatIf: null, whatIfBusy: false, tornado: null, tornadoBusy: false,
+    sel: 0,
     weights: { mission: 4, personnel: 3, escalation: 4, time: 2, resources: 1 },
     chosen: null, decisionNote: '', decision: null,
     intel: [
@@ -39,15 +35,8 @@ class Component extends DCLogic {
       { title: 'Anomalous vessel loitering over Estlink 2 cable route, Gulf of Finland', type: 'OSINT', rel: 'C – Fairly reliable', pir: 5, when: '1 d ago' }
     ],
     newIntelTitle: '', newIntelBody: '', newIntelType: 'SIGINT',
-    pirs: [
-      { no: 1, q: 'Reinforcement. Will Russia expand the incursion beyond Ida-Viru and Latgale?', ind: ['1st Guards Tank Army or 20th Guards CAA movement toward the Pskov axis or into Belarus', 'Rail loading in the Moscow MD', 'Forward logistics build at Pskov, Ostrov or Luga'], assets: ['RQ-4 / RC-135 (USAFE)', 'NATO AGS', 'National technical means'], reports: 1, ltiov: 'C+10', status: 1, dp: 'Commit 1AD as counterattack force vice reserve; request follow-on forces' },
-      { no: 2, q: 'Suwałki. Will 11th Army Corps or Belarus-based forces attack to close the Suwałki corridor?', ind: ['18th Guards MRD, 7th MRR or 336th Naval Infantry departure from garrison', 'Belarusian mobilization or RGF staging in the Grodno area', 'Engineer and bridging activity on the Lithuanian and Polish borders'], assets: ['2CR guard reporting', 'MQ-9 orbit', 'Polish 16th/18th Mech Div'], reports: 1, ltiov: 'C+4', status: 1, dp: 'Reinforce 2CR with 1AD ABCT; alert 173rd ABN; shift MND-NE main effort' },
-      { no: 3, q: 'Enemy transition. Will Russian forces in Estonia and Latgale shift to maneuver defense, or seize Tartu, Daugavpils or the Daugava crossings before NATO closure?', ind: ['Forward-detachment and mobile-obstacle-detachment activity', 'Minefield emplacement', 'Repositioning of antitank and anti-airborne reserves', 'River-crossing preparation on the Daugava'], assets: ['SOCEUR special reconnaissance', 'Latvian National Guard', 'Armed ISR'], reports: 1, ltiov: 'C+21', status: 1, dp: 'Advance or delay D-Day; adjust MND-N scheme of maneuver' },
-      { no: 4, q: 'Nuclear. Is Russia preparing to employ or demonstrate a non-strategic nuclear weapon?', ind: ['Iskander-M dispersal or warhead mating in Kaliningrad or Leningrad MD', 'Oreshnik activity in Belarus', 'Movement from 12th GUMO storage sites', 'Northern Fleet SSBN surge', 'Announced test or exclusion zones over the Baltic'], assets: ['National technical means', 'STRATCOM space ISR', 'SOCEUR SR'], reports: 1, ltiov: 'Continuous', status: 0, dp: 'Activate Annex C App 4; adjust strike authorities and dispersal' },
-      { no: 6, q: 'Snow Dome. Where are the S-400/S-300 batteries, EW complexes, UAS ground stations and Iskander launch units, and has the reconnaissance-strike complex been degraded enough for the D-Day air-superiority condition?', ind: ['Emitter geolocation of S-400/S-300 and EW complexes', 'UAS GCS activity', 'Iskander launch unit locations'], assets: ['RC-135 / U-2', 'EC-37B Compass Call', 'SOCEUR SR', 'USCYBERCOM'], reports: 0, ltiov: 'D-3', status: 0, dp: 'D-Day go/no-go; SEAD/DEAD sequencing; Tomahawk release' },
-      { no: 7, q: 'Baltic Fleet. Will the Baltic Fleet sortie, mine or strike?', ind: ['Kilo-class and corvette departures from Baltiysk', 'Minelaying in the Gulf of Finland and Gulf of Riga', 'Coastal-missile battery activation', 'Kalibr shooters positioned against Klaipėda, Riga, Gdańsk'], assets: ['P-8A (Sigonella / Keflavik)', 'CTF Baltic COP', 'SNMG1 / SNMCMG1'], reports: 1, ltiov: 'D-7', status: 1, dp: 'Escort and MCM prioritization; SPOD selection; Kaliningrad naval strike release' },
-      { no: 9, q: 'Rear-area threat. Are Spetsnaz, GRU or proxy networks positioning against LOCs, APODs, SPODs, undersea cables, Rail Baltica or the Klaipėda LNG terminal?', ind: ['Host-nation security service reporting', 'Anomalous vessel activity near cable routes', 'UAS overflight of Allied airfields and rail nodes'], assets: ['Host-nation services', 'NATO CUI Centre', 'SOCEUR counter-sabotage'], reports: 1, ltiov: 'Continuous', status: 0, dp: 'LOC security allocation; C-UAS repositioning; SOCEUR tasking' }
-    ],
+    // Local drafts only. Requirements come from /api/collection.
+    pirs: [],
     newPir: '',
     rfis: [
       { id: 'RFI-041', q: 'APS-2 draw rate at Powidz and the Dülmen/Zutendaal/Eygelshoven sites; can two ABCTs close combat-ready NLT C+21?', to: '21st TSC / 405th AFSB', ties: 'Assumption A4', status: 'Open' },
@@ -114,9 +103,9 @@ class Component extends DCLogic {
     const escV = (s.escalation || 0) * 0.6 + Math.max(0, (s.offensive || 0) - (s.restraint || 0)) * 0.3 - (s.restraint || 0) * 0.2 + Math.max(0, (s.escalation || 0) - avg('escalation'));
     const misV = Math.max(0, avg('partners') - (s.partners || 0)) * 0.5 + Math.max(0, avg('sustain') - (s.sustain || 0)) * 0.6 + Math.max(0, 6 - (s.intel || 0)) * 0.4 + (d.mission && d.mission.startsWith('Not found') ? 4 : 0);
     const perV = (s.force || 0) * 0.6 + (s.offensive || 0) * 0.3 - (s.defensive || 0) * 0.1;
-    const lv = (v, th) => this.level(v, th); const col = l => this.riskColor(l);
+    const lv = (v, th) => this.textBand(v, th); const col = l => this.riskColor(l);
     const rm = lv(misV, [2.5, 5, 8]), rp = lv(perV, [4, 7, 10]), re = lv(escV, [2.5, 5, 8]);
-    const mk = (label, level, why) => ({ label, short: label.replace('Risk to ', '').replace('Risk of ', ''), level, why, bg: col(level)[0], fg: col(level)[1] });
+    const mk = (label, short, level, why) => ({ label, short, level, why, bg: col(level)[0], fg: col(level)[1] });
     const alignLevel = x => { const gap = Math.abs((s.restraint || 0) - x.sig.restraint) + Math.abs((s.partners || 0) - x.sig.partners) * 0.5 + Math.max(0, (s.escalation || 0) - x.sig.escalation) * 1.5; return gap < 5 ? 'Aligned' : gap < 10 ? 'Tension' : 'Conflict'; };
     const alignColor = { Aligned: col('Low'), Tension: col('Moderate'), Conflict: col('High') };
     const findings = [];
@@ -125,7 +114,7 @@ class Component extends DCLogic {
     if ((s.sustain || 0) < avg('sustain')) findings.push('Sustainment and deployment (TPFDD, munitions, resupply) are under-specified relative to JSCP planning tasks.');
     if ((s.intel || 0) < 6) findings.push('Few PIRs / indicators referenced; wargame uncertainty will be wide until collection is defined.');
     if (!findings.length) findings.push('No material divergence from the guidance set detected; residual risk is inherent to the operational problem.');
-    return { rm, rp, re, risks: [mk('Risk to mission', rm, 'Nesting with guidance, partner and sustainment coverage'), mk('Risk to personnel', rp, 'Force exposure and offensive tempo in the text'), mk('Risk of escalation', re, 'Escalatory vs restraint language against guidance')],
+    return { rm, rp, re, risks: [mk('Document language · mission nesting', 'mission language', rm, 'Nesting with guidance, partner and sustainment coverage. A reading of this document\u2019s wording, not an evaluated risk level.'), mk('Document language · force exposure', 'force language', rp, 'Force exposure and offensive tempo in the text. A reading of this document\u2019s wording, not an evaluated risk level.'), mk('Document language · escalation', 'escalation language', re, 'Escalatory vs restraint language against guidance. A reading of this document\u2019s wording, not an evaluated risk level.')],
       alignment: g.map(x => { const l = alignLevel(x); return { doc: x.name.replace(/^\d{4}\s/, ''), level: l, note: x.directs, bg: alignColor[l][0], fg: alignColor[l][1] }; }), findings };
   }
 
@@ -134,8 +123,6 @@ class Component extends DCLogic {
     { label: 'Expanded incursion (MDCOA)', desc: '1st GTA reinforces via Pskov; converging attack closes Suwałki; Baltic Fleet mines and strikes SPODs; demonstrative nuclear detonation', ag: 0.8 },
     { label: 'Horizontal escalation', desc: 'Kalibr and Kh-101 strikes on Polish and German APODs/SPODs; sabotage of undersea cables and rail LOCs', ag: 0.6 }
   ];
-  PROBLEM_SETS = { 0: ['Alliance consensus', 'Article 5 credibility', 'Strategic communication'], 1: ['Force flow through Poland and Germany', 'Military mobility', 'Reception infrastructure'], 2: ['IAMD over reception corridor', 'Horizontal escalation'], 3: ['1AD closure timeline', 'D-Day conditions', 'APS-2 draw'], 4: ['Baltic SPODs', 'MCM and escort', 'Sustainment line to Klaipėda / Riga'], 5: ['Escalation management', 'Nuclear consequence management', 'Strike authorities'], 6: ['Suwałki corridor', 'Belarus front', '2CR guard'], 7: ['Coalition C2', 'Liaison and reporting'] };
-  A_STATUS = { 0: ['Valid', 'rgb(19,57,41)', 'rgb(76,195,138)'], 1: ['Under review', 'rgb(63,34,0)', 'rgb(255,203,71)'], 2: ['Invalidated', 'rgb(174,25,85)', 'rgb(254,236,244)'] };
   PLAN_TYPES = [
     { id: 'OPORD', label: 'Operation Order', abbr: 'OPORD', desc: 'Execution order directing force contribution and support to a lead command.' },
     { id: 'CCP', label: 'Combatant Command Campaign Plan', abbr: 'CCP', desc: 'Day-to-day campaigning that operationalizes strategic guidance.' },
@@ -165,24 +152,6 @@ class Component extends DCLogic {
     DPRK: { name: 'DPRK', label: 'North Korea', desc: 'Nuclear-armed artillery and missile threat to allies.' },
     VEO: { name: 'VEO', label: 'Violent extremist orgs', desc: 'Dispersed, partner-enabled counter-network problem.' }
   };
-  COA_LIB = [
-    { title: 'Rapid Reinforcement, Hold and Restore', approach: 'Base plan · LOE 1-3', deps: [1, 2, 4, 5], s: 0.72, cas: 2.1, esc: 0.34, days: 60, res: 88, dps: 5,
-      concept: '2CR forward to Lithuania and the Daugava by C+4; 1AD draws APS-2 and closes two ABCTs at Orzysz by C+21; joint SEAD/DEAD campaign degrades the Snow Dome in Estonia, Latgale and the Pskov support zone; D-Day counteroffensive along the Daugava–Rēzekne axis at C+30 with 1AD as the armored main effort.',
-      tasks: ['2CR guard on Suwałki and the Lithuanian–Belarusian border NLT C+4', 'Two 1AD ABCTs combat-ready NLT C+21; third by sealift C+45', 'Joint suppression of IADS, EW and fires networks in Phase II', 'MND-N main attack to restore Latgale and Ida-Viru at D-Day'] },
-    { title: 'Defend Forward, Delay D-Day', approach: 'Conditions-first', deps: [1, 4, 6, 8], s: 0.64, cas: 1.4, esc: 0.2, days: 95, res: 80, dps: 4,
-      concept: 'Complete full 1AD closure (three ABCTs, C+45) and finish MCM clearance to Riga before attacking; Phase II extended to D-Day at roughly C+60. Accepts a longer Russian consolidation window and a frozen-conflict narrative risk in exchange for overmatch and lower casualties.',
-      tasks: ['Extend Phase II shaping; hold D-Day until three ABCTs and cleared Q-routes', 'Persistent ISR against PIRs 1, 3 and 6', 'Sustain Alliance consensus through the delay via StratCom', 'Counterattack only if Suwałki is threatened'] },
-    { title: 'Suwałki-First Economy of Force', approach: 'Secure the LOC', deps: [2, 4, 7], s: 0.58, cas: 1.6, esc: 0.26, days: 80, res: 75, dps: 4,
-      concept: '1AD is committed as the counterattack force against 11th Army Corps and Belarus-based threats to the Suwałki corridor rather than held as reserve; the Estonian and Latvian restoration is led by MND-N Allied forces with US fires, air and 2CR in support, and US armor joins Phase III late.',
-      tasks: ['1AD positioned at Orzysz–Bemowo Piskie oriented on Kaliningrad and Grodno', '2CR and 173rd ABN reinforce MND-NE', 'US deep fires and air support Allied attack in Latgale', 'Convoys through Suwałki under dedicated C-UAS escort'] },
-    { title: 'Deep Strike and Maritime Pressure', approach: 'Fires-led shaping', deps: [1, 3, 6], s: 0.66, cas: 1.5, esc: 0.52, days: 55, res: 70, dps: 5,
-      concept: 'Seek early NAC and national approval to strike Kaliningrad IADS, Kalibr shooters and coastal batteries with Tomahawk and long-range fires; carrier strike group holds the Northern Fleet at risk; ground counteroffensive follows a compressed Phase II. Fastest route to air and sea superiority; highest escalation exposure.',
-      tasks: ['Request NAC approval for Kaliningrad strikes in Phase II', 'Tomahawk and 56th Artillery Command deep fires against Snow Dome nodes', 'CSG and P-8A ASW pressure on Baltic and Northern Fleets', 'Compressed D-Day at C+25'] },
-    { title: 'Restrained Defense and Negotiated Withdrawal', approach: 'Deter, defend, negotiate', deps: [1, 3, 7, 8], s: 0.41, cas: 0.6, esc: 0.1, days: 120, res: 60, dps: 3,
-      concept: 'Establish an unbreakable defense on the Daugava, Tapa and Suwałki lines with US forces, deny further gains, and use the Alliance build-up as leverage for a Russian withdrawal without a counteroffensive. Lowest casualties and escalation risk; does not restore territory by force and risks the frozen conflict the intent forbids.',
-      tasks: ['Defensive positions at brigade-plus in each Baltic State', 'IAMD and MCM to keep SPODs open', 'Joint Staff-led de-escalation channel', 'StratCom on Alliance unity and Russian pretext'] }
-  ];
-
   // Moving to another stage must put the operator at the top of that screen. Without this
   // the page keeps the old scroll position, so a button at the foot of a long screen appears
   // to land on a later stage.
@@ -207,7 +176,11 @@ class Component extends DCLogic {
     if (after) setTimeout(after, 200);
   }
 
-  componentDidMount() { const v = this.props.startView, st = +this.props.startStep; if (v || st) { if (['intel', 'docs', 'posture'].includes(v)) this.setState({ view: 'coa', step: 1, inputTab: v }); else this.setState({ view: v || 'coa', step: st || 1 }); } }
+  componentDidMount() {
+    const v = this.props.startView, st = +this.props.startStep;
+    if (v || st) { if (['intel', 'docs', 'posture'].includes(v)) this.setState({ view: 'coa', step: 1, inputTab: v }); else this.setState({ view: v || 'coa', step: st || 1 }); }
+    this.loadAll();
+  }
   go(view) { if (['intel', 'docs', 'posture'].includes(view)) return this.toStep({ view: 'coa', step: 1, inputTab: view }); this.toStep({ view }); }
   FEED_POOL = [
     { title: '1st Guards Tank Army forward logistics build observed at Ostrov and Luga', type: 'IMINT', rel: 'B – Usually reliable', pir: 1 },
@@ -225,200 +198,540 @@ class Component extends DCLogic {
   }
   componentWillUnmount() { clearInterval(this._feed); }
   goStep(step) { this.setState({ view: 'coa', step }); }
-  rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  gauss(r) { const u = 1 - r(), v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-  level(v, th) { return v < th[0] ? 'Low' : v < th[1] ? 'Moderate' : v < th[2] ? 'Significant' : 'High'; }
   riskColor(l) { return { Low: ['rgb(19,57,41)', 'rgb(76,195,138)'], Moderate: ['rgb(63,34,0)', 'rgb(255,203,71)'], Significant: ['rgb(130,78,0)', 'rgb(254,243,221)'], High: ['rgb(174,25,85)', 'rgb(254,236,244)'] }[l]; }
-  score(l) { return { Low: 4, Moderate: 3, Significant: 2, High: 1 }[l]; }
+  // Word-frequency banding for the *document* analysis on the Plans screen. It says
+  // something about the text of an uploaded document and nothing about a strategy;
+  // every evaluated risk level on every other screen comes from /api.
+  textBand(v, th) { return v < th[0] ? 'Low' : v < th[1] ? 'Moderate' : v < th[2] ? 'Significant' : 'High'; }
 
-  buildCoas() {
-    const t = this.THREATS[this.state.threat].name;
-    return this.COA_LIB.slice(0, this.state.numCoas).map((c, i) => ({ ...c, n: i + 1, concept: c.concept.replace('adversary', t) }));
+  // ───────────────────────────────────────────────────────────────── the API
+  // `api.js` is the only network client; `boot.js` loads it as a module and puts
+  // it on `window` because dc-runtime evaluates this file as a classic script.
+  api() { return window.WorkbenchApi; }
+
+  // Any failure stops the screen and shows the backend's own code and message.
+  // Nothing falls back to a computed-looking number.
+  fail(e, where) {
+    const err = { code: e && e.code ? e.code : 'ui_error', message: e && e.message ? e.message : String(e), status: e && e.status != null ? e.status : 0, path: (e && e.path) || where };
+    err.line = `${err.code} (${err.status || 'no response'}) — ${err.message}`;
+    this.setState({ apiError: err, loading: false, rankBusy: false, distBusy: false, whatIfBusy: false, tornadoBusy: false });
   }
-  runSim() {
-    const coas = this.state.coas.length ? this.state.coas : this.buildCoas();
-    this.setState({ coas, simRunning: true, simProgress: 0, results: null, simStatus: 'Setting up the red cell from JIPOE…' });
-    const msgs = ['Setting up the red cell from JIPOE…', 'Playing adversary reactions…', 'Resolving engagements…', 'Scoring risk to mission, personnel, escalation…'];
-    let p = 0;
-    const tick = setInterval(() => {
-      p += 6 + Math.random() * 8;
-      if (p >= 100) { clearInterval(tick); this.setState({ simRunning: false, simProgress: 100, results: this.compute(coas) }); return; }
-      this.setState({ simProgress: Math.round(p), simStatus: msgs[Math.min(3, Math.floor(p / 25))] });
-    }, 120);
+
+  async loadAll() {
+    this.setState({ loading: true, apiError: null });
+    try {
+      const A = this.api();
+      const [pair, risks, collection] = await Promise.all([A.loadOptions(this.state.weights), A.risks(), A.collection()]);
+      this.setState({ opts: pair.options, rank: pair.rank, risks, collection, loading: false });
+    } catch (e) { this.fail(e, '/api/options'); }
   }
-  compute(coas, agOverride, nOverride, failIdx) {
-    const { pirs, assumptions } = this.state; const N = nOverride || this.state.numSims, ag = agOverride ?? this.state.aggression;
-    if (failIdx != null) coas = coas.map(c => (c.deps || []).includes(failIdx + 1) ? { ...c, s: c.s - 0.14, esc: c.esc + 0.08, cas: c.cas * 1.25 } : { ...c, s: c.s - 0.03 });
-    const gaps = pirs.filter(p => p.status === 0).length;
-    const aWeak = assumptions.reduce((a, x) => a + (x.status === 2 ? 0.04 : (100 - x.conf) / 1000), 0);
-    const sd = 0.11 + gaps * 0.02 + aWeak;
-    return coas.map((c, i) => {
-      const r = this.rng(1000 + i * 77 + N);
-      const bins = new Array(10).fill(0); const sc = [], cas = []; let esc = 0, major = 0;
-      for (let k = 0; k < N; k++) {
-        const s = Math.min(1, Math.max(0, c.s - 0.18 * (ag - 0.5) + this.gauss(r) * sd));
-        sc.push(s); bins[Math.min(9, Math.floor(s * 10))]++;
-        cas.push(Math.max(0, c.cas * (0.7 + 0.6 * ag) + this.gauss(r) * c.cas * 0.45));
-        if (r() < c.esc + 0.35 * (ag - 0.5)) { esc++; if (r() < 0.35 + 0.4 * ag) major++; }
-      }
-      sc.sort((a, b) => a - b); cas.sort((a, b) => a - b);
-      const pS = sc.filter(s => s >= 0.5).length / N, pE = esc / N, c90 = cas[Math.floor(N * 0.9)];
-      const mx = Math.max(...bins);
-      return { n: c.n, title: c.title, days: c.days, res: c.res,
-        pSuccess: pS, pEsc: pE, pMajor: major / N, cas: c90,
-        ci: `${Math.round(sc[Math.floor(N * 0.1)] * 100)}–${Math.round(sc[Math.floor(N * 0.9)] * 100)}`,
-        bins: bins.map((b, j) => ({ h: Math.max(3, Math.round(b / mx * 100)), bg: j < 5 ? 'var(--color-accent-300)' : 'var(--color-accent-700)' })),
-        rm: this.level(1 - pS, [0.15, 0.30, 0.50]), rp: this.level(c90, [1, 2, 4]), re: this.level(pE, [0.15, 0.30, 0.45]),
-        rt: this.level(c.days, [30, 60, 100]), rr: this.level(c.res, [45, 65, 85]) };
-    });
+
+  // A weight slider is an operator input to /api/options/rank, not a local formula.
+  // The answer is a round trip, so a stale one must never overwrite a newer one.
+  setWeight(key, value) {
+    const weights = { ...this.state.weights, [key]: value };
+    const token = (this._rankToken = (this._rankToken || 0) + 1);
+    this.setState({ weights, rankBusy: true, tornado: null });
+    this.api().rank(weights).then(r => {
+      if (token !== this._rankToken) return;
+      this.setState({ rank: r, rankBusy: false });
+    }).catch(e => { if (token === this._rankToken) this.fail(e, '/api/options/rank'); });
   }
-  rankWith(w, results) {
-    return results.map(r => ({ n: r.n, raw: w.mission * this.score(r.rm) + w.personnel * this.score(r.rp) + w.escalation * this.score(r.re) + w.time * this.score(r.rt) + w.resources * this.score(r.rr) })).sort((a, b) => b.raw - a.raw);
+
+  // "Run Wargame" is a real recompute: the enumerated outcome distribution for
+  // every option. There is no progress to report, so none is invented.
+  runWargame() {
+    if (this.state.distBusy) return;
+    this.setState({ distBusy: true, apiError: null });
+    this.api().outcomeDistribution().then(d => this.setState({ dist: d, distBusy: false }))
+      .catch(e => this.fail(e, '/api/options/outcome-distribution'));
   }
-  ranked() {
-    const { results, weights: w } = this.state; if (!results) return [];
-    const max = (w.mission + w.personnel + w.escalation + w.time + w.resources) * 4 || 1;
-    return results.map(r => {
-      const s = w.mission * this.score(r.rm) + w.personnel * this.score(r.rp) + w.escalation * this.score(r.re) + w.time * this.score(r.rt) + w.resources * this.score(r.rr);
-      return { ...r, raw: s, pct: Math.round(s / max * 100), score: `${s} / ${max}` };
-    }).sort((a, b) => b.raw - a.raw).map((r, i) => ({ ...r, rank: i + 1 }));
+
+  pickAssumption(id) {
+    if (this.state.whatIfId === id) { this.setState({ whatIfId: null, whatIf: null, whatIfBusy: false }); return; }
+    const token = (this._whatIfToken = (this._whatIfToken || 0) + 1);
+    this.setState({ whatIfId: id, whatIf: null, whatIfBusy: true });
+    this.api().whatIf(id).then(w => { if (token === this._whatIfToken) this.setState({ whatIf: w, whatIfBusy: false }); })
+      .catch(e => { if (token === this._whatIfToken) this.fail(e, '/api/options/what-if'); });
   }
-  arcFor(r) {
-    const t = this.THREATS[this.state.threat].name;
-    const lib = {
-      1: [['2CR screens Suwałki by C+4; 1AD draws APS-2 at Powidz; USAFE establishes DCA over the Baltics.', `${t} REB and GPS jamming against reception corridor; Spetsnaz sabotage of Polish rail; Iskander readiness announced.`, 'C-UAS and LOC security to FPCON CHARLIE; SDDC reroutes armor by road; STRATCOM deterrence messaging.', 'DP1 · Force flow'], ['Joint SEAD/DEAD against S-400 and EW complexes in Latgale and Pskov support zone.', `${t} transitions to maneuver defense; minefields on the Daugava; threatens strikes on Powidz if Pskov is hit.`, 'SACEUR approves strikes on engaged forces only; Patriot repositioned to Powidz and Rzeszów.', 'DP2 · Strike authorities'], ['D-Day: 1AD attacks along Daugava–Rēzekne; Estonian and UK forces fix Narva.', `${t} announces exclusion zone over the Baltic; SSBN surge; Oreshnik activity in Belarus.`, 'Activate Annex C App 4; disperse forces; NAC consultation; continue the attack.', 'DP3 · Nuclear signaling']],
-      2: [['Extend Phase II; complete three-ABCT closure and MCM clearance to Riga.', `${t} hardens the Narva and Latgale belts; pushes a negotiated freeze through third parties; IO on Baltic Russophones.`, 'StratCom sustains Alliance consensus; persistent ISR builds the target set.', 'DP1 · Consensus'], ['Shaping fires degrade the reconnaissance-strike complex over 30 days.', `${t} 1st GTA closes to Pskov; reinforces Latgale before the delayed D-Day.`, 'Re-evaluate correlation of forces; commit 1AD earlier or accept a longer campaign.', 'DP2 · Reinforcement'], ['D-Day at C+60 with overmatch.', `${t} Kalibr strikes on Klaipėda LNG and Riga port.`, 'Escort and MCM surge; Tomahawk release against Kaliningrad shooters requested.', 'DP3 · SPODs']],
-      3: [['1AD oriented on Suwałki; 2CR and 173rd ABN reinforce MND-NE.', `${t} 11th Army Corps demonstrates toward the Lithuanian border but does not cross; Belarus stages in Grodno.`, 'Hold 1AD; Allied MND-N forces begin shaping in Latgale with US fires.', 'DP1 · Fix vs commit'], ['Allied-led attack toward Rēzekne with US air and deep fires.', `${t} maneuver defense trades space; anti-airborne reserves counterattack the Daugava crossings.`, 'Release one 1AD ABCT to MND-N; accept thinner Suwałki guard.', 'DP2 · Release reserve'], ['1AD joins Phase III late.', `${t} claims Allied disunity as US armor stays in Poland.`, 'StratCom emphasizes Allied lead; visible US armor movement north.', 'DP3 · Narrative']],
-      4: [['Request NAC approval for Kaliningrad strikes; CSG pressures the Northern Fleet.', `${t} frames strikes as attack on the homeland; Iskander warhead mating observed in Kaliningrad.`, 'Joint Staff de-escalation channel; limit strikes to Kalibr shooters and IADS.', 'DP1 · NAC approval'], ['Tomahawk and deep fires collapse the Snow Dome over Latgale in 10 days.', `${t} demonstrative low-yield detonation over the Baltic Sea.`, 'Nuclear consequence management; NAC consultation; national escalation measures.', 'DP2 · Detonation'], ['Compressed D-Day at C+25 with two ABCTs.', `${t} 1st GTA commits through Pskov toward Tartu.`, '173rd ABN and Estonian forces block; air interdiction of the Pskov axis.', 'DP3 · Pskov axis']],
-      5: [['Brigade-plus defense on the Daugava, Tapa and Suwałki lines; IAMD and MCM keep SPODs open.', `${t} consolidates Narva and Latgale; offers a freeze with forces in place.`, 'Reject freeze; sustain build-up as leverage.', 'DP1 · Freeze offer'], ['Allied build-up to corps strength over 90 days.', `${t} sabotage against Estlink and Rail Baltica; IO on Baltic domestic resolve.`, 'Undersea infrastructure defense; counter-sabotage; StratCom.', 'DP2 · Hybrid pressure'], ['Negotiations stall; Russian forces remain on NATO soil.', `${t} normalizes the occupation; Allies question the mission.`, 'Decide: transition to a counteroffensive or accept a frozen conflict.', 'DP3 · Commit']]
-    };
-    return (lib[r] || lib[1]).map((a, i) => ({ turn: (i + 1) * 3, action: a[0], reaction: a[1], counter: a[2], dp: a[3] }));
+
+  // The weight tornado asks "does the #1 change if this weight moves +/-2?". That is
+  // ten more rankings, so it is fetched from /api/options/rank — ten real answers,
+  // not a local re-score — and only when the operator opens the panel.
+  loadTornado() {
+    if (this.state.tornado || this.state.tornadoBusy || !this.state.rank) return;
+    const A = this.api(), w = this.state.weights;
+    this.setState({ tornadoBusy: true });
+    const jobs = [];
+    A.WEIGHT_KEYS.forEach(key => [-2, 2].forEach(d => {
+      const alt = { ...w, [key]: Math.max(0, Math.min(5, w[key] + d)) };
+      jobs.push(A.rank(alt).then(r => ({ key, d, top: (r.ranked && r.ranked[0]) || null })));
+    }));
+    Promise.all(jobs).then(rows => this.setState({ tornado: rows, tornadoBusy: false }))
+      .catch(e => this.fail(e, '/api/options/rank'));
   }
-  sensitivity(ranked, best, crit) {
-    const s = this.state, res = s.results; if (!res || !best) return { explain: [], explainText: '', runnerUp: {}, stability: [], stabilityText: '', tornado: [], sweep: [], sweepText: '', assumptionRisk: [], assumptionText: '' };
-    const w = s.weights, keys = ['mission', 'personnel', 'escalation', 'time', 'resources'], lv = { mission: 'rm', personnel: 'rp', escalation: 're', time: 'rt', resources: 'rr' };
-    const runner = ranked[1] || ranked[0];
-    const explain = crit.map(([k, label]) => { const b = w[k] * this.score(best[lv[k]]), o = w[k] * this.score(runner[lv[k]]), mx = w[k] * 4 || 1; const d = b - o; return { label, bestW: Math.round(b / mx * 50), otherW: Math.round(o / mx * 50), delta: (d > 0 ? '+' : '') + d, color: d > 0 ? 'rgb(76,195,138)' : d < 0 ? 'rgb(255,120,120)' : 'var(--color-neutral-600)' }; });
-    const gains = explain.filter(x => x.delta.startsWith('+')).map(x => x.label.toLowerCase()), losses = explain.filter(x => x.delta.startsWith('-')).map(x => x.label.toLowerCase());
-    const explainText = `Strategy ${best.n} leads Strategy ${runner.n} by ${best.raw - runner.raw} weighted points. The margin comes from ${gains.length ? gains.join(', ') : 'no single criterion'}${losses.length ? '; it gives ground on ' + losses.join(', ') : ''}. Each bar is weight × JRAM score (Low 4 … High 1).`;
-    const r = this.rng(4242); const wins = {}; res.forEach(x => wins[x.n] = 0);
-    for (let i = 0; i < 500; i++) { const pw = {}; keys.forEach(k => pw[k] = Math.max(0, Math.min(5, w[k] + Math.round((r() - 0.5) * 4)))); wins[this.rankWith(pw, res)[0].n]++; }
-    const stability = res.map(x => ({ n: x.n, pct: Math.round(wins[x.n] / 5), bg: x.n === best.n ? 'var(--color-accent)' : 'rgb(100,116,139)' })).sort((a, b) => b.pct - a.pct);
-    const stabilityText = stability[0].pct >= 75 ? `Robust: Strategy ${stability[0].n} ranks first in ${stability[0].pct}% of perturbed weightings.` : `Fragile: the top rank shifts between Strategy ${stability[0].n} and Strategy ${stability[1] ? stability[1].n : '-'} depending on weights — the commander's priorities decide.`;
-    const flip = n => n === best.n ? ['rgb(19,57,41)', 'rgb(76,195,138)'] : ['rgb(174,25,85)', 'rgb(254,236,244)'];
-    const tornado = crit.map(([k, label]) => { const lo = this.rankWith({ ...w, [k]: Math.max(0, w[k] - 2) }, res)[0].n, hi = this.rankWith({ ...w, [k]: Math.min(5, w[k] + 2) }, res)[0].n; return { label, lo, hi, loBg: flip(lo)[0], loFg: flip(lo)[1], hiBg: flip(hi)[0], hiFg: flip(hi)[1] }; });
-    const coas = s.coas.length ? s.coas : this.buildCoas();
-    const sw = [0.2, 0.5, 0.85].map(ag => this.compute(coas, ag, 400));
-    const sweep = coas.map((c, i) => ({ n: c.n, lo: Math.round(sw[0][i].pSuccess * 100), mid: Math.round(sw[1][i].pSuccess * 100), hi: Math.round(sw[2][i].pSuccess * 100) }));
-    const bestSw = sweep.find(x => x.n === best.n) || sweep[0]; const mostRobust = [...sweep].sort((a, b) => (a.lo - a.hi) - (b.lo - b.hi))[0];
-    const sweepText = `Strategy ${best.n} loses ${bestSw.lo - bestSw.hi} points of success probability from restrained to aggressive adversary behavior${mostRobust.n === best.n ? ', and it is also the most robust option across the sweep.' : `; Strategy ${mostRobust.n} degrades least (${mostRobust.lo - mostRobust.hi}).`}`;
-    const assumptionRisk = s.assumptions.map((a, i) => ({ n: i + 1, text: a.text, conf: a.conf, status: this.A_STATUS[a.status][0], bg: this.A_STATUS[a.status][1], fg: this.A_STATUS[a.status][2] })).sort((a, b) => a.conf - b.conf);
-    const weak = assumptionRisk.filter(a => a.conf < 70 || a.status !== 'Valid');
-    const sigma = Math.round(s.assumptions.reduce((a, x) => a + (x.status === 2 ? 0.04 : (100 - x.conf) / 1000), 0) * 100);
-    const assumptionText = weak.length ? `${weak.length} assumption(s) below 70% confidence or unvalidated add roughly ${sigma} points of uncertainty to every result. Validate A${weak[0].n} first — it has the lowest confidence.` : 'All assumptions validated at high confidence; uncertainty is driven by collection gaps only.';
-    return { explain, explainText, runnerUp: { n: runner.n, title: runner.title }, stability, stabilityText, tornado, sweep, sweepText, assumptionRisk, assumptionText };
-  }
-  // Assumption index (1-based) -> PIR: explicit link, else keyword overlap, else round-robin so every assumption has a PIR
-  pirFor(i) {
-    const s = this.state, a = s.assumptions[i - 1]; if (!a || !s.pirs.length) return null;
-    if (a.pir) return s.pirs.find(p => (p.no || s.pirs.indexOf(p) + 1) === a.pir) || null;
-    const words = (a.text.toLowerCase().match(/[a-zåäöéū]{5,}/g) || []);
-    let best = null, score = 1;
-    s.pirs.forEach(p => { const t = (p.q + ' ' + (p.ind || []).join(' ')).toLowerCase(); const n = words.filter(w => t.includes(w)).length; if (n > score) { score = n; best = p; } });
-    return best || s.pirs[(i - 1) % s.pirs.length];
-  }
-  assumptionsForPir(p) { return this.state.assumptions.map((_, k) => k + 1).filter(i => this.pirFor(i) === p); }
-  mitigations(r, c) {
-    const s = this.state, col = l => this.riskColor(l)[1]; const out = [];
-    const deps = (c.deps || []).map(i => s.assumptions[i - 1] && { i, a: s.assumptions[i - 1] }).filter(Boolean);
-    const weakest = deps.slice().sort((x, y) => x.a.conf - y.a.conf)[0];
-    out.push({ tag: `Mission · ${r.rm}`, fg: col(r.rm), risk: `Fails to reach the end state in about ${Math.round((1 - r.pSuccess) * 100)} of 100 runs${weakest ? `, most often when A${weakest.i} (${weakest.a.conf}%) does not hold` : ''}.`, fix: weakest ? `Task collection against A${weakest.i} now (${(() => { const p = this.pirFor(weakest.i); return p ? 'PIR ' + (p.no || s.pirs.indexOf(p) + 1) : 'assign a PIR'; })()}) and write a branch plan for the case where it fails.` : 'Hold a ready alternative strategy and define the trigger to switch.' });
-    out.push({ tag: `Personnel · ${r.rp}`, fg: col(r.rp), risk: `Worst-case losses near ${r.cas.toFixed(1)} percent of the committed force over ${r.days} days.`, fix: r.rp === 'Low' ? 'Maintain force protection posture; no additional measures.' : 'Phase the commitment so lead elements are not exposed before enablers and medical support are in place; confirm Role 3 and evacuation capacity.' });
-    out.push({ tag: `Escalation · ${r.re}`, fg: col(r.re), risk: `Adversary widens the fight in ${Math.round(r.pEsc * 100)} of 100 runs; spreads beyond the theater in ${Math.round(r.pMajor * 100)}.`, fix: r.re === 'Low' ? 'Keep current strike approval rules and messaging.' : 'Keep strikes limited to forces engaged against Allied territory, pre-clear the approval chain for time-sensitive targets, and keep the Joint Staff de-escalation channel open.' });
-    const gaps = s.pirs.filter(p => p.status === 0 && deps.some(d => this.pirFor(d.i) === p));
-    gaps.slice(0, 2).forEach(p => out.push({ tag: 'Collection gap', fg: 'rgb(255,203,71)', risk: `PIR ${p.no || s.pirs.indexOf(p) + 1} is untasked: "${p.q.replace(/\?.*$/, '')}".`, fix: `Assign ${(p.assets || []).filter(a => a !== 'Unassigned')[0] || 'a collector'} with a latest-time-of-value before the first decision point.` }));
-    return out;
-  }
-  evaluation(ranked, best, coas, isWeak) {
-    const s = this.state; if (!best) return { evalGrade: {}, evalSummary: '', evalStats: [], evalGaps: [], evalRisks: [], evalConditions: [] };
-    const c = coas.find(x => x.n === best.n) || {}; const deps = (c.deps || []).map(i => s.assumptions[i - 1] && { i, a: s.assumptions[i - 1] }).filter(Boolean);
-    const weakDeps = deps.filter(d => isWeak(d.a)); const openPirs = s.pirs.filter(p => p.status !== 2); const gapsPirs = s.pirs.filter(p => p.status === 0);
-    const sens = this.sensitivity(ranked, best, [['mission', 'Risk to mission'], ['personnel', 'Risk to personnel'], ['escalation', 'Risk of escalation'], ['time', 'Time to end state'], ['resources', 'Force demand vs GFM']]);
-    const stab = (sens.stability.find(x => x.n === best.n) || {}).pct || 0; const sw = sens.sweep.find(x => x.n === best.n) || { lo: 0, hi: 0 };
-    const worstProp = deps.map(d => { const alt = this.compute(coas, undefined, 300, d.i - 1); const base = s.results.find(r => r.n === best.n); const a = alt.find(r => r.n === best.n); return { i: d.i, drop: Math.round((base.pSuccess - a.pSuccess) * 100) }; }).sort((a, b) => b.drop - a.drop)[0] || { i: 0, drop: 0 };
-    const score = (stab >= 75 ? 2 : stab >= 50 ? 1 : 0) + (weakDeps.length === 0 ? 2 : weakDeps.length === 1 ? 1 : 0) + (best.re === 'Low' || best.re === 'Moderate' ? 1 : 0) + (gapsPirs.length === 0 ? 1 : 0);
-    const grade = score >= 5 ? ['High', 'rgb(19,57,41)', 'rgb(76,195,138)'] : score >= 3 ? ['Moderate', 'rgb(63,34,0)', 'rgb(255,203,71)'] : ['Low', 'rgb(174,25,85)', 'rgb(254,236,244)'];
-    const runner = ranked[1];
-    return {
-      evalGrade: { label: grade[0], bg: grade[1], fg: grade[2] },
-      evalSummary: `Strategy ${best.n} ranks first at ${best.pct}% of the weighted maximum succeeding in ${Math.round(best.pSuccess * 100)} of 100 runs across ${s.numSims} wargame runs${runner ? `, ahead of Strategy ${runner.n} (${runner.pct}%)` : ''}. It holds the top rank in ${stab}% of perturbed weightings and rests on ${deps.length} load-bearing assumption${deps.length === 1 ? '' : 's'}, ${weakDeps.length} of which ${weakDeps.length === 1 ? 'is' : 'are'} below threshold. ${openPirs.length} collection requirement${openPirs.length === 1 ? '' : 's'} remain open. Confidence in the recommendation is ${grade[0].toLowerCase()}.`,
-      evalStats: [
-        { label: 'Weighted score', value: `${best.pct}%`, note: `Rank #1 of ${ranked.length}`, color: 'var(--color-text)' },
-        { label: 'Rank stability', value: `${stab}%`, note: 'of perturbed weightings', color: stab >= 75 ? 'rgb(76,195,138)' : 'rgb(255,203,71)' },
-        { label: 'Thin evidence', value: `${weakDeps.length} / ${deps.length}`, note: 'load-bearing claims weak', color: weakDeps.length ? 'rgb(255,203,71)' : 'rgb(76,195,138)' },
-        { label: 'Open collection', value: String(openPirs.length), note: `${gapsPirs.length} untasked gap${gapsPirs.length === 1 ? '' : 's'}`, color: gapsPirs.length ? 'rgb(255,203,71)' : 'rgb(76,195,138)' },
-        { label: 'Worst propagation', value: `−${worstProp.drop} pts`, note: worstProp.i ? `if A${worstProp.i} fails` : 'no dependencies', color: worstProp.drop >= 10 ? 'rgb(255,120,120)' : 'rgb(255,203,71)' }
-      ],
-      evalGaps: deps.map(d => { const p = this.pirFor(d.i); const pl = p ? `PIR ${p.no || s.pirs.indexOf(p) + 1} (${['untasked', 'collecting', 'answered'][p.status]})` : 'no PIR assigned'; return `A${d.i} · ${d.a.conf}% ${this.A_STATUS[d.a.status][0].toLowerCase()}: ${d.a.text.split(/[,;—]/)[0].replace(/\.$/, '')}. Collection: ${pl}.`; }).concat(deps.length === 0 ? ['This strategy carries no load-bearing assumptions.'] : []),
-      evalRisks: [
-        `Mission (${best.rm}): about ${Math.round((1 - best.pSuccess) * 100)} in 100 runs the strategy does not reach the end state on time. ${best.rm === 'Low' || best.rm === 'Moderate' ? 'Acceptable for planning.' : 'The commander should expect to adjust the plan mid-execution.'}`,
-        `Personnel (${best.rp}): in the worst 10 percent of runs the force loses about ${best.cas.toFixed(1)} percent of committed personnel. ${best.rp === 'Low' || best.rp === 'Moderate' ? 'Within expected combat losses.' : 'Medical, replacement and casualty-notification capacity must be checked before execution.'}`,
-        `Escalation (${best.re}): ${Math.round(best.pEsc * 100)} in 100 runs the adversary widens the fight, and ${Math.round(best.pMajor * 100)} in 100 it spreads beyond the theater. ${best.re === 'Low' || best.re === 'Moderate' ? 'Manageable with existing strike approval rules.' : 'Strike authorities and de-escalation channels need SecDef and NAC attention before D-Day.'}`,
-        `Adversary behavior: if the adversary is aggressive rather than restrained, the chance of success drops from ${sw.lo} to ${sw.hi} in 100. The plan should not depend on the adversary holding back.`,
-        ...gapsPirs.map(p => `Untasked PIR ${p.no || s.pirs.indexOf(p) + 1}: nobody is collecting against "${p.q.replace(/\?.*$/, '')}". Until it is tasked the staff is guessing at this question, and any assumption that leans on it (${this.assumptionsForPir(p).map(i => 'A' + i).join(', ') || 'none linked'}) stays unverified.`)
-      ],
-      evalConditions: [worstProp.i ? `Validate A${worstProp.i} before C-Day; its failure costs Strategy ${best.n} ${worstProp.drop} points of success probability.` : 'No single assumption failure degrades the option materially.', openPirs.length ? `Close ${openPirs.length} open collection requirement${openPirs.length === 1 ? '' : 's'} to narrow outcome distributions before execution.` : 'Collection complete; outcome distributions at minimum width.', `Decision points DP1–DP3 in the wargame ARC table define branch triggers${runner ? `; Strategy ${runner.n} is the ready alternative` : ''}.`, best.re === 'Significant' || best.re === 'High' ? 'Escalation risk requires SecDef-level review of targets and STRATCOM deterrence messaging.' : 'Escalation risk within theater tolerance; maintain STRATCOM signaling.']
-    };
-  }
+
   decide(status) {
-    const rk = this.ranked(); const ch = rk.find(r => r.n === (this.state.chosen ?? rk[0]?.n)) || rk[0]; if (!ch) return;
-    this.setState({ decision: { status, n: ch.n, title: ch.title, risk: `Mission ${ch.rm} · Personnel ${ch.rp} · Escalation ${ch.re}`, time: new Date().toLocaleString(), note: this.state.decisionNote, hasNote: !!this.state.decisionNote } });
+    const rk = ((this.state.rank || {}).ranked) || [];
+    const ch = rk.find(r => r.number === this.state.chosen) || rk[0]; if (!ch) return;
+    const levels = (ch.criteria || []).map(c => `${c.label} ${c.level_label}`).join(' · ');
+    this.setState({ decision: { status, n: ch.number, title: ch.title, risk: levels, time: new Date().toLocaleString(), note: this.state.decisionNote, hasNote: !!this.state.decisionNote } });
   }
 
   renderVals() {
     const s = this.state, T = this.THREATS[s.threat];
+    const B = window.BRANDING || {};
     const on = ['var(--color-accent)', 'var(--color-accent)', '#fff'], off = ['var(--color-divider)', 'transparent', 'var(--color-text)'];
     const navItem = (id, label, view) => ({ label, go: () => this.go(view), opacity: 1, border: s.view === view ? 'rgb(30,41,59)' : 'transparent', dot: s.view === view ? 'var(--color-accent-700)' : 'transparent' });
-    const docSel = s.planDocs[s.planSel]; const docTitle = docSel ? docSel.name.replace(/\.(docx|pdf|txt|md)$/i, '').replace(/\s+[—–-]\s+.*$/, '').trim() : ''; const planLabel = docTitle || `${s.ccmd} ${{ OPORD: 'OPORD', CCP: 'CCP', CON: 'CONPLAN', GCP: 'GCP', FCP: 'FCP' }[s.planType]}`;
-    const stage = s.view === 'coa' ? (s.step === 3 ? 3 : s.step === 5 ? 4 : (s.step === 1 && s.inputTab !== 'strategy') ? 5 : 1) : s.view === 'collection' ? 2 : 0; const tog = k => () => this.setState({ details: { ...s.details, [k]: !s.details[k] } });
-    const isWeak = a => a.conf < 70 || a.status !== 0 || /expire/i.test(a.valid || '');
-    const coasNow = s.coas.length ? s.coas : this.buildCoas();
-    const ranked = this.ranked();
-    const results = s.results ? s.results.map(r => ({ ...r, sims: s.numSims, select: () => this.setState({ sel: r.n - 1 }),
-      outline: s.sel === r.n - 1 ? '2px solid var(--color-accent)' : 'none',
-      pSuccess: Math.round(r.pSuccess * 100), pEsc: Math.round(r.pEsc * 100), pMajor: Math.round(r.pMajor * 100), cas: r.cas.toFixed(1),
-      risks: [['Risk to mission', r.rm], ['Risk to personnel', r.rp], ['Risk of escalation', r.re]].map(([label, level]) => ({ label, level, bg: this.riskColor(level)[0], fg: this.riskColor(level)[1] })), mitigations: this.mitigations(r, coasNow.find(c => c.n === r.n) || {}) })) : [];
-    const cell = (level, detail) => ({ level, detail, bg: this.riskColor(level)[0], fg: this.riskColor(level)[1] });
-    const crit = [['mission', 'Risk to mission', r => cell(r.rm, `fails ${Math.round((1 - r.pSuccess) * 100)} in 100`)], ['personnel', 'Risk to personnel', r => cell(r.rp, `worst case ${r.cas.toFixed(1)}% casualties`)], ['escalation', 'Risk of escalation', r => cell(r.re, `escalates ${Math.round(r.pEsc * 100)} in 100`)], ['time', 'Time to end state', r => cell(r.rt, `${r.days} days`)], ['resources', 'Force demand vs GFM', r => cell(r.rr, `${r.res}% of allocated`)]];
-    const best = ranked[0]; const worstRisk = best ? [['mission', best.rm], ['personnel', best.rp], ['escalation', best.re]].sort((a, b) => this.score(a[1]) - this.score(b[1]))[0] : null;
-    const sel = s.results ? s.results[s.sel] || s.results[0] : null;
-    const chosenR = ranked.find(r => r.n === s.chosen) || best || {};
-    const statusMap = { 0: ['Gap', 'rgb(174,25,85)', 'rgb(254,236,244)'], 1: ['Collecting', 'rgb(130,78,0)', 'rgb(254,243,221)'], 2: ['Answered', 'rgb(35,110,74)', 'rgb(229,251,235)'] };
-    const rfiColor = { Open: ['rgb(174,25,85)', 'rgb(254,236,244)'], Pending: ['rgb(130,78,0)', 'rgb(254,243,221)'], Answered: ['rgb(35,110,74)', 'rgb(229,251,235)'] };
+    const docSel = s.planDocs[s.planSel]; const docTitle = docSel ? docSel.name.replace(/\.(docx|pdf|txt|md)$/i, '').replace(/\s+[—–-]\s+.*$/, '').trim() : '';
+    const stage = s.view === 'coa' ? (s.step === 3 ? 3 : s.step === 5 ? 4 : (s.step === 1 && s.inputTab !== 'strategy') ? 5 : 1) : s.view === 'collection' ? 2 : 0;
+    const tog = k => () => this.setState({ details: { ...s.details, [k]: !s.details[k] } });
     const set = k => e => this.setState({ [k]: e.target.value });
-    const defaultWorld = s.threat === 'RUS'
-      ? `Scenario: ${this.SCENARIOS[s.scenario].label}. USEUCOM is the supported combatant command for Operation AMBER SHIELD; the NAC invoked Article 5 on 06 SEP 2026. On 05 SEP Russian 6th CAA elements seized the Narva crossings and Ida-Viru County; 76th GAAD and Spetsnaz hold blocking positions in eastern Latgale. 11th Army Corps (Kaliningrad) and Belarus-based forces threaten the Suwałki corridor but have not crossed. Iskander-M readiness announced; Northern Fleet SSBN surge. C-Day 10 SEP 2026; D-Day on order, notionally C+30. Autumn weather degrades aviation and ISR; bogs canalize armor onto roads.`
-      : `Scenario: ${this.SCENARIOS[s.scenario].label}. ${s.ccmd} is supporting a ${planLabel.toLowerCase()} against ${T.label}. ${T.desc} Indications from the last 72 hours show force concentration and readiness increases consistent with the JIPOE most-likely COA. Allied posture is defensive; civilian shipping remains in the area. Weather window favorable for the next 10 days.`;
+
+    // ────────────────────────────────────────────────── what the API returned
+    const env = s.opts || {};
+    const optionList = env.options || [];
+    const rankEnv = s.rank || {};
+    const rankedRows = rankEnv.ranked || [];
+    const excluded = rankEnv.excluded || [];
+    const stab = rankEnv.weight_stability || null;
+    const risksEnv = s.risks || {};
+    const requirements = (s.collection || {}).requirements || [];
+    const rankOf = id => rankedRows.find(r => r.strategy_id === id) || null;
+    const excludedOf = id => excluded.find(r => r.strategy_id === id) || null;
+    const distOptions = (s.dist && s.dist.options) || [];
+    const distOf = id => distOptions.find(o => o.strategy_id === id) || null;
+    const hasOptions = optionList.length > 0 && !s.apiError;
+    const planLabel = docTitle || env.scenario_name || 'No scenario loaded';
+
+    // The one string the UI is allowed to print for a quantity this model does not
+    // produce. It is never replaced by a plausible-looking number.
+    const NA = 'Unavailable';
+    const f3 = x => (x === null || x === undefined) ? NA : Number(x).toFixed(3);
+    const f2 = x => (x === null || x === undefined) ? NA : Number(x).toFixed(2);
+    const pctOf = x => (x === null || x === undefined) ? null : Math.round(x * 100);
+    const pctStr = x => (x === null || x === undefined) ? NA : Math.round(x * 100) + '%';
+    const LEVEL = { low: 'Low', moderate: 'Moderate', significant: 'Significant', high: 'High' };
+    const lvColor = lv => this.riskColor(LEVEL[lv]) || ['rgb(30,41,59)', 'var(--color-neutral-700)'];
+    const lvLabel = lv => LEVEL[lv] || (lv ? String(lv) : NA);
+
+    // Assumption statuses are the evaluator's words, not a 0/1/2 the UI invented.
+    const ASTAT = {
+      holds: ['Holds', 'rgb(19,57,41)', 'rgb(76,195,138)'],
+      stale: ['Stale', 'rgb(63,34,0)', 'rgb(255,203,71)'],
+      violated: ['Violated', 'rgb(174,25,85)', 'rgb(254,236,244)'],
+      unsupported: ['Unsupported', 'rgb(174,25,85)', 'rgb(254,236,244)'],
+      unknown: ['Unknown', 'rgb(63,34,0)', 'rgb(255,203,71)']
+    };
+    const aStat = st => ASTAT[st] || [String(st || 'unknown'), 'rgb(30,41,59)', 'var(--color-neutral-700)'];
+    const isWeakA = a => a.status !== 'holds' || (a.p_holds != null && a.p_holds < 0.7);
+
+    // One row per distinct evaluated assumption, numbered in first-seen order, with
+    // the options that depend on it.
+    const byId = new Map();
+    optionList.forEach(o => (o.assumptions || []).forEach(a => {
+      const e = byId.get(a.assumption_id);
+      if (!e) { byId.set(a.assumption_id, { ...a, n: byId.size + 1, options: [o.number] }); return; }
+      e.options.push(o.number);
+      if (Math.abs(a.sensitivity || 0) > Math.abs(e.sensitivity || 0)) { e.sensitivity = a.sensitivity; e.evpi = a.evpi; }
+    }));
+    const evaluated = Array.from(byId.values());
+    const weakEval = evaluated.filter(isWeakA);
+
+    // An uploaded plan keeps its own wording. Where a document sentence clearly
+    // restates an evaluated assumption, the document's words are shown and every
+    // number still comes from the API row.
+    const docAssumptionTexts = ((docSel && docSel.assumptions) || []).filter(t => typeof t === 'string' && !t.startsWith('No explicit'));
+    const wordSet = t => new Set(String(t || '').toLowerCase().match(/[a-zà-ÿ]{5,}/g) || []);
+    const wordingFor = statement => {
+      if (!docAssumptionTexts.length) return null;
+      const target = wordSet(statement); if (!target.size) return null;
+      let best = null, bestScore = 0;
+      docAssumptionTexts.forEach(d => {
+        const ws = wordSet(d); let hit = 0;
+        target.forEach(w => { if (ws.has(w)) hit++; });
+        const sc = hit / target.size;
+        if (sc > bestScore) { bestScore = sc; best = d; }
+      });
+      return bestScore >= 0.4 ? best : null;
+    };
+    const textOf = a => wordingFor(a.statement) || a.statement;
+
+    const critKeys = ['mission', 'personnel', 'escalation', 'time', 'resources'];
+    const critOf = (o, k) => (o.criteria || []).find(c => c.key === k) || null;
+    const critLabel = k => {
+      for (const o of optionList) { const c = critOf(o, k); if (c) return c.label; }
+      return k;
+    };
+
+    // ───────────────────────────────────────────── step 2 · the option cards
+    const coas = optionList.map(o => ({
+      n: o.number, title: o.title, approach: o.approach, concept: o.concept, tasks: o.tasks || [],
+      // Days to end state, force demand as a percentage of allocation, and a count
+      // of decision points are not quantities this model produces.
+      days: NA, res: NA, dps: NA,
+      valueLine: `Expected value ${f3(o.expected_value)} · aspiration w·τ ${f3(o.aspiration)} · robustness ${f3(o.robustness)}`,
+      rangeLine: `Adversary-scenario range ${f3(o.adversary_range && o.adversary_range.min)} – ${f3(o.adversary_range && o.adversary_range.max)}`,
+      screen: (o.validity || []).map(v => ({
+        label: v.test.charAt(0).toUpperCase() + v.test.slice(1),
+        evidence: v.evidence,
+        bg: v.passed ? 'rgb(19,57,41)' : 'rgb(174,25,85)',
+        fg: v.passed ? 'rgb(76,195,138)' : 'rgb(254,236,244)'
+      })),
+      invalid: o.status !== 'valid',
+      gateLine: o.status !== 'valid'
+        ? `Invalid — failed the JP 5-0 ${(o.gates_failed && o.gates_failed.length ? o.gates_failed : [o.gate_failed]).filter(Boolean).join(' and ')} test. It stays on screen and cannot be recommended.`
+        : ''
+    }));
+
+    // ─────────────────────── step 3 · the enumerated outcome distribution cards
+    const results = optionList.map(o => {
+      const d = distOf(o.strategy_id);
+      const bins = (d && d.bins) || [];
+      const maxMass = bins.reduce((m, b) => Math.max(m, b.mass || 0), 0) || 1;
+      const asp = d ? d.aspiration : null;
+      return {
+        n: o.number, title: o.title,
+        select: () => this.setState({ sel: o.number - 1 }),
+        outline: s.sel === o.number - 1 ? '2px solid var(--color-accent)' : 'none',
+        worlds: d ? `${d.assumption_worlds} assumption worlds × ${d.adversary_coas} adversary COAs` : NA,
+        bins: bins.map(b => ({
+          h: Math.max(2, Math.round((b.mass || 0) / maxMass * 100)),
+          bg: (asp != null && b.lower >= asp) ? 'var(--color-accent-700)' : 'var(--color-accent-300)',
+          tip: `${f2(b.lower)}–${f2(b.upper)}: probability mass ${f3(b.mass)}`
+        })),
+        aspirationPct: d ? pctStr(d.p_meets_aspiration) : NA,
+        meanLine: d ? `mean ${f3(d.mean_outcome)} · sd ${f3(d.std_dev)}` : NA,
+        casualties: NA,
+        range: `${f3(o.adversary_range && o.adversary_range.min)} – ${f3(o.adversary_range && o.adversary_range.max)}`,
+        risks: (o.criteria || []).map(c => ({ label: c.label, level: c.level_label, bg: lvColor(c.level)[0], fg: lvColor(c.level)[1] })),
+        assumptions: (o.assumptions || []).map(a => {
+          const st = aStat(a.status);
+          return { n: (byId.get(a.assumption_id) || {}).n, text: textOf(a), tag: st[0], fg: st[2],
+            stats: `p(holds) ${f3(a.p_holds)} · sensitivity ${f3(a.sensitivity)} · EVPI ${f3(a.evpi)}` };
+        })
+      };
+    });
+
+    // ────────────────────────────────── step 4 · the criterion comparison table
+    const matrix = critKeys.map(k => ({
+      label: critLabel(k),
+      weight: s.weights[k],
+      setWeight: e => this.setWeight(k, +e.target.value),
+      cells: optionList.map(o => {
+        const c = critOf(o, k);
+        if (!c) return { level: NA, detail: 'the model does not measure this criterion for this option', bg: 'rgb(30,41,59)', fg: 'var(--color-neutral-700)' };
+        return { level: c.level_label, detail: `E[u] ${f3(c.expected_value)} · shortfall ${f3(c.shortfall)} · ${c.score} × w${c.weight} = ${c.contribution}`, bg: lvColor(c.level)[0], fg: lvColor(c.level)[1] };
+      })
+    }));
+
+    // One cell per option column, in the same order as the header row: a valid
+    // option shows its weighted total and rank; an invalid one names its gate.
+    const scoreRow = optionList.map(o => {
+      const r = rankOf(o.strategy_id), x = excludedOf(o.strategy_id);
+      if (r) return { pct: r.weighted_pct + '%', note: `Rank #${r.rank} · ${r.weighted_total} / ${rankEnv.weighted_max}` };
+      return { pct: 'Not ranked', note: x ? `failed the JP 5-0 ${x.gate_failed} test` : 'not in the ranking' };
+    });
+
+    const bestRow = rankedRows[0] || null;
+    const runnerRow = rankedRows[1] || null;
+    const chosenNumber = s.chosen != null ? s.chosen : (bestRow ? bestRow.number : null);
+    const ranked = rankedRows.map(r => ({
+      n: r.number, rank: r.rank, title: r.title, pct: r.weighted_pct,
+      score: `${r.weighted_total} / ${rankEnv.weighted_max}`,
+      riskLine: (r.criteria || []).map(c => `${c.label} ${c.level_label}`).join(' · '),
+      choose: () => this.setState({ chosen: r.number }),
+      chooseBg: chosenNumber === r.number ? 'color-mix(in srgb,var(--color-accent) 8%,transparent)' : 'transparent',
+      chooseBorder: chosenNumber === r.number ? 'var(--color-accent)' : 'var(--color-divider)'
+    }));
+    const chosenR = ranked.find(r => r.n === chosenNumber) || ranked[0] || {};
+
+    const explain = bestRow ? critKeys.map(k => {
+      const b = (bestRow.criteria || []).find(c => c.key === k) || {};
+      const r = runnerRow ? ((runnerRow.criteria || []).find(c => c.key === k) || {}) : {};
+      const mx = Math.max(1, (b.weight || 0) * 4);
+      const d = (b.contribution || 0) - (r.contribution || 0);
+      return { label: b.label || critLabel(k), bestW: Math.round((b.contribution || 0) / mx * 50), otherW: Math.round((r.contribution || 0) / mx * 50), delta: (d > 0 ? '+' : '') + d, color: d > 0 ? 'rgb(76,195,138)' : d < 0 ? 'rgb(255,120,120)' : 'var(--color-neutral-600)' };
+    }) : [];
+    const gains = explain.filter(x => x.delta.startsWith('+')).map(x => x.label.toLowerCase());
+    const losses = explain.filter(x => x.delta.startsWith('-')).map(x => x.label.toLowerCase());
+    const explainText = bestRow && runnerRow
+      ? `Strategy ${bestRow.number} leads Strategy ${runnerRow.number} by ${bestRow.weighted_total - runnerRow.weighted_total} weighted points (${bestRow.weighted_total} vs ${runnerRow.weighted_total} of ${rankEnv.weighted_max}). The margin comes from ${gains.length ? gains.join(', ') : 'no single criterion'}${losses.length ? '; it gives ground on ' + losses.join(', ') : ''}. Each bar is the criterion contribution the backend computed: JRAM score × weight.`
+      : (bestRow ? `Strategy ${bestRow.number} is the only ranked option under this weighting.` : '');
+
+    const stabPct = stab ? Math.round(stab.fraction_top * 100) : null;
+    const stability = stab ? (stab.per_option || []).map(x => ({ n: x.number, pct: Math.round(x.fraction_top * 100), bg: x.strategy_id === stab.top_option_id ? 'var(--color-accent)' : 'rgb(100,116,139)' })) : [];
+    const stabilityText = stab
+      ? `Strategy ${(stab.per_option[0] || {}).number} ranks first in ${stabPct}% of the ${stab.weightings_evaluated} weightings the backend enumerated. ${stab.method}`
+      : '';
+    const stabilityLabel = stab ? `Rank stability · ${stab.weightings_evaluated} weightings enumerated by /api/options/rank` : 'Rank stability';
+
+    const tornadoTop = row => (row && row.top) ? row.top.number : null;
+    const tornado = critKeys.map(k => {
+      const lo = (s.tornado || []).find(x => x.key === k && x.d === -2);
+      const hi = (s.tornado || []).find(x => x.key === k && x.d === 2);
+      const flip = n => (bestRow && n === bestRow.number) ? ['rgb(19,57,41)', 'rgb(76,195,138)'] : ['rgb(174,25,85)', 'rgb(254,236,244)'];
+      const loN = tornadoTop(lo), hiN = tornadoTop(hi);
+      return { label: critLabel(k), lo: loN == null ? '…' : loN, hi: hiN == null ? '…' : hiN,
+        loBg: loN == null ? 'rgb(30,41,59)' : flip(loN)[0], loFg: loN == null ? 'var(--color-neutral-700)' : flip(loN)[1],
+        hiBg: hiN == null ? 'rgb(30,41,59)' : flip(hiN)[0], hiFg: hiN == null ? 'var(--color-neutral-700)' : flip(hiN)[1] };
+    });
+
+    // The adversary axis this model actually has: min / expected / max across the
+    // adversary COAs in the opponent model. Never a confidence interval.
+    const sweep = optionList.map(o => ({ n: o.number, lo: f3(o.adversary_range && o.adversary_range.min), mid: f3(o.expected_value), hi: f3(o.adversary_range && o.adversary_range.max) }));
+    const sweepText = optionList.length ? ((optionList[0].adversary_range || {}).basis || '') : '';
+
+    const assumptionRisk = evaluated.slice().sort((a, b) => (a.p_holds || 0) - (b.p_holds || 0)).map(a => {
+      const st = aStat(a.status);
+      return { n: a.n, text: textOf(a), conf: pctOf(a.p_holds), status: st[0], bg: st[1], fg: st[2] };
+    });
+    const topSens = evaluated.slice().sort((a, b) => Math.abs(b.sensitivity || 0) - Math.abs(a.sensitivity || 0))[0] || null;
+    const assumptionText = evaluated.length
+      ? `${weakEval.length} of ${evaluated.length} evaluated assumptions are stale, violated or below p(holds) 0.70. The largest single sensitivity is A${topSens ? topSens.n : '-'} at ${f3(topSens && topSens.sensitivity)}, with EVPI ${f3(topSens && topSens.evpi)}; sensitivity and EVPI are the backend's, computed over the enumerated assumption worlds.`
+      : '';
+
+    // ───────────────────────────── step 3 · what-if, from /api/options/what-if
+    const wi = s.whatIf;
+    const wiAssumption = wi ? wi.assumption : null;
+    const propagation = wi ? (wi.options || []).map(o => {
+      const d = o.delta_conditioned;
+      const shift = o.status_changed
+        ? `${o.status_before} → ${o.status_after_withdrawn}${(o.gates_failed_after_withdrawn || []).length ? ' · fails ' + o.gates_failed_after_withdrawn.join(', ') : ''}`
+        : 'Status unchanged';
+      return { n: o.number, title: o.title, delta: `${d > 0 ? '+' : ''}${f3(d)} value`, before: f3(o.value_before), after: f3(o.value_after_conditioned),
+        color: d <= -0.02 ? 'rgb(255,120,120)' : d < 0 ? 'rgb(255,203,71)' : 'var(--color-neutral-600)', riskShift: shift };
+    }) : [];
+    const problemSets = wi ? (wi.problem_sets_moved || []).map(m => ({
+      label: `${m.name} · ${m.jsps_horizon}-term`, hop: `${lvLabel(m.level_before)} → ${lvLabel(m.level_after)}`,
+      w: 60, bg: lvColor(m.level_after)[1]
+    })) : [];
+    const harmfulMoved = wi ? (wi.harmful_events_moved || []).map(m => ({
+      label: m.statement, horizon: `${m.jsps_horizon}-term`,
+      move: `${lvLabel(m.level_before)} → ${lvLabel(m.level_after)}`, p: `p ${f2(m.p_before)} → ${f2(m.p_after)}`
+    })) : [];
+    const statusChanges = wi ? (wi.status_changes || []).map(c => `${c.strategy_id}: ${c.from} → ${c.to}${(c.gates_failed_after || []).length ? ' (fails ' + c.gates_failed_after.join(', ') + ')' : ''}`) : [];
+    const propagationText = wi
+      ? `Ranking before ${(wi.ranking_before || []).join(' > ') || '—'}; conditioned on the assumption failing ${(wi.ranking_after_conditioned || []).join(' > ') || '—'}; with its evidence withdrawn ${(wi.ranking_after_withdrawn || []).join(' > ') || '—'}. ${(wi.harmful_events_moved || []).length} harmful event rows and ${(wi.problem_sets_moved || []).length} problem-set rows move.`
+      : '';
+
+    // ─────────────────────────────────────── stage 3 · the risk graph (/api/risks)
+    const nearest = rows => (rows || []).find(x => x.jsps_horizon === 'near') || (rows || [])[0] || null;
+    const driverText = d => (d && (d.driver_id || d.id || d.name || d.statement)) || String(d);
+    const riskProblemSets = (risksEnv.problem_sets || []).map(ps => {
+      const h = nearest(ps.horizons);
+      return { label: ps.name, level: h ? lvLabel(h.max_risk_level) : NA, horizon: h ? `${h.jsps_horizon}-term` : NA,
+        bg: h ? lvColor(h.max_risk_level)[0] : 'rgb(30,41,59)', fg: h ? lvColor(h.max_risk_level)[1] : 'var(--color-neutral-700)',
+        owner: ps.risk_owner_role || NA, tolerance: ps.tolerance_statement || NA,
+        value: (ps.thing_of_value_names || []).join(', ') || NA };
+    });
+    const riskEvents = (risksEnv.harmful_events || []).map(he => {
+      const h = nearest(he.horizons);
+      const drivers = (h && h.active_drivers) || [];
+      return { statement: he.statement, set: he.problem_set_name, type: he.risk_type,
+        level: h ? lvLabel(h.risk_level) : NA, bg: h ? lvColor(h.risk_level)[0] : 'rgb(30,41,59)', fg: h ? lvColor(h.risk_level)[1] : 'var(--color-neutral-700)',
+        p: h ? `${h.p_level} · p ${f2(h.p_raw)}` : NA, consequence: h ? h.c_level : NA, trend: h ? h.trend : NA,
+        drivers: drivers.length ? drivers.map(driverText).join(', ') : 'no driver active at this horizon' };
+    });
+    const cascade = (risksEnv.escalation_edges || []).map(e => ({ from: e.from_statement, to: e.to_statement, lift: `lift ${f2(e.lift)}`, mechanism: e.mechanism || NA }));
+
+    // ────────────────────────────── stage 2 · collection (/api/collection + drafts)
+    const REQ_STATUS = {
+      research: ['Research', 'rgb(130,78,0)', 'rgb(254,243,221)'],
+      validation: ['Validation', 'rgb(63,34,0)', 'rgb(255,203,71)'],
+      submission: ['Submission', 'rgb(16,42,76)', 'rgb(147,197,253)'],
+      satisfaction: ['Satisfied', 'rgb(35,110,74)', 'rgb(229,251,235)'],
+      closed: ['Closed', 'rgb(35,110,74)', 'rgb(229,251,235)']
+    };
+    const reqStat = st => REQ_STATUS[st] || [String(st || 'unknown'), 'rgb(30,41,59)', 'var(--color-neutral-700)'];
+    const basisText = b => {
+      if (!b) return 'priority basis not supplied';
+      if (b.basis === 'evpi') return `priority basis: EVPI ${f3(b.evpi)} on ${b.assumption_id}`;
+      return `priority basis: ${b.basis} — claim ${b.claim_id || '—'}, confidence ${f2(b.confidence)}, degree ${b.degree}`;
+    };
+    const apiPirs = requirements.map(r => {
+      const st = reqStat(r.status);
+      const linked = r.assumption ? byId.get(r.assumption.assumption_id) : null;
+      return {
+        n: r.jipcl_rank, q: r.pir_statement || r.sir || r.req_id,
+        ind: r.indicators || [], assets: (r.candidate_assets || []).map(a => (a && (a.name || a.asset_id)) || String(a)),
+        status: st[0], bg: st[1], fg: st[2],
+        meta: `${r.req_id} · gap ${r.gap_type} · LTIOV ${r.ltiov || 'not set'} · routed to ${r.routing || 'unrouted'} · ${basisText(r.priority_basis)}`,
+        tied: linked ? ` · validates A${linked.n}` : '',
+        isLocal: false, cycleLabel: '', cycle: () => {}, remove: () => {}
+      };
+    });
+    const draftPirs = s.pirs.map((p, i) => ({
+      n: `D${i + 1}`, q: p.q, ind: p.ind || [], assets: p.assets || [],
+      status: ['Gap', 'Collecting', 'Answered'][p.status] || 'Gap',
+      bg: [['rgb(174,25,85)'], ['rgb(130,78,0)'], ['rgb(35,110,74)']][p.status || 0][0],
+      fg: ['rgb(254,236,244)', 'rgb(254,243,221)', 'rgb(229,251,235)'][p.status || 0],
+      meta: `Local draft — not submitted to the backend · LTIOV ${p.ltiov || 'TBD'}`,
+      tied: p.assumption ? ` · drafted against ${p.assumption}` : '',
+      isLocal: true, cycleLabel: p.status === 2 ? 'Reset' : p.status === 1 ? 'Collection returned' : 'Task assets',
+      cycle: () => this.setState({ pirs: s.pirs.map((x, j) => j === i ? { ...x, status: ((x.status || 0) + 1) % 3 } : x) }),
+      remove: () => this.setState({ pirs: s.pirs.filter((_, j) => j !== i) })
+    }));
+    const pirs = apiPirs.concat(draftPirs);
+    const openReqs = requirements.filter(r => !['satisfaction', 'closed'].includes(r.status)).length;
+    const pirSummary = requirements.length
+      ? `${requirements.length} requirements from /api/collection · ${openReqs} open · ${draftPirs.length} local draft${draftPirs.length === 1 ? '' : 's'}`
+      : (s.apiError ? 'Requirements unavailable — the API did not answer' : 'Loading requirements…');
+
+    const requirementFor = a => requirements.find(r => r.assumption && r.assumption.assumption_id === a.assumption_id) || null;
+    const draftFor = a => s.pirs.findIndex(p => p.assumption === a.assumption_id);
+    const draftOne = a => this.setState({ pirs: [...this.state.pirs, { q: 'Validate: ' + textOf(a), ind: ['Indicators to be defined by J2'], assets: ['Unassigned'], ltiov: 'TBD', status: 0, assumption: a.assumption_id }] });
+    const weakList = weakEval.map(a => {
+      const st = aStat(a.status);
+      const req = requirementFor(a); const di = draftFor(a);
+      return {
+        n: a.n, text: textOf(a),
+        link: `${a.subject_name || a.subject_id || 'unlinked'} · ${a.predicate || '—'}`,
+        valid: `sensitivity ${f3(a.sensitivity)} · EVPI ${f3(a.evpi)}`,
+        conf: pctOf(a.p_holds), status: st[0], bg: st[1], fg: st[2],
+        bearing: a.options.map(n => 'Strategy ' + n).join(', ') || 'no option',
+        hasCr: !!req || di >= 0, noCr: !req && di < 0,
+        crLabel: req ? `${req.req_id} · ${reqStat(req.status)[0]}` : (di >= 0 ? `Local draft D${di + 1}` : ''),
+        draft: () => draftOne(a)
+      };
+    });
+
+    // ─────────────────────────────────── step 1 · the assumption tracker
+    const trackerApi = evaluated.map(a => {
+      const st = aStat(a.status); const doc = wordingFor(a.statement);
+      return { n: a.n, text: doc || a.statement, conf: pctOf(a.p_holds), status: st[0], bg: st[1], fg: st[2],
+        link: doc ? `Wording from ${docSel.name}; evaluated as ${a.assumption_id}` : `${a.assumption_id} · ${a.subject_name || a.subject_id || 'unlinked'} · ${a.predicate || '—'}`,
+        stats: `p(holds) ${f3(a.p_holds)} · sensitivity ${f3(a.sensitivity)} · EVPI ${f3(a.evpi)} · load-bearing for ${a.options.map(n => 'Strategy ' + n).join(', ')}`,
+        isLocal: false, remove: () => {} };
+    });
+    const trackerLocal = s.assumptions.map((a, i) => ({
+      n: evaluated.length + i + 1, text: a.text, conf: null, status: 'Local draft', bg: 'rgb(30,41,59)', fg: 'var(--color-neutral-700)',
+      link: a.link ? 'Local draft · ' + a.link : 'Local draft',
+      stats: 'Local draft — typed into this session and not evaluated by the model.',
+      isLocal: true, remove: () => this.setState({ assumptions: s.assumptions.filter((_, j) => j !== i) })
+    }));
+    const trackerRows = trackerApi.concat(trackerLocal);
+    const assumptionSummary = evaluated.length
+      ? `${evaluated.filter(a => a.status === 'holds').length} hold · ${evaluated.filter(a => a.status !== 'holds').length} not holding · ${weakEval.length} below p(holds) 0.70 or not holding · ${trackerLocal.length} local draft${trackerLocal.length === 1 ? '' : 's'}`
+      : (s.apiError ? 'Assumptions unavailable — the API did not answer' : 'Loading assumptions…');
+
+    // ───────────────────────────────── step 4 · where the analysis stands
+    const evidence = optionList.map(o => {
+      const r = rankOf(o.strategy_id), x = excludedOf(o.strategy_id);
+      const deps = (o.assumptions || []).map(a => {
+        const st = aStat(a.status); const u = byId.get(a.assumption_id) || {};
+        return { n: u.n, short: textOf(a).slice(0, 78), conf: pctStr(a.p_holds), status: st[0], bg: st[1], fg: st[2] };
+      });
+      const weak = (o.assumptions || []).filter(isWeakA);
+      return {
+        n: o.number, title: o.title, deps,
+        rank: r ? `Rank #${r.rank}` : 'Not ranked',
+        border: r && r.rank === 1 ? 'var(--color-accent)' : 'var(--color-divider)',
+        verdict: x
+          ? `Invalid — failed the JP 5-0 ${x.gate_failed} test. ${x.reason}`
+          : (weak.length ? `Stands on thin evidence: ${weak.map(a => 'A' + (byId.get(a.assumption_id) || {}).n).join(', ')} ${weak.length === 1 ? 'is' : 'are'} stale, violated or below p(holds) 0.70.` : 'Every load-bearing assumption holds at p ≥ 0.70.'),
+        verdictColor: x ? 'rgb(255,120,120)' : (weak.length ? 'rgb(255,203,71)' : 'rgb(76,195,138)')
+      };
+    });
+
+    const bestOption = bestRow ? optionList.find(o => o.strategy_id === bestRow.strategy_id) : null;
+    const worstCrit = bestRow ? (bestRow.criteria || []).slice().sort((a, b) => a.score - b.score)[0] : null;
+    const best = bestRow ? {
+      n: bestRow.number, title: bestRow.title,
+      reason: `Highest weighted total among the valid options: ${bestRow.weighted_total} of ${rankEnv.weighted_max} (${bestRow.weighted_pct}%) under weights ${critKeys.map(k => k + ' ' + s.weights[k]).join(', ')}. Expected value ${f3(bestRow.expected_value)} against an aspiration of ${f3(bestOption && bestOption.aspiration)}. ${excluded.length} option${excluded.length === 1 ? '' : 's'} could not be ranked because ${excluded.length === 1 ? 'it' : 'they'} failed a JP 5-0 validity test.`,
+      riskAccepted: worstCrit ? `${worstCrit.level_label} on "${worstCrit.label}" is the governing criterion: E[u] ${f3(worstCrit.expected_value)}, shortfall ${f3(worstCrit.shortfall)}. ${env.level_basis || ''}` : ''
+    } : { n: '', title: '', reason: '', riskAccepted: '' };
+
+    const tradeoffs = hasOptions ? (() => {
+      const byValue = optionList.slice().sort((a, b) => b.expected_value - a.expected_value)[0];
+      const widest = optionList.slice().sort((a, b) => ((b.adversary_range || {}).max - (b.adversary_range || {}).min) - ((a.adversary_range || {}).max - (a.adversary_range || {}).min))[0];
+      const robust = optionList.slice().sort((a, b) => b.robustness - a.robustness)[0];
+      return [
+        `Highest expected value: Strategy ${byValue.number} at ${f3(byValue.expected_value)} against an aspiration of ${f3(byValue.aspiration)}.`,
+        `Widest adversary-scenario range: Strategy ${widest.number} at ${f3((widest.adversary_range || {}).min)} – ${f3((widest.adversary_range || {}).max)}. That is the spread of expected value across the adversary COAs in the opponent model.`,
+        `Most robust to the adversary's choice: Strategy ${robust.number} at ${f3(robust.robustness)}.`,
+        excluded.length ? `${excluded.map(x => 'Strategy ' + x.number).join(', ')} cannot be recommended: ${excluded.map(x => x.gate_failed).join(', ')} test failed.` : 'Every option passed all five JP 5-0 validity tests.'
+      ];
+    })() : [];
+
+    // ───────────────────────────────────────────────── step 5 · recommendation
+    const evalGrade = stab
+      ? { label: `${stabPct}% of ${stab.weightings_evaluated} weightings`, bg: stabPct >= 75 ? 'rgb(19,57,41)' : 'rgb(63,34,0)', fg: stabPct >= 75 ? 'rgb(76,195,138)' : 'rgb(255,203,71)' }
+      : { label: NA, bg: 'rgb(30,41,59)', fg: 'var(--color-neutral-700)' };
+    const evalSummary = bestRow
+      ? `Strategy ${bestRow.number} ranks first at ${bestRow.weighted_pct}% of the weighted maximum (${bestRow.weighted_total} / ${rankEnv.weighted_max})${runnerRow ? `, ahead of Strategy ${runnerRow.number} (${runnerRow.weighted_pct}%)` : ''}. It holds the top rank in ${stabPct}% of the ${stab ? stab.weightings_evaluated : '—'} weightings the backend enumerated. It rests on ${(bestOption && bestOption.assumptions || []).length} evaluated assumptions, ${(bestOption && bestOption.assumptions || []).filter(isWeakA).length} of which are stale, violated or below p(holds) 0.70. ${openReqs} collection requirement${openReqs === 1 ? '' : 's'} are open. ${env.caution || ''}`
+      : '';
+    const evalStats = bestRow ? [
+      { label: 'Weighted score', value: `${bestRow.weighted_pct}%`, note: `Rank #1 of ${rankedRows.length} valid options`, color: 'var(--color-text)' },
+      { label: 'Rank stability', value: stabPct == null ? NA : `${stabPct}%`, note: stab ? `of ${stab.weightings_evaluated} weightings enumerated` : '', color: stabPct >= 75 ? 'rgb(76,195,138)' : 'rgb(255,203,71)' },
+      { label: 'Thin evidence', value: `${(bestOption && bestOption.assumptions || []).filter(isWeakA).length} / ${(bestOption && bestOption.assumptions || []).length}`, note: 'load-bearing assumptions not holding at p ≥ 0.70', color: 'rgb(255,203,71)' },
+      { label: 'Open collection', value: String(openReqs), note: `of ${requirements.length} requirements in the JIPCL`, color: openReqs ? 'rgb(255,203,71)' : 'rgb(76,195,138)' },
+      { label: 'Highest sensitivity', value: f3(topSens && topSens.sensitivity), note: topSens ? `A${topSens.n} · EVPI ${f3(topSens.evpi)}` : NA, color: 'rgb(255,203,71)' }
+    ] : [];
+    const evalGaps = bestOption
+      ? ((bestOption.assumptions || []).filter(isWeakA).map(a => {
+          const u = byId.get(a.assumption_id) || {}; const req = requirementFor(a);
+          return `A${u.n} · ${aStat(a.status)[0].toLowerCase()}, p(holds) ${f3(a.p_holds)}, EVPI ${f3(a.evpi)}: ${textOf(a).slice(0, 140)}. Collection: ${req ? `${req.req_id} (${req.status})` : 'no requirement raised'}.`;
+        }).concat((bestOption.assumptions || []).filter(isWeakA).length ? [] : ['Every load-bearing assumption on this option holds at p ≥ 0.70.']))
+      : [];
+    const evalRisks = bestRow ? (bestRow.criteria || []).map(c =>
+      `${c.label} (${c.level_label}): E[u] ${f3(c.expected_value)}, shortfall ${f3(c.shortfall)}, scoring ${c.score} at weight ${c.weight}.`
+    ).concat(excluded.map(x => `Strategy ${x.number} is invalid and outside the ranking: ${x.reason}`)) : [];
+    const evalConditions = bestRow ? [
+      topSens ? `Validate A${topSens.n} first: it carries the largest sensitivity (${f3(topSens.sensitivity)}) and an EVPI of ${f3(topSens.evpi)}.` : 'No assumption carries a material sensitivity.',
+      openReqs ? `Close ${openReqs} open collection requirement${openReqs === 1 ? '' : 's'}; /api/collection ranks them by the JIPCL rule.` : 'No collection requirement is open.',
+      env.caution || '',
+      env.level_basis ? `Risk levels: ${env.level_basis}` : ''
+    ].filter(Boolean) : [];
+
+    const failToggles = evaluated.map(a => ({
+      label: `A${a.n} fails`, pick: () => this.pickAssumption(a.assumption_id),
+      border: s.whatIfId === a.assumption_id ? 'rgb(255,120,120)' : 'var(--color-divider)',
+      bg: s.whatIfId === a.assumption_id ? 'rgb(60,20,35)' : 'transparent'
+    }));
+
+    const selOption = optionList[s.sel] || optionList[0] || null;
+
+    const defaultWorld = env.scenario_name
+      ? `Scenario ${env.scenario_name} (${env.scenario}), batch ${env.batch}, evaluated as of ${env.as_of}. ${this.SCENARIOS[s.scenario].desc}`
+      : `Scenario: ${this.SCENARIOS[s.scenario].label}. ${s.ccmd} is supporting a plan against ${T.label}. ${T.desc}`;
+
     return {
+      brandMark: B.mark || '【Pytho】', brandTitle: B.title || 'Strategy Adjudicator', brandProduct: B.product || '',
       crumb: s.view === 'collection' ? 'Collection Management Agent' : s.view === 'doctrine' ? 'Doctrine' : s.step === 3 ? 'Predictive Interconnected Risk Engine' : s.step === 5 ? 'Option Recommendation' : s.step === 1 ? 'Inputs / ' + { strategy: 'Strategy', intel: 'Intelligence', docs: 'Plans & Guidance', posture: 'Force Posture' }[s.inputTab] : 'Strategy Option Evaluation',
       showWorkflow: s.view !== 'doctrine',
       isCoa: s.view === 'coa', isIntel: s.step === 1 && s.inputTab === 'intel', isCollection: s.view === 'collection', isRfi: s.view === 'collection', isPosture: s.step === 1 && s.inputTab === 'posture', isDoctrine: s.view === 'doctrine',
       inputStrategy: s.inputTab === 'strategy',
+
+      // ── API state. An error stops every numeric screen and prints the backend's
+      //    own code and message; nothing degrades to a locally computed number.
+      apiFailed: !!s.apiError, apiOk: !s.apiError, apiLoading: s.loading && !s.apiError,
+      apiError: s.apiError || {},
+      apiErrorCode: (s.apiError || {}).code || '', apiErrorMessage: (s.apiError || {}).message || '',
+      apiErrorPath: (s.apiError || {}).path || '', apiErrorLine: (s.apiError || {}).line || '',
+      retry: () => this.loadAll(),
+      caution: env.caution || '',
+      asOf: env.as_of || '', scenarioName: env.scenario_name || '', scenarioId: env.scenario || '', batchNo: env.batch != null ? String(env.batch) : '',
+      levelBasis: env.level_basis || '',
+      aspirationNote: (s.dist && s.dist.aspiration_basis) || 'probability across enumerated assumption worlds, not a real-world forecast',
+      binNote: (s.dist && s.dist.bin_note) || '',
+      modelShape: hasOptions ? `${optionList.length} options · ${rankedRows.length} ranked · ${excluded.length} invalid · ${evaluated.length} evaluated assumptions · evaluated as of ${env.as_of}` : '',
+
       inputTabs: [['Strategy', 'strategy'], ['Intelligence', 'intel'], ['Plans & Guidance', 'docs'], ['Force Posture', 'posture']].map(([label, t]) => ({ label, go: () => this.setState({ inputTab: t }), line: s.inputTab === t ? 'var(--color-accent)' : 'transparent', opacity: s.inputTab === t ? 1 : 0.65 })),
-      strategyName: (s.planDocs[s.planSel] || {}).name || 'No strategy loaded',
+      strategyName: (s.planDocs[s.planSel] || {}).name || 'No strategy document loaded',
       strategyMeta: s.planDocs[s.planSel] ? `${s.planDocs[s.planSel].words.toLocaleString()} words · ${s.planDocs[s.planSel].pages} pages · ${s.planDocs[s.planSel].status}${s.docBusy ? ' · ' + s.docBusy : ''}` : (s.docBusy || 'Parsed in your browser; mission, intent, end state and assumptions are pulled into the fields below'),
       strategyRisks: s.planDocs[s.planSel] ? this.planRisk(s.planDocs[s.planSel]).risks : [],
       planTypeDesc: (p => `${p.label} — ${p.desc}`)(this.PLAN_TYPES.find(x => x.id === s.planType)),
       scenarioLabel: this.SCENARIOS[s.scenario].label, showScenario: s.details.scenario, toggleScenario: tog('scenario'), scenarioToggle: s.details.scenario ? 'Hide details' : 'Edit scenario',
-      showArc: s.details.arc, toggleArc: tog('arc'), arcToggle: s.details.arc ? 'Hide log' : 'Show log',
-      showSens: s.details.sens, toggleSens: tog('sens'), sensToggle: s.details.sens ? 'Hide details' : 'Show details',
+      showArc: s.details.arc, toggleArc: tog('arc'), arcToggle: s.details.arc ? 'Hide risk graph' : 'Show risk graph',
+      showSens: s.details.sens, toggleSens: () => { if (!s.details.sens) this.loadTornado(); tog('sens')(); }, sensToggle: s.details.sens ? 'Hide details' : 'Show details',
       showPirDetail: s.details.pir, togglePir: tog('pir'), pirToggle: s.details.pir ? 'Hide indicators and assets' : 'Show indicators and assets',
-      pirSummary: `${s.pirs.filter(p => p.status === 0).length} gaps · ${s.pirs.filter(p => p.status === 1).length} collecting · ${s.pirs.filter(p => p.status === 2).length} answered`,
-      onPirKey: e => { if (e.key === 'Enter' && s.newPir.trim()) this.setState({ pirs: [...s.pirs, { q: s.newPir.trim(), ind: ['Indicators to be defined'], assets: ['Unassigned'], reports: 0, ltiov: 'TBD', status: 0 }], newPir: '' }); },
+      pirSummary,
+      onPirKey: e => { if (e.key === 'Enter' && s.newPir.trim()) this.setState({ pirs: [...s.pirs, { q: s.newPir.trim(), ind: ['Indicators to be defined'], assets: ['Unassigned'], ltiov: 'TBD', status: 0 }], newPir: '' }); },
       goCollection: () => this.go('collection'), goDoctrine: () => this.go('doctrine'), goHome: () => this.toStep({ view: 'coa', step: 1, inputTab: 'strategy' }),
       feedUrl: s.feedUrl, onFeedUrl: set('feedUrl'), toggleFeed: () => this.toggleFeed(), feedBtn: s.feedOn ? 'Disconnect' : 'Connect', feedLabel: s.feedOn ? `Connected · ${s.feedCount} received` : 'Not connected', feedColor: s.feedOn ? 'rgb(76,195,138)' : 'var(--color-neutral-600)',
-      stages: [['Strategy Option Evaluation', 'Scores strategies against their assumptions and shows exactly where the analysis stands on thin evidence.', 1], ['Collection Management Agent', 'Turns weak assumptions into draft collection requirements: tagged, routed, tracked. Scores re-run as collection returns.', 2], ['Predictive Interconnected Risk Engine', 'Reads the graph\'s edges and propagates: which option degrades if this assumption fails, and how far it travels.', 3], ['Option Recommendation', 'Strategy evaluation taking in every gap and risk; offers the Commander a recommended option and the risk accepted.', 4]].map(([label, sub, n]) => { const active = stage === n; const done = n === 1 ? !!s.results : n === 2 ? s.pirs.every(p => p.status === 2) : n === 3 ? !!s.results : !!s.decision; return { n, label, sub, lineShow: n < 4 ? 'block' : 'none', go: () => n === 1 ? this.toStep({ view: 'coa', step: [1, 2, 4].includes(s.step) ? s.step : 1, inputTab: 'strategy' }) : n === 2 ? this.go('collection') : n === 3 ? this.toStep({ view: 'coa', step: 3 }) : this.toStep({ view: 'coa', step: 5 }), ring: active || done ? 'var(--color-accent)' : 'var(--color-divider)', bg: active ? 'rgb(16,42,76)' : done ? 'rgb(9,84,165)' : 'var(--color-surface)', fg: active || done ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', opacity: active ? 1 : 0.65 }; }),
-      foundation: { go: () => this.go('intel'), ring: stage === 5 ? 'var(--color-accent)' : 'var(--color-divider)', bg: stage === 5 ? 'rgb(16,42,76)' : 'var(--color-surface)', fg: stage === 5 ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', stat: `${s.assumptions.length + s.intel.length} claims · ${s.intel.length} reports · ${s.planDocs.length + s.guideDocs.length} documents` },
+      stages: [['Strategy Option Evaluation', 'Scores strategies against their assumptions and shows exactly where the analysis stands on thin evidence.', 1], ['Collection Management Agent', 'Turns weak assumptions into draft collection requirements: tagged, routed, tracked. Scores re-run as collection returns.', 2], ['Predictive Interconnected Risk Engine', 'Reads the graph\'s edges and propagates: which option degrades if this assumption fails, and how far it travels.', 3], ['Option Recommendation', 'Strategy evaluation taking in every gap and risk; offers the Commander a recommended option and the risk accepted.', 4]].map(([label, sub, n]) => { const active = stage === n; const done = n === 1 ? hasOptions : n === 2 ? requirements.length > 0 : n === 3 ? !!s.dist : !!s.decision; return { n, label, sub, lineShow: n < 4 ? 'block' : 'none', go: () => n === 1 ? this.toStep({ view: 'coa', step: [1, 2, 4].includes(s.step) ? s.step : 1, inputTab: 'strategy' }) : n === 2 ? this.go('collection') : n === 3 ? this.toStep({ view: 'coa', step: 3 }) : this.toStep({ view: 'coa', step: 5 }), ring: active || done ? 'var(--color-accent)' : 'var(--color-divider)', bg: active ? 'rgb(16,42,76)' : done ? 'rgb(9,84,165)' : 'var(--color-surface)', fg: active || done ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', opacity: active ? 1 : 0.65 }; }),
+      foundation: { go: () => this.go('intel'), ring: stage === 5 ? 'var(--color-accent)' : 'var(--color-divider)', bg: stage === 5 ? 'rgb(16,42,76)' : 'var(--color-surface)', fg: stage === 5 ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', stat: `${evaluated.length} evaluated assumptions · ${s.intel.length} local reports · ${s.planDocs.length + s.guideDocs.length} documents` },
       hasSubtabs: s.view === 'coa' && [1, 2, 4].includes(s.step),
       subtabs: [['Inputs', 1], ['Options', 2], ['Score', 4]].map(([label, st]) => ({ label, go: () => this.goStep(st), line: s.step === st ? 'var(--color-accent)' : 'transparent', opacity: s.step === st ? 1 : 0.65 })),
       step1: s.step === 1, step2: s.step === 2, step3: s.step === 3, step4: s.step === 4, step5: s.step === 5,
@@ -429,64 +742,62 @@ class Component extends DCLogic {
         { hasLabel: true, label: 'Reference', items: [navItem('doctrine', 'Doctrine', 'doctrine')] }
       ],
       planLabel, ccmd: s.ccmd, threatName: T.name, runId: s.runId,
-      resetRun: () => this.toStep({ step: 1, coas: [], results: null, decision: null, chosen: null, runId: 'R-' + String(400 + Math.floor(Math.random() * 500)).padStart(4, '0') }),
-      steps: [['Strategy Preparation', 'Mission Analysis & Guidance'], ['Development', 'Concepts & Screening'], ['Option Adjudication', 'Wargames · ARC'], ['Option\nComparison', 'Decision Matrix'], ['Strategy Decision', "Commander's decision"]].map(([label, sub], i) => ({ n: i + 1, label, sub, go: () => this.goStep(i + 1),
+      resetRun: () => { this.setState({ dist: null, decision: null, chosen: null, whatIf: null, whatIfId: null, tornado: null, runId: 'R-' + String(400 + Math.floor(Math.random() * 500)).padStart(4, '0') }); this.toStep({ step: 1 }); },
+      steps: [['Strategy Preparation', 'Mission Analysis & Guidance'], ['Development', 'Concepts & Screening'], ['Option Adjudication', 'Risk engine · what-if'], ['Option\nComparison', 'Decision Matrix'], ['Strategy Decision', "Commander's decision"]].map(([label, sub], i) => ({ n: i + 1, label, sub, go: () => this.goStep(i + 1),
         lineShow: i < 4 ? 'block' : 'none', ring: s.step >= i + 1 ? 'var(--color-accent)' : 'var(--color-divider)', bg: s.step > i + 1 ? 'rgb(9,84,165)' : s.step === i + 1 ? 'rgb(16,42,76)' : 'var(--color-surface)', fg: s.step >= i + 1 ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', opacity: s.step === i + 1 ? 1 : 0.6 })),
-      planTypes: this.PLAN_TYPES, planType: s.planType, onPlanType: e => this.setState({ planType: e.target.value }), onCcmd: e => this.setState({ ccmd: e.target.value }), threat: s.threat, onThreat: e => this.setState({ threat: e.target.value, coas: [], results: null }),
+      planTypes: this.PLAN_TYPES, planType: s.planType, onPlanType: e => this.setState({ planType: e.target.value }), onCcmd: e => this.setState({ ccmd: e.target.value }), threat: s.threat, onThreat: e => this.setState({ threat: e.target.value }),
       isContingency: s.planType === 'CON', levels: this.LEVELS.map((l, i) => ({ label: `L${i + 1}`, on: s.level === i + 1, pick: () => this.setState({ level: i + 1 }) })), levelDesc: this.LEVELS[s.level - 1],
       ccmds: Object.keys(this.CCMDS).map(c => { const a = s.ccmd === c ? on : off; return { label: c, pick: () => this.setState({ ccmd: c }), border: a[0], bg: a[1], fg: a[2] }; }), ccmdDesc: this.CCMDS[s.ccmd],
-      threats: Object.keys(this.THREATS).map(k => { const a = s.threat === k ? on : off; return { id: k, label: this.THREATS[k].label, pick: () => this.setState({ threat: k, coas: [], results: null }), border: a[0], bg: a[1], fg: a[2] }; }), threatDesc: T.desc,
+      threats: Object.keys(this.THREATS).map(k => { const a = s.threat === k ? on : off; return { id: k, label: this.THREATS[k].label, pick: () => this.setState({ threat: k }), border: a[0], bg: a[1], fg: a[2] }; }), threatDesc: T.desc,
       intelCount: s.intel.length, worldState: s.worldState || defaultWorld, onWorldState: set('worldState'),
-      intent: s.intent || (s.threat === 'RUS' && s.planDocs[0] ? s.planDocs[0].intent : `Deter ${T.name} aggression against allies and partners; if deterrence fails, deny ${T.name} its objectives while limiting escalation beyond the theater and preserving the force for a prolonged campaign.`), onIntent: set('intent'),
-      endState: s.endState || (s.threat === 'RUS' && s.planDocs[0] ? s.planDocs[0].endState : `${T.name} force projection halted; allied territory and sea lines of communication secure; conditions set for a negotiated settlement.`), onEndState: set('endState'),
-      assumptions: s.assumptions.map((a, i) => ({ n: i + 1, text: a.text, conf: a.conf, link: a.link ? 'Tracked via ' + a.link : 'Unlinked', status: this.A_STATUS[a.status][0], bg: this.A_STATUS[a.status][1], fg: this.A_STATUS[a.status][2],
-        remove: () => this.setState({ assumptions: s.assumptions.filter((_, j) => j !== i) }),
-        cycle: () => this.setState({ assumptions: s.assumptions.map((x, j) => j === i ? { ...x, status: (x.status + 1) % 3 } : x), results: null }),
-        setConf: e => this.setState({ assumptions: s.assumptions.map((x, j) => j === i ? { ...x, conf: +e.target.value } : x), results: null }) })),
-      assumptionSummary: `${s.assumptions.filter(a => a.status === 0).length} valid · ${s.assumptions.filter(a => a.status === 1).length} under review · ${s.assumptions.filter(a => a.status === 2).length} invalidated`,
-      scenarios: this.SCENARIOS.map((sc, i) => ({ ...sc, pick: () => this.setState({ scenario: i, aggression: sc.ag, results: null, worldState: '' }), border: s.scenario === i ? 'var(--color-accent)' : 'var(--color-divider)', bg: s.scenario === i ? 'rgb(16,36,62)' : 'transparent' })),
+      intent: s.intent || (s.planDocs[0] ? s.planDocs[0].intent : ''), onIntent: set('intent'),
+      endState: s.endState || (s.planDocs[0] ? s.planDocs[0].endState : ''), onEndState: set('endState'),
+      assumptions: trackerRows, assumptionSummary,
+      scenarios: this.SCENARIOS.map((sc, i) => ({ ...sc, pick: () => this.setState({ scenario: i, worldState: '' }), border: s.scenario === i ? 'var(--color-accent)' : 'var(--color-divider)', bg: s.scenario === i ? 'rgb(16,36,62)' : 'transparent' })),
       newAssumption: s.newAssumption, onNewAssumption: set('newAssumption'),
-      addAssumption: () => s.newAssumption.trim() && this.setState({ assumptions: [...s.assumptions, { text: s.newAssumption.trim(), status: 1, conf: 50, link: '' }], newAssumption: '' }),
-      onAssumptionKey: e => { if (e.key === 'Enter' && s.newAssumption.trim()) this.setState({ assumptions: [...s.assumptions, { text: s.newAssumption.trim(), status: 1, conf: 50, link: '' }], newAssumption: '' }); },
+      addAssumption: () => s.newAssumption.trim() && this.setState({ assumptions: [...s.assumptions, { text: s.newAssumption.trim(), link: '' }], newAssumption: '' }),
+      onAssumptionKey: e => { if (e.key === 'Enter' && s.newAssumption.trim()) this.setState({ assumptions: [...s.assumptions, { text: s.newAssumption.trim(), link: '' }], newAssumption: '' }); },
       constraints: s.constraints.map((c, i) => ({ code: `${c.kind}${s.constraints.slice(0, i + 1).filter(x => x.kind === c.kind).length}`, text: c.text, remove: () => this.setState({ constraints: s.constraints.filter((_, j) => j !== i) }) })),
       constraintKinds: [['C', 'Constraint'], ['R', 'Restraint']].map(([k, label]) => ({ label, on: s.constraintKind === k, pick: () => this.setState({ constraintKind: k }) })),
       constraintPlaceholder: s.constraintKind === 'C' ? 'Add constraint (something the commander must do)' : 'Add restraint (something the commander must not do)',
       newConstraint: s.newConstraint, onNewConstraint: set('newConstraint'),
       addConstraint: () => s.newConstraint.trim() && this.setState({ constraints: [...s.constraints, { kind: s.constraintKind, text: s.newConstraint.trim() }], newConstraint: '' }),
       onConstraintKey: e => { if (e.key === 'Enter' && s.newConstraint.trim()) this.setState({ constraints: [...s.constraints, { kind: s.constraintKind, text: s.newConstraint.trim() }], newConstraint: '' }); },
-      coaCounts: [2, 3, 4, 5].map(k => ({ label: String(k), on: s.numCoas === k, pick: () => this.setState({ numCoas: k, coas: [], results: null }) })),
-      numSims: s.numSims, onNumSims: e => this.setState({ numSims: +e.target.value, results: null }),
-      aggressionPct: Math.round(s.aggression * 100), onAggression: e => this.setState({ aggression: +e.target.value / 100, results: null }),
-      aggressionLabel: s.aggression < 0.34 ? 'restrained' : s.aggression < 0.67 ? 'moderate' : 'aggressive',
-      startDevelopment: () => this.toStep({ coas: this.buildCoas(), step: 2, results: null }),
-      coas: (s.coas.length ? s.coas : this.buildCoas()).map(c => ({ ...c, screen: ['Feasible', 'Acceptable', 'Suitable', 'Distinguishable', 'Complete'].map((l, i) => { const warn = (c.res > 85 && i === 0) || (c.esc > 0.5 && i === 1) || (c.s < 0.5 && i === 2); return { label: l, bg: warn ? 'rgb(130,78,0)' : 'rgb(19,57,41)', fg: warn ? 'rgb(254,243,221)' : 'rgb(76,195,138)' }; }) })),
-      coaCount: s.numCoas,
-      startWargame: () => this.toStep({ step: 3 }, s.results ? null : () => this.runSim()),
-      runSim: () => this.runSim(), runLabel: s.results ? 'Re-run Wargame' : 'Run Wargame',
-      simRunning: s.simRunning, simProgress: s.simProgress, simStatus: s.simStatus,
-      hasResults: !!s.results && !s.simRunning, noResults: !s.results,
-      results, selN: sel ? sel.n : '', selTitle: sel ? sel.title : '', arc: sel ? this.arcFor(sel.n) : [],
+      startDevelopment: () => this.toStep({ step: 2 }),
+      coas, coaCount: optionList.length,
+      startWargame: () => this.toStep({ step: 3 }, s.dist ? null : () => this.runWargame()),
+      runSim: () => this.runWargame(), runLabel: s.dist ? 'Re-run Wargame' : 'Run Wargame',
+      distBusy: s.distBusy, rankBusy: s.rankBusy,
+      hasResults: !!s.dist && hasOptions && !s.distBusy, noResults: !s.dist && !s.distBusy,
+      hasOptions, noOptions: !hasOptions && !s.apiError,
+      results, selN: selOption ? selOption.number : '', selTitle: selOption ? selOption.title : '',
+      riskProblemSets, riskEvents, cascade,
       goCompare: () => this.toStep({ step: 4 }), goApprove: () => this.toStep({ step: 5 }),
-      ...this.evaluation(ranked, best, coasNow, isWeak),
-      matrix: crit.map(([k, label, fn]) => ({ label, weight: s.weights[k], setWeight: e => this.setState({ weights: { ...s.weights, [k]: +e.target.value } }), cells: (s.results || []).map(fn) })),
-      ranked: (s.results || []).map(r => { const rk = ranked.find(x => x.n === r.n); const isCh = (s.chosen ?? best?.n) === r.n; return { ...rk, riskLine: `Mission ${rk.rm} · Personnel ${rk.rp} · Escalation ${rk.re}`, choose: () => this.setState({ chosen: r.n }), chooseBg: isCh ? 'color-mix(in srgb,var(--color-accent) 8%,transparent)' : 'transparent', chooseBorder: isCh ? 'var(--color-accent)' : 'var(--color-divider)' }; }),
-      best: best ? { n: best.n, title: best.title, reason: `Highest weighted score (${best.pct}%) across ${s.numSims} wargame runs: succeeds ${Math.round(best.pSuccess * 100)} in 100 with ${best.re.toLowerCase()} escalation risk and p90 casualties of ${best.cas.toFixed(1)}%. Weights reflect commander's emphasis on mission and escalation.`, riskAccepted: worstRisk ? `${worstRisk[1]} risk to ${worstRisk[0]} is the governing risk; mitigated through the decision points in the ARC table and the branch plans identified in wargaming.` : '' } : { n: '', title: '', reason: '', riskAccepted: '' },
-      ...this.sensitivity(ranked, best, crit),
-      weakCount: s.assumptions.filter(isWeak).length,
-      evidence: ranked.map(r => { const c = coasNow.find(x => x.n === r.n) || {}; const deps = (c.deps || []).filter(i => s.assumptions[i - 1]).map(i => { const a = s.assumptions[i - 1]; const w = isWeak(a); return { n: i, short: a.text.split(/[,;—]/)[0].slice(0, 70), conf: a.conf, status: this.A_STATUS[a.status][0], bg: w ? this.A_STATUS[a.status === 0 ? 1 : a.status][1] : this.A_STATUS[0][1], fg: w ? this.A_STATUS[a.status === 0 ? 1 : a.status][2] : this.A_STATUS[0][2] }; }); const weak = deps.filter(d => isWeak(s.assumptions[d.n - 1])); return { n: r.n, title: r.title, rank: r.rank, deps, border: r.rank === 1 ? 'var(--color-accent)' : 'var(--color-divider)', verdict: weak.length ? `Stands on thin evidence: ${weak.map(d => 'A' + d.n).join(', ')} ${weak.length === 1 ? 'is' : 'are'} below threshold.` : 'All load-bearing claims validated.', verdictColor: weak.length ? 'rgb(255,203,71)' : 'rgb(76,195,138)' }; }),
-      sendWeakToCollection: () => { const existing = new Set(s.pirs.map(p => p.assumption).filter(x => x != null)); const add = s.assumptions.map((a, i) => [a, i]).filter(([a, i]) => isWeak(a) && !existing.has(i)).map(([a, i]) => ({ q: 'Validate: ' + a.text, ind: ['Indicators to be defined by J2'], assets: ['Unassigned'], reports: 0, ltiov: (a.valid || '').replace('Expires ', '') || 'TBD', status: 0, assumption: i })); this.setState({ pirs: [...s.pirs, ...add], view: 'collection' }); },
-      weakList: s.assumptions.map((a, i) => ({ a, i })).filter(({ a }) => isWeak(a)).map(({ a, i }) => { const cr = s.pirs.findIndex(p => p.assumption === i); return { n: i + 1, text: a.text, link: a.link || 'unsourced', valid: a.valid || 'unspecified', conf: a.conf, status: this.A_STATUS[a.status][0], bg: this.A_STATUS[a.status][1], fg: this.A_STATUS[a.status][2], bearing: coasNow.filter(c => (c.deps || []).includes(i + 1)).map(c => 'Strategy ' + c.n).join(', ') || 'no option', hasCr: cr >= 0, noCr: cr < 0, crLabel: cr >= 0 ? `PIR ${cr + 1} · ${['Gap', 'Collecting', 'Answered'][s.pirs[cr].status]}` : '', draft: () => this.setState({ pirs: [...s.pirs, { q: 'Validate: ' + a.text, ind: ['Indicators to be defined by J2'], assets: ['Unassigned'], reports: 0, ltiov: (a.valid || '').replace('Expires ', '') || 'TBD', status: 0, assumption: i }] }) }; }),
-      noWeak: !s.assumptions.some(isWeak),
-      failToggles: s.assumptions.map((a, i) => ({ label: `A${i + 1} fails`, pick: () => this.setState({ failIdx: s.failIdx === i ? null : i }), border: s.failIdx === i ? 'rgb(255,120,120)' : 'var(--color-divider)', bg: s.failIdx === i ? 'rgb(60,20,35)' : 'transparent' })),
-      hasFail: s.failIdx != null && !!s.results, failN: (s.failIdx ?? 0) + 1, failText: s.failIdx != null ? s.assumptions[s.failIdx].text : '',
-      ...(s.failIdx != null && s.results ? (() => { const alt = this.compute(coasNow, undefined, 600, s.failIdx); const propagation = s.results.map((r, i) => { const d = Math.round((alt[i].pSuccess - r.pSuccess) * 100); const shifts = [['Mission', r.rm, alt[i].rm], ['Personnel', r.rp, alt[i].rp], ['Escalation', r.re, alt[i].re]].filter(x => x[1] !== x[2]).map(x => `${x[0]} ${x[1]} → ${x[2]}`); return { n: r.n, title: r.title, delta: (d > 0 ? '+' : '') + d + ' pts', color: d < -5 ? 'rgb(255,120,120)' : d < 0 ? 'rgb(255,203,71)' : 'var(--color-neutral-600)', riskShift: shifts.join(' · ') || 'Risk levels unchanged' }; }); const sets = (this.PROBLEM_SETS[s.failIdx] || ['Force flow']); const problemSets = sets.map((label, k) => ({ label, hop: k === 0 ? 'Direct' : `${k} hop${k > 1 ? 's' : ''}`, w: Math.max(14, 60 - k * 18), bg: k === 0 ? 'rgb(255,120,120)' : k === 1 ? 'rgb(255,203,71)' : 'rgb(100,116,139)' })); const hit = propagation.filter(p => p.delta.startsWith('-') && parseInt(p.delta) <= -5); return { propagation, problemSets, propagationText: `${hit.length} of ${propagation.length} options degrade materially; the effect reaches ${sets.length} problem set${sets.length > 1 ? 's' : ''} through the graph's edges.` }; })() : { propagation: [], problemSets: [], propagationText: '' }),
-      claimCount: s.assumptions.length + s.intel.length,
-      claims: [...s.assumptions.map((a, i) => ({ text: a.text, type: 'Assumption', source: a.link || 'unsourced', valid: a.valid || 'unspecified', conf: a.conf, bg: this.A_STATUS[isWeak(a) ? (a.status === 0 ? 1 : a.status) : 0][1], fg: this.A_STATUS[isWeak(a) ? (a.status === 0 ? 1 : a.status) : 0][2], edges: (coasNow.filter(c => (c.deps || []).includes(i + 1)).map(c => 'Strategy ' + c.n).concat(s.pirs.map((p, k) => p.assumption === i ? 'PIR ' + (k + 1) : null).filter(Boolean)).join(', ')) || '—' })), ...s.intel.map(r => { const conf = { A: 90, B: 75, C: 55, D: 40, E: 25, F: 30 }[r.rel[0]] || 50; return { text: r.title, type: r.type, source: r.rel, valid: r.when === 'just now' ? '72 h from receipt' : '72 h from ' + r.when, conf, bg: conf >= 70 ? this.A_STATUS[0][1] : this.A_STATUS[1][1], fg: conf >= 70 ? this.A_STATUS[0][2] : this.A_STATUS[1][2], edges: 'PIR ' + r.pir }; })],
-      tradeoffs: ranked.length ? [
-        `Fastest to end state: Strategy ${[...ranked].sort((a, b) => a.days - b.days)[0].n} (${[...ranked].sort((a, b) => a.days - b.days)[0].days} days) — ${['Significant', 'High'].includes([...ranked].sort((a, b) => a.days - b.days)[0].re) ? 'but carries' : 'and carries'} ${[...ranked].sort((a, b) => a.days - b.days)[0].re.toLowerCase()} escalation risk.`,
-        `Lowest risk to personnel: Strategy ${[...ranked].sort((a, b) => a.cas - b.cas)[0].n} (worst case ${[...ranked].sort((a, b) => a.cas - b.cas)[0].cas.toFixed(1)}% casualties) at the cost of a ${Math.round([...ranked].sort((a, b) => a.cas - b.cas)[0].pSuccess * 100)}% success probability.`,
-        `${s.pirs.filter(p => p.status === 0).length} unanswered PIR(s) add uncertainty to every result; answering them tightens the estimates before approval.`
-      ] : [],
+      evalGrade, evalSummary, evalStats, evalGaps, evalRisks, evalConditions,
+      matrix, scoreRow, ranked, best,
+      explain, explainText, runnerUp: runnerRow ? { n: runnerRow.number, title: runnerRow.title } : {},
+      stability, stabilityText, stabilityLabel, tornado, tornadoBusy: s.tornadoBusy,
+      sweep, sweepText, assumptionRisk, assumptionText,
+      weakCount: weakEval.length,
+      evidence,
+      sendWeakToCollection: () => {
+        const add = weakEval.filter(a => !requirementFor(a) && draftFor(a) < 0)
+          .map(a => ({ q: 'Validate: ' + textOf(a), ind: ['Indicators to be defined by J2'], assets: ['Unassigned'], ltiov: 'TBD', status: 0, assumption: a.assumption_id }));
+        this.setState({ pirs: [...s.pirs, ...add], view: 'collection' });
+      },
+      weakList, noWeak: hasOptions && weakEval.length === 0,
+      failToggles,
+      hasFail: !!wi, whatIfBusy: s.whatIfBusy,
+      failN: wiAssumption ? ((byId.get(wiAssumption.assumption_id) || {}).n || '') : '',
+      failText: wiAssumption ? (wordingFor(wiAssumption.statement) || wiAssumption.statement) : '',
+      failStats: wiAssumption ? `status ${wiAssumption.status} · p(holds) ${f3(wiAssumption.p_holds)} → ${f3(wiAssumption.p_holds_after_withdrawn)} · sensitivity ${f3(wiAssumption.sensitivity)} · EVPI ${f3(wiAssumption.evpi)}` : '',
+      propagation, problemSets, harmfulMoved, statusChanges, propagationText,
+      claimCount: evaluated.length + s.intel.length,
+      claims: [
+        ...evaluated.map(a => { const st = aStat(a.status); return { text: textOf(a), type: 'Assumption', source: `${a.subject_name || a.subject_id || 'unlinked'} · ${a.predicate || '—'}`, valid: `evaluated as of ${env.as_of || '—'}`, conf: pctStr(a.p_holds), bg: st[1], fg: st[2], edges: a.options.map(n => 'Strategy ' + n).join(', ') || '—' }; }),
+        ...s.intel.map(r => ({ text: r.title, type: r.type, source: r.rel + ' · local demo item', valid: r.when === 'just now' ? 'received this session' : r.when, conf: NA, bg: 'rgb(30,41,59)', fg: 'var(--color-neutral-700)', edges: 'not in the evaluated claim set' }))
+      ],
+      tradeoffs,
       chosen: chosenR, decisionNote: s.decisionNote, onDecisionNote: set('decisionNote'),
       approve: () => this.decide('Approved'), approveMod: () => this.decide('Approved with modifications'), returnRework: () => this.decide('Returned for rework'),
       hasDecision: !!s.decision, noDecision: !s.decision, decision: s.decision || {},
@@ -504,17 +815,14 @@ class Component extends DCLogic {
       intelTypes: ['SIGINT', 'IMINT', 'GEOINT', 'HUMINT', 'OSINT'].map(t => ({ label: t, on: s.newIntelType === t, pick: () => this.setState({ newIntelType: t }) })),
       ingest: () => s.newIntelTitle.trim() && this.setState({ intel: [{ title: s.newIntelTitle.trim(), type: s.newIntelType, rel: 'F – Not yet evaluated', pir: 1 + (s.intel.length % 3), when: 'just now' }, ...s.intel], newIntelTitle: '', newIntelBody: '' }),
       mapSrc: './assets/jipoe-map/index.html?threat=' + encodeURIComponent(T.name),
-      ipoe: s.threat === 'RUS' ? { likely: 'Russia consolidates its gains in Narva/Ida-Viru and eastern Latgale, transitions to maneuver defense behind a dense mine, obstacle and EW belt, and seeks a negotiated freeze that leaves Russian forces in place. Kaliningrad and Belarus-based forces remain postured but uncommitted to fix Allied forces in Lithuania and Poland. Hybrid pressure continues (cyber, sabotage of undersea cables and rail LOCs, disinformation targeting Baltic Russophones) and nuclear signaling escalates as NATO builds combat power.', dangerous: 'Russia expands the incursion before NATO reinforcement is complete: 1st Guards Tank Army elements reinforce through the Pskov axis toward Tartu and the Daugava; 11th Army Corps and Belarus-based forces conduct a converging attack to close the Suwałki corridor and isolate the Baltic States; the Baltic Fleet mines and strikes to close Klaipėda, Riga and Tallinn and interdict the Danish Straits; and Russia conducts a demonstrative low-yield nuclear detonation over the Baltic Sea to coerce Alliance disunity.', terrain: 'Suwałki corridor (only land LOC to the Baltics); Narva River crossings; Daugava River line through Latgale; Tallinn, Riga and Klaipėda ports; Šiauliai and Ämari airfields; Danish Straits; Gulf of Finland and Gulf of Riga (mine-favorable).' }
-        : { likely: `${T.name} escalates gray-zone coercion into a limited seizure of a peripheral objective under cover of an exercise, seeking a fait accompli within 72 hours.`, dangerous: `${T.name} opens with pre-emptive long-range fires on regional bases and cyber attacks on logistics, then commits amphibious and airborne forces simultaneously.`, terrain: 'Maritime chokepoints, forward airfields within 500 nm of the objective, undersea cable landing sites.' },
-      pirs: s.pirs.map((p, i) => ({ ...p, n: p.no || i + 1, remove: () => this.setState({ pirs: s.pirs.filter((_, j) => j !== i), results: null }), status: statusMap[p.status][0], bg: statusMap[p.status][1], fg: statusMap[p.status][2], tied: p.assumption != null ? ` · validates A${p.assumption + 1}` : '', cycleLabel: p.status === 2 ? 'Reset' : p.status === 1 ? 'Collection returned' : 'Task assets',
-        cycle: () => { const ns = (p.status + 1) % 3; this.setState({ pirs: s.pirs.map((x, j) => j === i ? { ...x, status: ns, reports: ns === 2 ? x.reports + 1 : x.reports } : x), results: null, assumptions: (ns === 2 && p.assumption != null) ? s.assumptions.map((a, k) => k === p.assumption ? { ...a, status: 0, conf: Math.max(a.conf, 85) } : a) : s.assumptions }); } })),
-      newPir: s.newPir, onNewPir: set('newPir'), addPir: () => s.newPir.trim() && this.setState({ pirs: [...s.pirs, { q: s.newPir.trim(), ind: ['Indicators to be defined'], assets: ['Unassigned'], reports: 0, ltiov: 'TBD', status: 0 }], newPir: '' }),
-      rfis: s.rfis.map(r => ({ ...r, bg: rfiColor[r.status][0], fg: rfiColor[r.status][1] })), newRfi: s.newRfi, onNewRfi: set('newRfi'),
+      pirs, newPir: s.newPir, onNewPir: set('newPir'),
+      addPir: () => s.newPir.trim() && this.setState({ pirs: [...s.pirs, { q: s.newPir.trim(), ind: ['Indicators to be defined'], assets: ['Unassigned'], ltiov: 'TBD', status: 0 }], newPir: '' }),
+      rfis: s.rfis.map(r => ({ ...r, bg: ({ Open: 'rgb(174,25,85)', Pending: 'rgb(130,78,0)', Answered: 'rgb(35,110,74)' })[r.status], fg: ({ Open: 'rgb(254,236,244)', Pending: 'rgb(254,243,221)', Answered: 'rgb(229,251,235)' })[r.status] })), newRfi: s.newRfi, onNewRfi: set('newRfi'),
       addRfi: () => s.newRfi.trim() && this.setState({ rfis: [...s.rfis, { id: `RFI-0${35 + s.rfis.length - 4}`, q: s.newRfi.trim() + (s.newRfiLtiov ? ` (LTIOV ${s.newRfiLtiov})` : ''), to: s.newRfiRoute || 'J2', ties: s.newRfiTies || 'Unlinked', status: 'Open' }], newRfi: '', newRfiTies: '', newRfiLtiov: '', rfiOpen: false }),
       rfiOpen: !!s.rfiOpen, openRfi: () => this.setState({ rfiOpen: true }), closeRfi: () => this.setState({ rfiOpen: false }), stop: e => e.stopPropagation(),
       rfiRoutes: ['J2 / DIA', 'J4', 'J5', 'Interagency'].map(r => ({ label: r, on: (s.newRfiRoute || 'J2 / DIA') === r, pick: () => this.setState({ newRfiRoute: r }) })),
       newRfiTies: s.newRfiTies || '', onNewRfiTies: set('newRfiTies'), newRfiLtiov: s.newRfiLtiov || '', onNewRfiLtiov: set('newRfiLtiov'),
-      postureStats: [{ label: 'Component commands', value: '5' }, { label: 'Designated for AMBER SHIELD', value: '11 packages' }, { label: 'C-1 / C-2 ready', value: '78%' }, { label: 'Peak strategy demand', value: `${Math.max(...this.buildCoas().map(c => c.res))}%` }],
+      postureStats: [{ label: 'Component commands', value: '5' }, { label: 'Designated for AMBER SHIELD', value: '11 packages' }, { label: 'C-1 / C-2 ready', value: '78%' }, { label: 'Peak strategy demand', value: NA }],
       forces: [
         { unit: 'V Corps (Forward) · ARFOR / corps HQ', domain: 'Land', source: 'Assigned', loc: 'Poznań', c: 'C-1', avail: 'C+1' },
         { unit: '2nd Cavalry Regiment (SBCT)', domain: 'Land', source: 'Assigned', loc: 'Vilseck', c: 'C-1', avail: 'C+4 (Lithuania)' },
@@ -531,6 +839,8 @@ class Component extends DCLogic {
         { unit: '21st TSC · RSOI, APS-2 issue, theater sustainment', domain: 'Logistics', source: 'Assigned', loc: 'Kaiserslautern / Powidz / Bremerhaven', c: 'C-1', avail: 'Now' },
         { unit: 'APODs / SPODs (Ramstein, Rzeszów, Powidz, Bremerhaven, Gdańsk/Gdynia)', domain: 'Mobility', source: 'HNS', loc: 'DEU / POL', c: 'C-1', avail: 'Now' }
       ],
+      ipoe: s.threat === 'RUS' ? { likely: 'Russia consolidates its gains in Narva/Ida-Viru and eastern Latgale, transitions to maneuver defense behind a dense mine, obstacle and EW belt, and seeks a negotiated freeze that leaves Russian forces in place. Kaliningrad and Belarus-based forces remain postured but uncommitted to fix Allied forces in Lithuania and Poland. Hybrid pressure continues (cyber, sabotage of undersea cables and rail LOCs, disinformation targeting Baltic Russophones) and nuclear signaling escalates as NATO builds combat power.', dangerous: 'Russia expands the incursion before NATO reinforcement is complete: 1st Guards Tank Army elements reinforce through the Pskov axis toward Tartu and the Daugava; 11th Army Corps and Belarus-based forces conduct a converging attack to close the Suwałki corridor and isolate the Baltic States; the Baltic Fleet mines and strikes to close Klaipėda, Riga and Tallinn and interdict the Danish Straits; and Russia conducts a demonstrative low-yield nuclear detonation over the Baltic Sea to coerce Alliance disunity.', terrain: 'Suwałki corridor (only land LOC to the Baltics); Narva River crossings; Daugava River line through Latgale; Tallinn, Riga and Klaipėda ports; Šiauliai and Ämari airfields; Danish Straits; Gulf of Finland and Gulf of Riga (mine-favorable).' }
+        : { likely: `${T.name} escalates gray-zone coercion into a limited seizure of a peripheral objective under cover of an exercise, seeking a fait accompli within 72 hours.`, dangerous: `${T.name} opens with pre-emptive long-range fires on regional bases and cyber attacks on logistics, then commits amphibious and airborne forces simultaneously.`, terrain: 'Maritime chokepoints, forward airfields within 500 nm of the objective, undersea cable landing sites.' },
       doctrine: [
         { ref: 'CJCSI 3100.01F · 29 Jan 2024', title: 'Joint Strategic Planning System', note: 'Directs three types of campaign plans (GCP, FCP, CCP), integrated contingency plan sets and Strategic Planning Frameworks; frames advice around risk to strategy, risk to force and readiness.', used: 'Plan type selector, CCMD selection, GFM inputs' },
         { ref: 'JP 5-0 · Joint Planning', title: 'Joint Planning Process', note: 'Mission analysis, COA development, COA analysis and wargaming, COA comparison and approval; screening for feasibility, acceptability, suitability, distinguishability and completeness.', used: 'Five-step lifecycle, COA screening tags' },

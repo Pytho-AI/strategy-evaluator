@@ -1,7 +1,6 @@
 """Shared fixtures. The dataset is a frozen contract: these tests only read it."""
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import shutil
@@ -11,11 +10,10 @@ from pathlib import Path
 
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+from support import DATASET_DIR, REPO_ROOT
+
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
-
-DATASET_DIR = REPO_ROOT / "dataset"
 
 # Product workspaces go to a throwaway directory for the whole run, so the tests never touch
 # the developer's own app/workspace/. Set before the app is imported: the store reads it per
@@ -25,26 +23,13 @@ os.environ["STRATEGY_WORKSPACE_DIR"] = _WORKSPACES
 
 from fastapi.testclient import TestClient  # noqa: E402
 
+from support import MeridianClient, hash_tree  # noqa: E402
 from app.backend.adapter import DatasetAdapter, eval_module  # noqa: E402
 from app.backend.main import create_app  # noqa: E402
 
 # Puts dataset/ on sys.path the one supported way, so a test can import the reference
 # evaluator directly (`from eval.engine import recompute`) and use it as an oracle.
 eval_module("tables")
-
-
-def hash_tree(root: Path) -> dict[str, str]:
-    """SHA-256 of every file under root, keyed by relative path."""
-    out: dict[str, str] = {}
-    for path in sorted(root.rglob("*")):
-        if not path.is_file() or "__pycache__" in path.parts:
-            continue
-        digest = hashlib.sha256()
-        with path.open("rb") as handle:
-            for chunk in iter(lambda: handle.read(1 << 20), b""):
-                digest.update(chunk)
-        out[str(path.relative_to(root))] = digest.hexdigest()
-    return out
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -84,29 +69,6 @@ def workspace_id(request) -> str:
 @pytest.fixture(scope="session")
 def adapter() -> DatasetAdapter:
     return DatasetAdapter()
-
-
-class MeridianClient(TestClient):
-    """A TestClient that pins ``scenario=meridian`` on every API request.
-
-    The registry default is ``amber_shield`` whenever its package loads. Everything in this
-    directory except ``test_scenarios.py`` is a Meridian regression suite -- it asserts
-    against ``dataset/``, the inject manifests and direct ``eval`` recomputation -- so the
-    scenario it exercises is named once, here, instead of in several hundred call sites.
-    A request that already carries ``scenario=`` is left alone, and so is a non-API path.
-    """
-
-    def request(self, method, url, **kwargs):  # noqa: D102 - httpx signature
-        text = str(url)
-        params = kwargs.get("params")
-        if text.startswith("/api/"):
-            if params is not None:
-                # httpx replaces the URL query with ``params``, so the pin goes there.
-                if isinstance(params, dict) and "scenario" not in params:
-                    kwargs["params"] = {**params, "scenario": "meridian"}
-            elif "scenario=" not in text:
-                url = f"{text}{'&' if '?' in text else '?'}scenario=meridian"
-        return super().request(method, url, **kwargs)
 
 
 @pytest.fixture(scope="session")

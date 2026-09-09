@@ -12,6 +12,13 @@ make image            # build the container image
 make image-run        # run it on http://127.0.0.1:9010/
 ```
 
+## Deploy hold
+
+`deploy/deploy-ec2.sh` refuses to run while `deploy/HOLD` exists, printing the reason. The
+file records which build is live and why it is pinned. Delete the file to lift the hold, or
+run a single deploy with `DEPLOY_OVERRIDE=1` when you deliberately want to bypass it. The host
+also carries `.deployed_commit`, naming the commit the running container was built from.
+
 ## Deploy to the box (EC2, docker compose)
 
 ```sh

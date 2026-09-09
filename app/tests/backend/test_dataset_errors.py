@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
-from conftest import MeridianClient
+from support import MeridianClient
 from fastapi.testclient import TestClient
 
 from app.backend.adapter import DatasetAdapter

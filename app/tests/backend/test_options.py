@@ -220,6 +220,25 @@ def test_the_ranking_orders_by_the_weighted_total(client, batch):
         )
 
 
+@pytest.mark.parametrize("batch", BATCHES)
+def test_only_valid_options_are_ranked_and_the_rest_name_their_gate(client, batch):
+    """JP 5-0: an option that fails a validity test is not placed in a ranked order."""
+    body = ranked(client, batch)
+    served = {o["strategy_id"]: o for o in options(client, batch)["options"]}
+    for row in body["ranked"]:
+        assert row["status"] == "valid", row["strategy_id"]
+    excluded = {row["strategy_id"]: row for row in body["excluded"]}
+    assert set(excluded) | {r["strategy_id"] for r in body["ranked"]} == set(served)
+    for strategy_id, row in excluded.items():
+        assert row["status"] != "valid"
+        assert row["gates_failed"] == served[strategy_id]["gates_failed"]
+        assert row["gate_failed"] == served[strategy_id]["gate_failed"]
+        assert "not ranked" in row["reason"]
+    assert set(excluded).isdisjoint(
+        {row["strategy_id"] for row in body["weight_stability"]["per_option"]}
+    )
+
+
 def test_get_and_post_rank_agree(client):
     from_get = client.get("/api/options/rank", params={"mission": 5, "time": 0}).json()
     from_post = client.post(
@@ -507,7 +526,7 @@ NEW_URLS = (
 
 @pytest.mark.parametrize("url", NEW_URLS)
 def test_each_new_endpoint_answers_in_under_two_seconds_from_cold(url):
-    from conftest import MeridianClient
+    from support import MeridianClient
 
     from app.backend.adapter import DatasetAdapter
     from app.backend.main import create_app

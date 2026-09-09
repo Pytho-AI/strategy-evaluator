@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from conftest import DATASET_DIR, hash_tree
+from support import DATASET_DIR, hash_tree
 
 from app.backend.adapter import DatasetAdapter
 

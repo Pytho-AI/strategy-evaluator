@@ -600,6 +600,10 @@ no source links, so it is never flagged on a guess.
               "title": "Defend Forward, Delay D-Day", "status": "valid",
               "weighted_total": 36, "weighted_pct": 64, "expected_value": 0.4968,
               "criteria": [{"...": 0}]}],
+  "excluded": [{"strategy_id": "str_coa_3", "number": 3,
+                "title": "Suwałki-First Economy of Force", "status": "invalid",
+                "gate_failed": "acceptable", "gates_failed": ["acceptable"],
+                "reason": "status invalid: failed the JP 5-0 acceptable test. An option that fails a validity test is not ranked."}],
   "weight_stability": {
     "top_option_id": "str_coa_2", "fraction_top": 0.549375,
     "weightings_evaluated": 1600,
@@ -613,6 +617,11 @@ no source links, so it is never flagged on a guess.
   always returns the same number — and `weightings_evaluated` says how many were scored.
   Label it "of perturbed weightings", not "of simulations".
 - Ties on `weighted_total` go to the higher `expected_value`, then the lower `number`.
+- **`ranked` holds valid options only.** An option that failed a JP 5-0 validity test is in
+  `excluded` with the gate that stopped it, and is left out of `weight_stability` too.
+  `/api/options` still returns every option in full, so the comparison screen can show the
+  excluded ones greyed out beside their gate. When no option is valid, `ranked` and
+  `excluded[]`'s counterpart are empty and `weight_stability.top_option_id` is `null`.
 
 `GET /api/options/outcome-distribution?scenario=&batch=&strategy=` — the honest replacement
 for the UI's Monte Carlo. `strategy=` is optional; omitted returns every option.

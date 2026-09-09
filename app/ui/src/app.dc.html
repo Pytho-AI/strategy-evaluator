@@ -46,6 +46,18 @@
 
     <!-- ─── STRATEGY OPTION EVALUATION / RISK ENGINE (COA steps) ─── -->
     <sc-if value="{{ isCoa }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ apiFailed }}" hint-placeholder-val="{{ false }}">
+        <section style="padding:28px 32px 0">
+          <div class="blueprint" style="padding:22px;display:flex;flex-direction:column;gap:8px;border:1px solid rgb(174,25,85)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgb(255,120,120)">API error · no evaluated numbers can be shown</span>
+            <h3 style="font-size:22px;margin:0">{{ apiErrorCode }}</h3>
+            <p style="margin:0;font-size:14px;line-height:1.5">{{ apiErrorMessage }}</p>
+            <span style="font-size:12px;color:var(--color-neutral-700)">{{ apiErrorLine }} · requested {{ apiErrorPath }}</span>
+            <button class="btn btn-secondary" style="align-self:flex-start" sc-camel-on-click="{{ retry }}">Retry</button>
+          </div>
+        </section>
+      </sc-if>
 
       <!-- STEP 1 PREPARATION -->
       <sc-if value="{{ step1 }}" hint-placeholder-val="{{ true }}">
@@ -131,19 +143,19 @@
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
             <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Priority Intelligence Requirements</div><span style="font-size:11px;color:var(--color-neutral-700)">{{ pirSummary }}</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Collection requirements · /api/collection</div><span style="font-size:11px;color:var(--color-neutral-700)">{{ pirSummary }}</span></div>
               <div style="display:flex;flex-direction:column;gap:4px">
                 <sc-for list="{{ pirs }}" as="p" hint-placeholder-count="3">
                   <div style="display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:6px 0;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
-                    <span style="font-family:var(--font-heading);font-weight:600;color:var(--color-accent-700);min-width:44px">PIR {{ p.n }}</span>
-                    <span style="flex:1;line-height:1.4">{{ p.q }}</span>
+                    <span style="font-family:var(--font-heading);font-weight:600;color:var(--color-accent-700);min-width:52px">JIPCL {{ p.n }}</span>
+                    <span style="flex:1;line-height:1.4">{{ p.q }}<br><span style="font-size:11px;color:var(--color-neutral-700)">{{ p.meta }}{{ p.tied }}</span></span>
                     <span class="tag" style="background:{{ p.bg }};color:{{ p.fg }};white-space:nowrap">{{ p.status }}</span>
-                    <button sc-camel-on-click="{{ p.remove }}" class="btn btn-ghost" style="padding:0 6px;font-size:12px">Remove</button>
+                    <sc-if value="{{ p.isLocal }}" hint-placeholder-val="{{ false }}"><button sc-camel-on-click="{{ p.remove }}" class="btn btn-ghost" style="padding:0 6px;font-size:12px">Remove</button></sc-if>
                   </div>
                 </sc-for>
               </div>
               <div style="display:flex;gap:8px">
-                <input class="input" style="flex:1;min-width:0" placeholder="Add PIR (what must the commander know to decide?)" value="{{ newPir }}" sc-camel-on-change="{{ onNewPir }}" sc-camel-on-key-down="{{ onPirKey }}">
+                <input class="input" style="flex:1;min-width:0" placeholder="Add PIR — local draft (what must the commander know to decide?)" value="{{ newPir }}" sc-camel-on-change="{{ onNewPir }}" sc-camel-on-key-down="{{ onPirKey }}">
                 <button class="btn btn-secondary" sc-camel-on-click="{{ addPir }}">Add</button>
               </div>
               <button class="btn btn-ghost" style="font-size:12px;align-self:flex-start" sc-camel-on-click="{{ goCollection }}">Open Collection Management →</button>
@@ -157,12 +169,11 @@
                     <div style="display:flex;gap:10px;align-items:flex-start">
                       <span style="font-family:var(--font-heading);font-weight:600;color:var(--color-accent-700);min-width:26px">A{{ a.n }}</span>
                       <span style="flex:1">{{ a.text }}</span>
-                      <button sc-camel-on-click="{{ a.remove }}" class="btn btn-ghost" style="padding:0 6px;font-size:12px">Remove</button>
+                      <sc-if value="{{ a.isLocal }}" hint-placeholder-val="{{ false }}"><button sc-camel-on-click="{{ a.remove }}" class="btn btn-ghost" style="padding:0 6px;font-size:12px">Remove</button></sc-if>
                     </div>
                     <div style="display:flex;gap:8px;align-items:center;padding-left:36px;flex-wrap:wrap">
-                      <button sc-camel-on-click="{{ a.cycle }}" style="padding:2px 8px;border-radius:6px;border:0;font:inherit;font-size:11px;font-weight:600;cursor:pointer;background:{{ a.bg }};color:{{ a.fg }}">{{ a.status }}</button>
-                      <span style="font-size:11px;color:var(--color-neutral-700)">Confidence {{ a.conf }}%</span>
-                      <input type="range" min="10" max="100" step="10" value="{{ a.conf }}" sc-camel-on-change="{{ a.setConf }}" style="width:90px">
+                      <span style="padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;background:{{ a.bg }};color:{{ a.fg }}">{{ a.status }}</span>
+                      <span style="font-size:11px;color:var(--color-neutral-700)">{{ a.stats }}</span>
                       <span style="font-size:11px;color:var(--color-neutral-700)">{{ a.link }}</span>
                     </div>
                   </div>
@@ -201,20 +212,12 @@
           <div class="blueprint" style="padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;align-items:end">
             <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
             <div style="display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Strategies to Develop</span>
-              <div class="seg" style="display:flex">
-                <sc-for list="{{ coaCounts }}" as="k" hint-placeholder-count="4">
-                  <label class="seg-opt" style="flex:1;justify-content:center"><input type="radio" name="ncoa" checked="{{ k.on }}" sc-camel-on-change="{{ k.pick }}">{{ k.label }}</label>
-                </sc-for>
-              </div>
+              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Evaluated model</span>
+              <span style="font-size:13px;line-height:1.5">{{ modelShape }}</span>
             </div>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Wargame Runs · {{ numSims }}</span>
-              <input type="range" min="500" max="10000" step="500" value="{{ numSims }}" sc-camel-on-change="{{ onNumSims }}">
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Adversary Aggression · {{ aggressionLabel }}</span>
-              <input type="range" min="0" max="100" step="5" value="{{ aggressionPct }}" sc-camel-on-change="{{ onAggression }}">
+            <div style="display:flex;flex-direction:column;gap:6px;grid-column:span 2">
+              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Risk levels</span>
+              <span style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">{{ levelBasis }}</span>
             </div>
             <button class="btn btn-primary blueprint" style="padding:12px 18px;font-size:14px;justify-self:end" sc-camel-on-click="{{ startDevelopment }}">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Adjudicate Strategy →
@@ -239,7 +242,7 @@
             <sc-raw-thead><sc-raw-tr><sc-raw-th>Claim</sc-raw-th><sc-raw-th>Type</sc-raw-th><sc-raw-th>Source span</sc-raw-th><sc-raw-th>Validity window</sc-raw-th><sc-raw-th>Confidence</sc-raw-th><sc-raw-th>Edges</sc-raw-th></sc-raw-tr></sc-raw-thead>
             <sc-raw-tbody>
               <sc-for list="{{ claims }}" as="c" hint-placeholder-count="6">
-                <sc-raw-tr><sc-raw-td style="font-weight:500;max-width:420px">{{ c.text }}</sc-raw-td><sc-raw-td><span class="tag tag-accent">{{ c.type }}</span></sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:13px">{{ c.source }}</sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:13px">{{ c.valid }}</sc-raw-td><sc-raw-td><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ c.bg }};color:{{ c.fg }}">{{ c.conf }}%</span></sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:12.5px">{{ c.edges }}</sc-raw-td></sc-raw-tr>
+                <sc-raw-tr><sc-raw-td style="font-weight:500;max-width:420px">{{ c.text }}</sc-raw-td><sc-raw-td><span class="tag tag-accent">{{ c.type }}</span></sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:13px">{{ c.source }}</sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:13px">{{ c.valid }}</sc-raw-td><sc-raw-td><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ c.bg }};color:{{ c.fg }}">{{ c.conf }}</span></sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:12.5px">{{ c.edges }}</sc-raw-td></sc-raw-tr>
               </sc-for>
             </sc-raw-tbody>
           </sc-raw-table>
@@ -415,7 +418,7 @@
           <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
             <div>
               <h2 style="font-size:26px;margin:0">Strategy Development</h2>
-              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">{{ coaCount }} strategies for {{ ccmd }} against {{ threatName }} · each screened for feasibility, acceptability, suitability, distinguishability and completeness.</p>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">{{ coaCount }} options served by /api/options for {{ scenarioName }}, batch {{ batchNo }}, evaluated as of {{ asOf }} · each carries the five JP 5-0 validity tests with the evidence the evaluator wrote. An option that fails a test stays on screen, names its gate and cannot be recommended.</p>
             </div>
             <button class="btn btn-primary blueprint" style="padding:12px 18px;font-size:14px" sc-camel-on-click="{{ startWargame }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Proceed to Wargame →</button>
           </div>
@@ -434,13 +437,21 @@
                   <sc-for list="{{ c.tasks }}" as="t" hint-placeholder-count="3"><li>{{ t }}</li></sc-for>
                 </ol>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;border-top:1px solid var(--color-divider);padding-top:10px">
-                  <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Duration</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.days }} d</div></div>
-                  <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Force Demand</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.res }}%</div></div>
+                  <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Duration</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.days }}</div></div>
+                  <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Force Demand</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.res }}</div></div>
                   <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Decision Points</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.dps }}</div></div>
                 </div>
+                <span style="font-size:11px;color:var(--color-neutral-700);line-height:1.45">The evaluated model does not estimate schedule days, force demand as a share of allocation, or a count of decision points.</span>
+                <div style="font-size:12.5px;line-height:1.5">{{ c.valueLine }}<br>{{ c.rangeLine }}</div>
                 <div style="display:flex;gap:4px;flex-wrap:wrap">
-                  <sc-for list="{{ c.screen }}" as="s" hint-placeholder-count="5"><span class="tag" style="background:{{ s.bg }};color:{{ s.fg }}">{{ s.label }}</span></sc-for>
+                  <sc-for list="{{ c.screen }}" as="s" hint-placeholder-count="5"><span class="tag" title="{{ s.evidence }}" style="background:{{ s.bg }};color:{{ s.fg }}">{{ s.label }}</span></sc-for>
                 </div>
+                <sc-for list="{{ c.screen }}" as="s" hint-placeholder-count="5">
+                  <div style="font-size:11.5px;line-height:1.45;color:var(--color-neutral-700)"><span style="font-weight:600;color:{{ s.fg }}">{{ s.label }}</span> — {{ s.evidence }}</div>
+                </sc-for>
+                <sc-if value="{{ c.invalid }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12.5px;line-height:1.5;padding:8px 10px;border-radius:6px;background:rgb(174,25,85);color:rgb(254,236,244)">{{ c.gateLine }}</div>
+                </sc-if>
               </article>
             </sc-for>
           </div>
@@ -453,7 +464,7 @@
           <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
             <div>
               <h2 style="font-size:26px;margin:0">Strategy Wargame</h2>
-              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">The Predictive Interconnected Risk Engine reads the graph's edges — how one problem set depends on another — and propagates: change a claim here, see what shifts there. Each strategy is played {{ numSims }} times against {{ threatName }} reactions at {{ aggressionLabel }} aggression; outcomes drive the three governing risks.</p>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">The Predictive Interconnected Risk Engine reads the graph's edges — how one problem set depends on another — and propagates: fail a claim here, see what shifts there. "Run Wargame" asks /api/options/outcome-distribution to enumerate every assumption world against every adversary COA. Nothing is sampled and nothing is simulated in the browser.</p>
             </div>
             <div style="display:flex;gap:8px">
               <button class="btn btn-secondary" sc-camel-on-click="{{ runSim }}">{{ runLabel }}</button>
@@ -461,11 +472,10 @@
             </div>
           </div>
 
-          <sc-if value="{{ simRunning }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ distBusy }}" hint-placeholder-val="{{ false }}">
             <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="animation:pulse 1.2s infinite">{{ simStatus }}</span><span style="font-family:var(--font-heading);font-weight:600">{{ simProgress }}%</span></div>
-              <div style="height:6px;border:1px solid var(--color-divider)"><div style="height:100%;background:var(--color-accent);width:{{ simProgress }}%"></div></div>
+              <div style="font-size:13px"><span style="animation:pulse 1.2s infinite">Enumerating the outcome distribution over every assumption world and adversary COA…</span></div>
             </div>
           </sc-if>
 
@@ -476,28 +486,29 @@
                   <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
                   <div style="display:flex;justify-content:space-between;align-items:baseline">
                     <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Strategy {{ r.n }} · {{ r.title }}</span>
-                    <span style="font-size:11px;color:var(--color-neutral-700)">{{ r.sims }} runs</span>
+                    <span style="font-size:11px;color:var(--color-neutral-700)">{{ r.worlds }}</span>
                   </div>
                   <div style="display:flex;align-items:flex-end;gap:2px;height:84px;border-bottom:1px solid var(--color-divider)">
                     <sc-for list="{{ r.bins }}" as="b" hint-placeholder-count="10">
-                      <div style="flex:1;height:{{ b.h }}%;background:{{ b.bg }}"></div>
+                      <div title="{{ b.tip }}" style="flex:1;height:{{ b.h }}%;background:{{ b.bg }}"></div>
                     </sc-for>
                   </div>
-                  <div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)"><span>Mission Failure</span><span>Objective Secured</span></div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)"><span>Value 0.0</span><span>Value 1.0</span></div>
+                  <div style="font-size:11px;color:var(--color-neutral-700);line-height:1.4">Probability mass per bin, from the enumerated worlds. Darker bins are at or above the option's aspiration.</div>
                   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Success Rate</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.pSuccess }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">80% CI {{ r.ci }}</div></div>
-                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Worst-Case Casualties</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.cas }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">of committed force</div></div>
-                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Escalation Rate</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.pEsc }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">{{ r.pMajor }}% beyond theater</div></div>
+                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Meets aspiration</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.aspirationPct }}</div><div style="font-size:11px;color:var(--color-neutral-700)">probability across enumerated assumption worlds, not a real-world forecast</div></div>
+                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Casualties p90</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.casualties }}</div><div style="font-size:11px;color:var(--color-neutral-700)">this model does not estimate casualties</div></div>
+                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Adversary-scenario range</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.range }}</div><div style="font-size:11px;color:var(--color-neutral-700)">min and max expected value across the adversary COAs · {{ r.meanLine }}</div></div>
                   </div>
-                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;border-top:1px solid var(--color-divider);padding-top:10px">
-                    <sc-for list="{{ r.risks }}" as="k" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:6px;border-top:1px solid var(--color-divider);padding-top:10px">
+                    <sc-for list="{{ r.risks }}" as="k" hint-placeholder-count="5">
                       <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">{{ k.label }}</span><span style="padding:4px 8px;font-family:var(--font-heading);font-weight:600;font-size:13px;text-align:center;background:{{ k.bg }};color:{{ k.fg }};border-radius:6px">{{ k.level }}</span></div>
                     </sc-for>
                   </div>
                   <div style="display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--color-divider);padding-top:10px">
-                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Risks and mitigations</span>
-                    <sc-for list="{{ r.mitigations }}" as="m" hint-placeholder-count="3">
-                      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;font-size:12px;line-height:1.45;padding:4px 0;border-bottom:1px solid var(--color-divider)"><span><span style="font-weight:600;color:{{ m.fg }}">{{ m.tag }}</span> {{ m.risk }}</span><span style="color:var(--color-neutral-700)"><span style="font-weight:600;color:var(--color-text)">Mitigate:</span> {{ m.fix }}</span></div>
+                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Assumptions this option depends on</span>
+                    <sc-for list="{{ r.assumptions }}" as="m" hint-placeholder-count="3">
+                      <div style="display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:10px;font-size:12px;line-height:1.45;padding:4px 0;border-bottom:1px solid var(--color-divider)"><span><span style="font-weight:600;color:{{ m.fg }}">A{{ m.n }} · {{ m.tag }}</span> {{ m.text }}</span><span style="color:var(--color-neutral-700)">{{ m.stats }}</span></div>
                     </sc-for>
                   </div>
                 </article>
@@ -508,7 +519,7 @@
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
               <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
                 <h3 style="font-size:22px;margin:0">Propagation · If One Assumption Fails, What Else Moves</h3>
-                <span style="font-size:11px;color:var(--color-neutral-700)">Fail one assumption; the wargame re-runs {{ numSims }} times and shows which strategies and problem sets are affected</span>
+                <span style="font-size:11px;color:var(--color-neutral-700)">Fail one assumption; /api/options/what-if recomputes the comparison and reports which options degrade, which harmful events move and which problem sets move</span>
               </div>
               <div style="display:flex;gap:6px;flex-wrap:wrap">
                 <sc-for list="{{ failToggles }}" as="f" hint-placeholder-count="4">
@@ -519,18 +530,26 @@
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start">
                   <div style="display:flex;flex-direction:column;gap:6px">
                     <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">If A{{ failN }} fails — {{ failText }}</span>
+                    <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ failStats }}</span>
                     <sc-for list="{{ propagation }}" as="p" hint-placeholder-count="3">
-                      <div style="display:grid;grid-template-columns:minmax(0,1fr) 90px 150px;gap:10px;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+                      <div style="display:grid;grid-template-columns:minmax(0,1fr) 150px 170px;gap:10px;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
                         <span><span style="font-weight:600">Strategy {{ p.n }}</span> · {{ p.title }}</span>
-                        <span style="font-weight:600;color:{{ p.color }}">{{ p.delta }} success</span>
+                        <span style="font-weight:600;color:{{ p.color }}">{{ p.delta }}<span style="font-weight:400;color:var(--color-neutral-700)"> ({{ p.before }} → {{ p.after }})</span></span>
                         <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ p.riskShift }}</span>
                       </div>
                     </sc-for>
                   </div>
                   <div style="display:flex;flex-direction:column;gap:6px">
-                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">How far the effect travels · problem sets</span>
+                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">How far the effect travels · problem sets moved</span>
                     <sc-for list="{{ problemSets }}" as="ps" hint-placeholder-count="3">
                       <div style="display:flex;gap:10px;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)"><span style="width:{{ ps.w }}px;height:8px;background:{{ ps.bg }};border-radius:2px;flex:none"></span><span style="flex:1">{{ ps.label }}</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ ps.hop }}</span></div>
+                    </sc-for>
+                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:6px">Harmful events moved</span>
+                    <sc-for list="{{ harmfulMoved }}" as="he" hint-placeholder-count="2">
+                      <div style="display:flex;gap:10px;align-items:baseline;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)"><span style="flex:1">{{ he.label }}</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ he.horizon }} · {{ he.move }} · {{ he.p }}</span></div>
+                    </sc-for>
+                    <sc-for list="{{ statusChanges }}" as="sc" hint-placeholder-count="1">
+                      <div style="font-size:12px;color:rgb(255,120,120)">Validity change · {{ sc }}</div>
                     </sc-for>
                     <span style="font-size:12px;color:var(--color-neutral-700)">{{ propagationText }}</span>
                   </div>
@@ -541,17 +560,31 @@
             <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
               <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
-                <div style="display:flex;gap:12px;align-items:baseline"><h3 style="font-size:22px;margin:0">Action – Reaction – Counteraction · Strategy {{ selN }} {{ selTitle }}</h3><button class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ toggleArc }}">{{ arcToggle }}</button></div>
-                <span style="font-size:11px;color:var(--color-neutral-700)">Select a strategy card above to change · red cell reactions drawn from JIPOE most likely / most dangerous COAs</span>
+                <div style="display:flex;gap:12px;align-items:baseline"><h3 style="font-size:22px;margin:0">Interconnected risk · problem sets, harmful events and cascade</h3><button class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ toggleArc }}">{{ arcToggle }}</button></div>
+                <span style="font-size:11px;color:var(--color-neutral-700)">Levels, drivers and cascade edges from /api/risks at the near-term horizon. A turn-by-turn action–reaction–counteraction sequence is Unavailable: this model does not produce one.</span>
               </div>
-              <sc-if value="{{ showArc }}" hint-placeholder-val="{{ false }}"><sc-raw-table class="table">
-                <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:70px">Turn</sc-raw-th><sc-raw-th>Friendly Action</sc-raw-th><sc-raw-th>{{ threatName }} Reaction</sc-raw-th><sc-raw-th>Counteraction</sc-raw-th><sc-raw-th style="width:130px">Decision Point</sc-raw-th></sc-raw-tr></sc-raw-thead>
-                <sc-raw-tbody>
-                  <sc-for list="{{ arc }}" as="a" hint-placeholder-count="3">
-                    <sc-raw-tr><sc-raw-td style="font-family:var(--font-heading);font-weight:600">T+{{ a.turn }}</sc-raw-td><sc-raw-td>{{ a.action }}</sc-raw-td><sc-raw-td>{{ a.reaction }}</sc-raw-td><sc-raw-td>{{ a.counter }}</sc-raw-td><sc-raw-td><span class="tag tag-outline">{{ a.dp }}</span></sc-raw-td></sc-raw-tr>
-                  </sc-for>
-                </sc-raw-tbody>
-              </sc-raw-table></sc-if>
+              <sc-if value="{{ showArc }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:14px">
+                <sc-raw-table class="table">
+                  <sc-raw-thead><sc-raw-tr><sc-raw-th>Problem set</sc-raw-th><sc-raw-th style="width:120px">Risk level</sc-raw-th><sc-raw-th>Thing of value</sc-raw-th><sc-raw-th>Tolerance</sc-raw-th></sc-raw-tr></sc-raw-thead>
+                  <sc-raw-tbody>
+                    <sc-for list="{{ riskProblemSets }}" as="ps" hint-placeholder-count="4">
+                      <sc-raw-tr><sc-raw-td style="font-weight:600">{{ ps.label }}</sc-raw-td><sc-raw-td><span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;background:{{ ps.bg }};color:{{ ps.fg }}">{{ ps.level }}</span> <span style="font-size:11px;color:var(--color-neutral-700)">{{ ps.horizon }}</span></sc-raw-td><sc-raw-td style="font-size:12.5px">{{ ps.value }}</sc-raw-td><sc-raw-td style="font-size:12.5px;color:var(--color-neutral-700)">{{ ps.tolerance }}</sc-raw-td></sc-raw-tr>
+                    </sc-for>
+                  </sc-raw-tbody>
+                </sc-raw-table>
+                <sc-raw-table class="table">
+                  <sc-raw-thead><sc-raw-tr><sc-raw-th>Harmful event</sc-raw-th><sc-raw-th style="width:120px">Risk level</sc-raw-th><sc-raw-th>Probability</sc-raw-th><sc-raw-th>Consequence</sc-raw-th><sc-raw-th>Drivers</sc-raw-th></sc-raw-tr></sc-raw-thead>
+                  <sc-raw-tbody>
+                    <sc-for list="{{ riskEvents }}" as="he" hint-placeholder-count="4">
+                      <sc-raw-tr><sc-raw-td style="font-weight:500">{{ he.statement }}<br><span style="font-size:11px;color:var(--color-neutral-700)">{{ he.set }} · {{ he.type }}</span></sc-raw-td><sc-raw-td><span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;background:{{ he.bg }};color:{{ he.fg }}">{{ he.level }}</span></sc-raw-td><sc-raw-td style="font-size:12.5px">{{ he.p }}</sc-raw-td><sc-raw-td style="font-size:12.5px">{{ he.consequence }} · {{ he.trend }}</sc-raw-td><sc-raw-td style="font-size:12px;color:var(--color-neutral-700)">{{ he.drivers }}</sc-raw-td></sc-raw-tr>
+                    </sc-for>
+                  </sc-raw-tbody>
+                </sc-raw-table>
+                <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Cascade edges</span>
+                <sc-for list="{{ cascade }}" as="e" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);gap:10px;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)"><span>{{ e.from }}</span><span style="font-weight:600;color:var(--color-accent-700);text-align:center">→ {{ e.lift }}</span><span>{{ e.to }}<br><span style="font-size:11px;color:var(--color-neutral-700)">{{ e.mechanism }}</span></span></div>
+                </sc-for>
+              </div></sc-if>
             </div>
           </sc-if>
         </section>
@@ -563,24 +596,24 @@
           <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
             <div>
               <h2 style="font-size:26px;margin:0">Strategy Comparison</h2>
-              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Strategy Option Evaluation sits on top and scores options against assumptions, where each assumption is a claim in the graph. Governing criteria are risk to mission, risk to personnel and risk of escalation, rated Low / Moderate / Significant / High.</p>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Five criteria — mission, personnel, escalation, time and force demand — each rated Low / Moderate / Significant / High by the backend. The sliders are an operator input to /api/options/rank; the ranking below is that endpoint's answer, never a score computed in this page.</p>
             </div>
             <button class="btn btn-primary blueprint" style="padding:12px 18px;font-size:14px" sc-camel-on-click="{{ goApprove }}" disabled="{{ noResults }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Proceed to Approval →</button>
           </div>
-          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
-            <div class="blueprint" style="padding:28px;text-align:center;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>No wargame results yet. Run the Monte Carlo wargame in step 3 first.</div>
+          <sc-if value="{{ noOptions }}" hint-placeholder-val="{{ false }}">
+            <div class="blueprint" style="padding:28px;text-align:center;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Loading the evaluated options from /api/options…</div>
           </sc-if>
-          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ hasOptions }}" hint-placeholder-val="{{ false }}">
             <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
               <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Where the Analysis Stands on Thin Evidence</span><button class="btn btn-secondary" style="font-size:12.5px" sc-camel-on-click="{{ sendWeakToCollection }}">Send {{ weakCount }} weak assumptions to Collection Agent →</button></div>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
                 <sc-for list="{{ evidence }}" as="e" hint-placeholder-count="3">
                   <div style="display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid {{ e.border }};border-radius:8px">
-                    <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:600;font-size:14px">Strategy {{ e.n }} · {{ e.title }}</span><span style="font-size:11px;color:var(--color-neutral-700)">Rank #{{ e.rank }}</span></div>
+                    <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:600;font-size:14px">Strategy {{ e.n }} · {{ e.title }}</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ e.rank }}</span></div>
                     <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Load-bearing claims</span>
                     <sc-for list="{{ e.deps }}" as="d" hint-placeholder-count="2">
-                      <div style="display:flex;gap:8px;align-items:center;font-size:12.5px"><span style="font-weight:600;color:var(--color-accent-700);min-width:24px">A{{ d.n }}</span><span style="flex:1;color:var(--color-neutral-800)">{{ d.short }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ d.bg }};color:{{ d.fg }}">{{ d.conf }}% · {{ d.status }}</span></div>
+                      <div style="display:flex;gap:8px;align-items:center;font-size:12.5px"><span style="font-weight:600;color:var(--color-accent-700);min-width:24px">A{{ d.n }}</span><span style="flex:1;color:var(--color-neutral-800)">{{ d.short }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ d.bg }};color:{{ d.fg }}">{{ d.conf }} · {{ d.status }}</span></div>
                     </sc-for>
                     <span style="font-size:12px;color:{{ e.verdictColor }}">{{ e.verdict }}</span>
                   </div>
@@ -592,7 +625,7 @@
                 <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
                 <sc-raw-table class="table">
                   <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:220px">Criterion · Weight</sc-raw-th>
-                    <sc-for list="{{ results }}" as="r" hint-placeholder-count="3"><sc-raw-th style="text-align:center">Strategy {{ r.n }}<br><span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px">{{ r.title }}</span></sc-raw-th></sc-for>
+                    <sc-for list="{{ coas }}" as="r" hint-placeholder-count="5"><sc-raw-th style="text-align:center">Strategy {{ r.n }}<br><span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px">{{ r.title }}</span></sc-raw-th></sc-for>
                   </sc-raw-tr></sc-raw-thead>
                   <sc-raw-tbody>
                     <sc-for list="{{ matrix }}" as="row" hint-placeholder-count="5">
@@ -605,12 +638,13 @@
                     </sc-for>
                     <sc-raw-tr style="background:color-mix(in srgb,var(--color-accent) 6%,transparent)">
                       <sc-raw-td style="font-family:var(--font-heading);font-weight:600;font-size:15px">Weighted Score</sc-raw-td>
-                      <sc-for list="{{ ranked }}" as="r" hint-placeholder-count="3">
-                        <sc-raw-td style="text-align:center"><div style="font-family:var(--font-heading);font-weight:600;font-size:26px">{{ r.pct }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">Rank #{{ r.rank }} · {{ r.score }}</div></sc-raw-td>
+                      <sc-for list="{{ scoreRow }}" as="r" hint-placeholder-count="5">
+                        <sc-raw-td style="text-align:center"><div style="font-family:var(--font-heading);font-weight:600;font-size:26px">{{ r.pct }}</div><div style="font-size:11px;color:var(--color-neutral-700)">{{ r.note }}</div></sc-raw-td>
                       </sc-for>
                     </sc-raw-tr>
                   </sc-raw-tbody>
                 </sc-raw-table>
+                <p style="margin:0;padding:12px 16px;border-top:1px solid var(--color-divider);font-size:12.5px;line-height:1.5;color:var(--color-neutral-700)"><span style="font-weight:600;color:var(--color-text)">JP 5-0 Appendix F:</span> {{ caution }}</p>
               </div>
               <div style="display:flex;flex-direction:column;gap:22px">
                 <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:10px;background:rgb(16,36,62);border:1px solid var(--color-accent)">
@@ -645,14 +679,14 @@
               <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><div style="display:flex;gap:12px;align-items:baseline"><h3 style="font-size:22px;margin:0">Sensitivity Analysis</h3><button class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ toggleSens }}">{{ sensToggle }}</button></div><span style="font-size:11px;color:var(--color-neutral-700)">How robust is the recommendation to changes in weights, adversary behavior and assumptions?</span></div>
               <sc-if value="{{ showSens }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px">
                 <div style="display:flex;flex-direction:column;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Rank Stability · 500 random weight sets (±2 each)</span>
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">{{ stabilityLabel }}</span>
                   <sc-for list="{{ stability }}" as="r" hint-placeholder-count="3">
                     <div style="display:grid;grid-template-columns:70px minmax(0,1fr) 44px;gap:8px;align-items:center;font-size:12.5px"><span>Strategy {{ r.n }}</span><div style="height:12px;background:rgb(30,41,59);border-radius:3px;overflow:hidden"><div style="height:100%;width:{{ r.pct }}%;background:{{ r.bg }}"></div></div><span style="text-align:right;font-weight:600">{{ r.pct }}%</span></div>
                   </sc-for>
                   <span style="font-size:12px;color:var(--color-neutral-700)">{{ stabilityText }}</span>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Weight Tornado · Does the #1 change if a weight moves ±2?</span>
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Weight Tornado · Does the #1 change if a weight moves ±2? · ten more calls to /api/options/rank</span>
                   <sc-for list="{{ tornado }}" as="t" hint-placeholder-count="5">
                     <div style="display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;align-items:center;font-size:11px">
                       <span style="font-size:12px">{{ t.label }}</span>
@@ -662,17 +696,17 @@
                   </sc-for>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Adversary Aggression Sweep · Success Rate</span>
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Adversary-scenario range · expected value across the adversary COAs</span>
                   <sc-raw-table class="table" style="font-size:12.5px">
-                    <sc-raw-thead><sc-raw-tr><sc-raw-th>Strategy</sc-raw-th><sc-raw-th>Restrained</sc-raw-th><sc-raw-th>Moderate</sc-raw-th><sc-raw-th>Aggressive</sc-raw-th></sc-raw-tr></sc-raw-thead>
-                    <sc-raw-tbody><sc-for list="{{ sweep }}" as="r" hint-placeholder-count="3"><sc-raw-tr><sc-raw-td style="font-weight:600">Strategy {{ r.n }}</sc-raw-td><sc-raw-td>{{ r.lo }}%</sc-raw-td><sc-raw-td>{{ r.mid }}%</sc-raw-td><sc-raw-td>{{ r.hi }}%</sc-raw-td></sc-raw-tr></sc-for></sc-raw-tbody>
+                    <sc-raw-thead><sc-raw-tr><sc-raw-th>Strategy</sc-raw-th><sc-raw-th>Min</sc-raw-th><sc-raw-th>Expected</sc-raw-th><sc-raw-th>Max</sc-raw-th></sc-raw-tr></sc-raw-thead>
+                    <sc-raw-tbody><sc-for list="{{ sweep }}" as="r" hint-placeholder-count="5"><sc-raw-tr><sc-raw-td style="font-weight:600">Strategy {{ r.n }}</sc-raw-td><sc-raw-td>{{ r.lo }}</sc-raw-td><sc-raw-td>{{ r.mid }}</sc-raw-td><sc-raw-td>{{ r.hi }}</sc-raw-td></sc-raw-tr></sc-for></sc-raw-tbody>
                   </sc-raw-table>
                   <span style="font-size:12px;color:var(--color-neutral-700)">{{ sweepText }}</span>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:8px">
                   <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Assumption Exposure</span>
                   <sc-for list="{{ assumptionRisk }}" as="a" hint-placeholder-count="3">
-                    <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:5px 0;border-bottom:1px solid var(--color-divider)"><span style="font-weight:600;color:var(--color-accent-700);min-width:24px">A{{ a.n }}</span><span style="flex:1">{{ a.text }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ a.bg }};color:{{ a.fg }}">{{ a.status }} · {{ a.conf }}%</span></div>
+                    <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:5px 0;border-bottom:1px solid var(--color-divider)"><span style="font-weight:600;color:var(--color-accent-700);min-width:24px">A{{ a.n }}</span><span style="flex:1">{{ a.text }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ a.bg }};color:{{ a.fg }}">{{ a.status }} · p(holds) {{ a.conf }}%</span></div>
                   </sc-for>
                   <span style="font-size:12px;color:var(--color-neutral-700)">{{ assumptionText }}</span>
                 </div>
@@ -689,11 +723,11 @@
             <h2 style="font-size:26px;margin:0">Option Recommendation</h2>
             <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Strategy evaluation that takes in every gap and risk surfaced upstream — thin evidence, open collection, propagation exposure and adversary behavior — and offers the Commander a recommended option with the risk being accepted.</p>
           </div>
-          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ hasOptions }}" hint-placeholder-val="{{ false }}">
             <div class="blueprint" style="padding:22px;display:flex;flex-direction:column;gap:14px;background:rgb(16,36,62);border:1px solid var(--color-accent)">
               <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
                 <div><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Strategy Evaluation · {{ planLabel }} · vs {{ threatName }}</span><h3 style="font-size:28px;margin:2px 0 0">Recommend Strategy {{ best.n }} · {{ best.title }}</h3></div>
-                <span style="padding:6px 12px;border-radius:6px;font-weight:600;font-size:14px;background:{{ evalGrade.bg }};color:{{ evalGrade.fg }}">Confidence in recommendation · {{ evalGrade.label }}</span>
+                <span style="padding:6px 12px;border-radius:6px;font-weight:600;font-size:14px;background:{{ evalGrade.bg }};color:{{ evalGrade.fg }}">Rank stability · {{ evalGrade.label }}</span>
               </div>
               <p style="margin:0;font-size:14px;line-height:1.55">{{ evalSummary }}</p>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
@@ -717,10 +751,10 @@
               </div>
             </div>
           </sc-if>
-          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
-            <div class="blueprint" style="padding:28px;text-align:center;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Run the wargames in the Predictive Risk Engine before a recommendation can be offered.</div>
+          <sc-if value="{{ noOptions }}" hint-placeholder-val="{{ false }}">
+            <div class="blueprint" style="padding:28px;text-align:center;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Loading the ranked options from /api/options/rank…</div>
           </sc-if>
-          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ hasOptions }}" hint-placeholder-val="{{ false }}">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
               <sc-for list="{{ ranked }}" as="r" hint-placeholder-count="3">
                 <button class="blueprint" sc-camel-on-click="{{ r.choose }}" style="padding:18px;display:flex;flex-direction:column;gap:8px;text-align:left;font:inherit;color:var(--color-text);background:{{ r.chooseBg }};cursor:pointer;border-color:{{ r.chooseBorder }}">
@@ -764,6 +798,18 @@
 
     <!-- ─── COLLECTION MANAGEMENT ─── -->
     <sc-if value="{{ isCollection }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ apiFailed }}" hint-placeholder-val="{{ false }}">
+        <section style="padding:28px 32px 0">
+          <div class="blueprint" style="padding:22px;display:flex;flex-direction:column;gap:8px;border:1px solid rgb(174,25,85)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgb(255,120,120)">API error · no evaluated numbers can be shown</span>
+            <h3 style="font-size:22px;margin:0">{{ apiErrorCode }}</h3>
+            <p style="margin:0;font-size:14px;line-height:1.5">{{ apiErrorMessage }}</p>
+            <span style="font-size:12px;color:var(--color-neutral-700)">{{ apiErrorLine }} · requested {{ apiErrorPath }}</span>
+            <button class="btn btn-secondary" style="align-self:flex-start" sc-camel-on-click="{{ retry }}">Retry</button>
+          </div>
+        </section>
+      </sc-if>
       <section style="padding:22px 32px 40px;display:flex;flex-direction:column;gap:22px">
         <div>
           <h2 style="font-size:26px;margin:0">Collection Management Agent</h2>
@@ -771,37 +817,38 @@
         </div>
         <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
           <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Gaps Defined by the Strategy Question · Weak Assumptions</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ weakCount }} claims below 70% confidence, unvalidated or expired</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Gaps Defined by the Strategy Question · Weak Assumptions</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ weakCount }} evaluated assumptions stale, violated or below p(holds) 0.70</span></div>
           <sc-for list="{{ weakList }}" as="w" hint-placeholder-count="3">
             <div style="display:grid;grid-template-columns:30px minmax(0,1fr) auto auto;gap:10px;align-items:center;font-size:13px;padding:7px 0;border-bottom:1px solid var(--color-divider)">
               <span style="font-weight:600;color:var(--color-accent-700)">A{{ w.n }}</span>
-              <span style="display:flex;flex-direction:column;gap:2px"><span>{{ w.text }}</span><span style="font-size:11px;color:var(--color-neutral-700)">Load-bearing for {{ w.bearing }} · source {{ w.link }} · valid {{ w.valid }}</span></span>
-              <span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ w.bg }};color:{{ w.fg }}">{{ w.status }} · {{ w.conf }}%</span>
+              <span style="display:flex;flex-direction:column;gap:2px"><span>{{ w.text }}</span><span style="font-size:11px;color:var(--color-neutral-700)">Load-bearing for {{ w.bearing }} · {{ w.link }} · {{ w.valid }}</span></span>
+              <span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ w.bg }};color:{{ w.fg }}">{{ w.status }} · p(holds) {{ w.conf }}%</span>
               <sc-if value="{{ w.hasCr }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="white-space:nowrap">{{ w.crLabel }}</span></sc-if>
               <sc-if value="{{ w.noCr }}" hint-placeholder-val="{{ true }}"><button class="btn btn-secondary" style="font-size:12px;white-space:nowrap" sc-camel-on-click="{{ w.draft }}">Draft collection requirement</button></sc-if>
             </div>
           </sc-for>
           <sc-if value="{{ noWeak }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--color-neutral-700)">No weak assumptions. Every load-bearing claim is validated above 70% confidence.</span></sc-if>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Priority Intelligence Requirements</span><button class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ togglePir }}">{{ pirToggle }}</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Collection requirements · /api/collection · {{ pirSummary }}</span><button class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ togglePir }}">{{ pirToggle }}</button></div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
           <sc-for list="{{ pirs }}" as="p" hint-placeholder-count="3">
             <article class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">PIR {{ p.n }}</span><span class="tag" style="background:{{ p.bg }};color:{{ p.fg }}">{{ p.status }}</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">JIPCL {{ p.n }}</span><span class="tag" style="background:{{ p.bg }};color:{{ p.fg }}">{{ p.status }}</span></div>
               <h3 style="font-size:20px;margin:0;line-height:1.2">{{ p.q }}</h3>
               <sc-if value="{{ showPirDetail }}" hint-placeholder-val="{{ false }}"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Indicators</div>
               <ul style="margin:0;padding-left:16px;font-size:13px;line-height:1.5"><sc-for list="{{ p.ind }}" as="i" hint-placeholder-count="2"><li>{{ i }}</li></sc-for></ul>
               <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Tasked Assets</div>
               <div style="display:flex;gap:4px;flex-wrap:wrap"><sc-for list="{{ p.assets }}" as="a" hint-placeholder-count="2"><span class="tag tag-neutral">{{ a }}</span></sc-for></div></sc-if>
-              <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--color-divider);padding-top:8px;font-size:12px;color:var(--color-neutral-700);gap:8px;flex-wrap:wrap"><span>{{ p.reports }} reports · LTIOV {{ p.ltiov }}{{ p.tied }}</span><span style="display:flex;gap:4px"><button class="btn btn-ghost" sc-camel-on-click="{{ p.cycle }}" style="font-size:12px">{{ p.cycleLabel }}</button><button class="btn btn-ghost" sc-camel-on-click="{{ p.remove }}" style="font-size:12px">Remove</button></span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--color-divider);padding-top:8px;font-size:12px;color:var(--color-neutral-700);gap:8px;flex-wrap:wrap"><span>{{ p.meta }}{{ p.tied }}</span><sc-if value="{{ p.isLocal }}" hint-placeholder-val="{{ false }}"><span style="display:flex;gap:4px"><button class="btn btn-ghost" sc-camel-on-click="{{ p.cycle }}" style="font-size:12px">{{ p.cycleLabel }}</button><button class="btn btn-ghost" sc-camel-on-click="{{ p.remove }}" style="font-size:12px">Remove</button></span></sc-if></div>
             </article>
           </sc-for>
           <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px;border-style:dashed">
             <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">New PIR</span>
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">New PIR · local draft</span>
             <textarea class="input" style="min-height:70px;font-size:13px" placeholder="What must the commander know to decide?" value="{{ newPir }}" sc-camel-on-change="{{ onNewPir }}"></textarea>
             <button class="btn btn-secondary" sc-camel-on-click="{{ addPir }}">Add PIR</button>
+            <span style="font-size:11px;color:var(--color-neutral-700);line-height:1.4">Drafts stay in this browser session. Nothing is written to the backend workspace.</span>
           </div>
         </div>
       <!-- ─── RFI ─── -->

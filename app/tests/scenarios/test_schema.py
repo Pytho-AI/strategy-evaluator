@@ -1,13 +1,16 @@
-"""Every row validates against the dataset's pydantic models, and the applicable invariants pass.
+"""Every row validates against the dataset's pydantic models, and all twenty invariants pass.
 
-Both checks reuse `dataset/gen/validate.py` rather than restating the rules. The invariants left
-out (02, 11, 12, 13, 15, 16, 17, 20) read the rendered corpus, which the claims agent owns.
+Both checks reuse `dataset/gen/validate.py` rather than restating the rules. The corpus-reading
+invariants (02 spans, 11-13 markings and vocabulary, 15-17 decision matrix, comparison tables and
+the App. F caution, 20 acronyms) resolve `sources.path` against the scenario package rather than
+against `dataset/`, so they take `scenario_root`.
 """
 from __future__ import annotations
 
 import pytest
 
-SCENARIO_INVARIANTS = ["01", "03", "04", "05", "06", "07", "08", "09", "10", "14", "18", "19"]
+SCENARIO_INVARIANTS = [f"{n:02d}" for n in range(1, 21)]
+CORPUS_INVARIANTS = ["02", "11", "12", "13", "15", "16", "17", "20"]
 
 
 def test_every_row_validates_against_its_model(validate, computed):
@@ -21,10 +24,18 @@ def test_authored_rows_validate_before_recompute(validate, authored):
 
 
 @pytest.mark.parametrize("invariant", SCENARIO_INVARIANTS)
-def test_dataset_invariant(validate, computed, dataset_dir, S, invariant):
-    results = validate.run_all(computed, dataset_dir, S.AS_OF, S.WORLD_VERSION, only={invariant})
+def test_dataset_invariant(validate, computed, scenario_root, S, invariant):
+    results = validate.run_all(computed, scenario_root, S.AS_OF, S.WORLD_VERSION, only={invariant})
     assert len(results) == 1
     assert results[0].passed, f"invariant {invariant}: {results[0].detail}"
+
+
+def test_the_corpus_reading_invariants_are_actually_exercised(computed, CORPUS=CORPUS_INVARIANTS):
+    """They only mean something because there is a corpus to read: guard against them passing
+    vacuously if the source rows ever went back to a single stand-in document."""
+    assert set(CORPUS) <= set(SCENARIO_INVARIANTS)
+    assert len(computed["sources"]) >= 10
+    assert all(s["path"].startswith("corpus/") for s in computed["sources"])
 
 
 def test_every_table_the_api_reads_is_populated(computed):

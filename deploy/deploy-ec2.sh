@@ -17,6 +17,14 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 ssh_run() { ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new "$HOST" "$@"; }
 
+HOLD_FILE="$REPO_ROOT/deploy/HOLD"
+if [ -f "$HOLD_FILE" ] && [ "${DEPLOY_OVERRIDE:-}" != "1" ]; then
+  echo "refusing to deploy: deploy/HOLD is in place." >&2
+  echo >&2
+  sed 's/^/    /' "$HOLD_FILE" >&2
+  exit 1
+fi
+
 echo "==> target $HOST:$REMOTE_DIR  (published on port $HOST_PORT)"
 
 # The box runs other stacks. Record what is up before we touch anything, refuse to

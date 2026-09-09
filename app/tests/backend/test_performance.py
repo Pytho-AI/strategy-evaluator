@@ -4,8 +4,7 @@ from __future__ import annotations
 import time
 
 import pytest
-from conftest import MeridianClient
-from fastapi.testclient import TestClient
+from support import MeridianClient
 
 from app.backend.adapter import DatasetAdapter
 from app.backend.main import create_app

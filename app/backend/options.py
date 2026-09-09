@@ -167,7 +167,6 @@ class OptionSet:
         self.actor_id = actor_id
         self.value_mod = eval_module("value")
         self.engine = eval_module("engine")
-        self.validity_mod = eval_module("validity")
         self.ids = sorted(
             s["strategy_id"]
             for s in index.rows("strategies")
@@ -320,6 +319,17 @@ class OptionSet:
     def weighted_max(self, weights: dict[str, int]) -> int:
         return sum(weights.values()) * MAX_LEVEL_SCORE
 
+    @property
+    def rankable(self) -> list[str]:
+        """The options a comparison may rank: the ones that passed every JP 5-0 test.
+
+        An option that failed a validity gate is served in full and names its gate, but it
+        is never placed in a ranked order -- the same rule ``eval.engine.ranking`` applies
+        and ``decision_overview`` already follows.
+        """
+        return [sid for sid in self.ids
+                if self.index.strategies[sid]["status"] == "valid"]
+
     def rank(self, scores: dict[str, dict[str, int]],
              weights: dict[str, int]) -> list[str]:
         """Best weighted total first; ties broken by expected value, then option number.
@@ -329,7 +339,7 @@ class OptionSet:
         value ordering prefers. It is deterministic either way.
         """
         return sorted(
-            self.ids,
+            self.rankable,
             key=lambda sid: (
                 -self.weighted_total(scores[sid], weights),
                 -self.index.strategies[sid]["value"],
@@ -340,16 +350,22 @@ class OptionSet:
     def weight_stability(self, scores: dict[str, dict[str, int]],
                          weights: dict[str, int]) -> dict:
         """Fraction of the enumerated perturbed weightings each option leads."""
-        wins = {sid: 0 for sid in self.ids}
+        rankable = self.rankable
+        wins = {sid: 0 for sid in rankable}
         axes = [
             sorted({min(WEIGHT_MAX, max(WEIGHT_MIN, weights[key] + d))
                     for d in WEIGHT_PERTURBATIONS})
             for key in CRITERION_KEYS
         ]
         # Pre-sort by the tie-break so only the weighted total has to be compared.
-        ordered = sorted(self.ids, key=lambda sid: (-self.index.strategies[sid]["value"],
+        ordered = sorted(rankable, key=lambda sid: (-self.index.strategies[sid]["value"],
                                                     self.numbers[sid]))
         rows = [(sid, [scores[sid][key] for key in CRITERION_KEYS]) for sid in ordered]
+        if not rows:
+            return {
+                "top_option_id": None, "fraction_top": 0.0, "weightings_evaluated": 0,
+                "method": WEIGHT_STABILITY_METHOD, "per_option": [],
+            }
         evaluated = 0
         for combination in itertools.product(*axes):
             evaluated += 1
@@ -368,7 +384,7 @@ class OptionSet:
             "per_option": [
                 {"strategy_id": sid, "number": self.numbers[sid],
                  "fraction_top": round(wins[sid] / evaluated, 9)}
-                for sid in sorted(self.ids, key=lambda s: (-wins[s], self.numbers[s]))
+                for sid in sorted(rankable, key=lambda s: (-wins[s], self.numbers[s]))
             ],
         }
 

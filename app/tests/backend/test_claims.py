@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 
 import pytest
-from conftest import DATASET_DIR
+from support import DATASET_DIR
 
 # One T0 claim, one inject claim, one proposed inject claim.
 PROVENANCE_CLAIMS = ("clm_0001", "clm_0844", "clm_0862")
