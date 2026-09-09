@@ -54,6 +54,29 @@ curl -s 'http://54.90.137.38:9010/api/snapshot?batch=1'   # str_blue_1 invalid, 
 
 Then walk `docs/QA_CHEATSHEET.md` in a browser.
 
+## Sharing the box with other stacks
+
+The target box also runs `coa-engine`, the `geo-agent` stack, the agent services and the
+`proxy-app` nginx. This deployment is kept strictly beside them:
+
+- its own directory (`/home/ubuntu/strategy-evaluation-workbench`), its own compose project,
+  its own network and its own named volume;
+- its own port. 8765 and 8766 belong to coa-engine, 9845/9846 and 9980/9981 to geo-agent,
+  17610/17611 to the agent services, 80/443 to the proxy. This stack publishes 9010;
+- capped at 2 GB of memory and 1.5 CPUs, so it cannot starve anything else;
+- the deploy script never runs `docker system prune`, never stops a container it did not
+  create, and touches nothing outside its own directory.
+
+`deploy/deploy-ec2.sh` enforces two checks itself: it refuses to start if another container
+already publishes the chosen port, and it takes a census of running containers before and
+after and fails loudly if any pre-existing container is no longer running.
+
+Verify by hand at any time:
+
+```sh
+ssh -i ~/.ssh/ml-docker-test.pem ubuntu@54.90.137.38 'docker ps --format "{{.Names}}\t{{.Status}}"'
+```
+
 ## State and reset
 
 Product state (ingested reports, proposed claims, review decisions, collection drafts,

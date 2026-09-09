@@ -18,6 +18,19 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ssh_run() { ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new "$HOST" "$@"; }
 
 echo "==> target $HOST:$REMOTE_DIR  (published on port $HOST_PORT)"
+
+# The box runs other stacks. Record what is up before we touch anything, refuse to
+# take a port another container already publishes, and verify afterwards that every
+# one of those containers is still running. This script never prunes, never stops a
+# container it did not create, and works only inside $REMOTE_DIR.
+BEFORE="$(ssh_run "docker ps --format '{{.Names}}'" | sort)"
+echo "==> other containers running now: $(echo "$BEFORE" | grep -v '^strategy-workbench$' | tr '\n' ' ')"
+
+if ssh_run "docker ps --format '{{.Names}} {{.Ports}}' | grep -v '^strategy-workbench ' | grep -q ':$HOST_PORT->'"; then
+  echo "refusing to deploy: port $HOST_PORT is already published by another container" >&2
+  exit 1
+fi
+
 ssh_run "mkdir -p '$REMOTE_DIR'"
 
 echo "==> syncing"
@@ -30,6 +43,16 @@ rsync -az --delete \
 
 echo "==> building and starting"
 ssh_run "cd '$REMOTE_DIR' && HOST_PORT=$HOST_PORT docker compose up -d --build"
+
+echo "==> checking the other stacks are untouched"
+AFTER="$(ssh_run "docker ps --format '{{.Names}}'" | sort)"
+MISSING="$(comm -23 <(echo "$BEFORE" | grep -v '^strategy-workbench$') <(echo "$AFTER"))"
+if [ -n "$MISSING" ]; then
+  echo "STOPPED BY THIS DEPLOY: $MISSING" >&2
+  echo "restart them before continuing" >&2
+  exit 1
+fi
+echo "==> all pre-existing containers still running"
 
 echo "==> waiting for health"
 for i in $(seq 1 30); do
