@@ -57,15 +57,7 @@ class Component extends DCLogic {
       { id: 'RFI-045', q: 'FMN Spiral / US BICES-X terminal availability at MNC-NE, MND-N and MND-NE for V Corps liaison.', to: 'J6', ties: 'Assumption A8', status: 'Answered' }
     ],
     newRfi: '',
-    planDocs: [
-      { name: 'USEUCOM OPORD 26-004 — OPERATION AMBER SHIELD.docx', kind: 'DOCX', words: 8600, pages: 18, status: 'Parsed', text: '',
-        mission: 'US European Command, as the supported combatant command, on order and NLT C-Day (10 SEP 2026), deploys, receives and employs designated US ground, air, maritime and special operations forces in the Baltic Region under NATO command; defends Allied territory, airspace and sea lines of communication; and, on order (D-Day), conducts and enables Alliance counteroffensive operations to expel Russian forces from Estonia and Latvia, while maintaining strategic deterrence across the remainder of the EUCOM AOR and managing escalation, in order to restore the territorial integrity of Estonia and Latvia, preserve the credibility of NATO Article 5 and deter further Russian aggression against the Alliance.',
-        intent: 'This operation exists to prove that Article 5 is a fact and not a slogan. The United States will fight forward with Allies to restore Estonia and Latvia to their governments, deny Russia a frozen conflict on NATO soil, and do so without allowing Moscow to convert a limited incursion into a general war or a nuclear crisis. Speed of reinforcement, Allied cohesion and escalation discipline are the decisive factors.',
-        endState: 'Russian forces are expelled from Estonia and Latvia and Allied forces control the international border; the Suwałki corridor, Baltic SPODs and Danish Straits are open; Allied air and maritime superiority over the Baltic Region is established; a sustainable Allied forward defense is in place at brigade-plus strength in each Baltic State; escalation has been contained below the nuclear threshold; and Russia has been denied both a territorial gain and a narrative of Alliance disunity.',
-        assumptions: ['Article 5 remains invoked and the NAC sustains consensus for restoration by force.', 'Transit, overflight, basing and HNS granted by Germany, Poland, Denmark, Benelux, Finland and Sweden.', 'Russia does not strike CONUS; strikes on NATO territory outside the Baltics remain possible.', 'Sealift and APS-2 deliver 1AD with two ABCTs NLT C+21, full division NLT C+45.', 'Baltic Sea contested but not closed; Danish Straits transit possible under escort.', 'Russia employs nuclear signaling and may conduct a demonstrative detonation.', 'Belarusian forces remain uncommitted absent a Russian decision to expand the war.', 'MPE and NATO FMN provide adequate C2 interoperability.'],
-        phases: ['Phase I Deter and Reinforce (Now to C+21)', 'Phase II Defend and Shape (C+21 to D-Day, notionally C+30)', 'Phase III Restore (D-Day to D+30)', 'Phase IV Stabilize and Transition (D+30 onward)'],
-        sig: { offensive: 8, defensive: 14, escalation: 9, restraint: 9, force: 7, partners: 18, sustain: 13, intel: 11 } }
-    ],
+    planDocs: [],
     guideDocs: [
       { name: '2022 National Defense Strategy', tier: 'SecDef', directs: 'Integrated deterrence; Russia as acute threat; campaigning with Allies.', sig: { offensive: 2, defensive: 9, escalation: 2, restraint: 7, force: 2, partners: 14, sustain: 4, intel: 3 } },
       { name: '2022 National Military Strategy', tier: 'CJCS', directs: 'Risk to force and risk to strategy framing; joint force development.', sig: { offensive: 3, defensive: 8, escalation: 3, restraint: 5, force: 4, partners: 9, sustain: 5, intel: 4 } },
@@ -79,7 +71,7 @@ class Component extends DCLogic {
   };
 
   async loadDocs(files, kind) {
-    const mod = await import('./assets/docreader.js');
+    const mod = await import(new URL('assets/docreader.js', document.baseURI).href);
     for (const f of files) {
       this.setState({ docBusy: `Reading ${f.name}…` });
       let doc;
@@ -142,8 +134,7 @@ class Component extends DCLogic {
     { id: 'CCP', label: 'Combatant Command Campaign Plan', abbr: 'CCP', desc: 'Day-to-day campaigning that operationalizes strategic guidance.' },
     { id: 'CON', label: 'Contingency Plan', abbr: 'CONPLAN / OPLAN', desc: 'Branch of the campaign for a specific threat scenario; Level 1–4 detail.' },
     { id: 'GCP', label: 'Global Campaign Plan', abbr: 'GCP', desc: 'Trans-regional, all-domain challenge integrated across CCMDs.' },
-    { id: 'FCP', label: 'Functional Campaign Plan', abbr: 'FCP', desc: 'Cross-cutting functional challenge, global in scope.' },
-    { id: 'SPF', label: 'Strategic Planning Framework', abbr: 'SPF', desc: 'Integrated contingency planning for a priority problem set.' }
+    { id: 'FCP', label: 'Functional Campaign Plan', abbr: 'FCP', desc: 'Cross-cutting functional challenge, global in scope.' }
   ];
   LEVELS = ['Level 1 – Commander\'s estimate', 'Level 2 – Base plan', 'Level 3 – CONPLAN with annexes', 'Level 4 – OPLAN with TPFDD'];
   CCMDS = {
@@ -357,7 +348,7 @@ class Component extends DCLogic {
     const s = this.state, T = this.THREATS[s.threat];
     const on = ['var(--color-accent)', 'var(--color-accent)', '#fff'], off = ['var(--color-divider)', 'transparent', 'var(--color-text)'];
     const navItem = (id, label, view) => ({ label, go: () => this.go(view), opacity: 1, border: s.view === view ? 'rgb(30,41,59)' : 'transparent', dot: s.view === view ? 'var(--color-accent-700)' : 'transparent' });
-    const docSel = s.planDocs[s.planSel]; const docTitle = docSel ? docSel.name.replace(/\.(docx|pdf|txt|md)$/i, '').replace(/\s+[—–-]\s+.*$/, '').trim() : ''; const planLabel = docTitle || `${s.ccmd} ${{ OPORD: 'OPORD', CCP: 'CCP', CON: 'CONPLAN', GCP: 'GCP', FCP: 'FCP', SPF: 'SPF' }[s.planType]}`;
+    const docSel = s.planDocs[s.planSel]; const docTitle = docSel ? docSel.name.replace(/\.(docx|pdf|txt|md)$/i, '').replace(/\s+[—–-]\s+.*$/, '').trim() : ''; const planLabel = docTitle || `${s.ccmd} ${{ OPORD: 'OPORD', CCP: 'CCP', CON: 'CONPLAN', GCP: 'GCP', FCP: 'FCP' }[s.planType]}`;
     const stage = s.view === 'coa' ? (s.step === 3 ? 3 : s.step === 5 ? 4 : (s.step === 1 && s.inputTab !== 'strategy') ? 5 : 1) : s.view === 'collection' ? 2 : 0; const tog = k => () => this.setState({ details: { ...s.details, [k]: !s.details[k] } });
     const isWeak = a => a.conf < 70 || a.status !== 0 || /expire/i.test(a.valid || '');
     const coasNow = s.coas.length ? s.coas : this.buildCoas();
@@ -415,8 +406,8 @@ class Component extends DCLogic {
       ccmds: Object.keys(this.CCMDS).map(c => { const a = s.ccmd === c ? on : off; return { label: c, pick: () => this.setState({ ccmd: c }), border: a[0], bg: a[1], fg: a[2] }; }), ccmdDesc: this.CCMDS[s.ccmd],
       threats: Object.keys(this.THREATS).map(k => { const a = s.threat === k ? on : off; return { id: k, label: this.THREATS[k].label, pick: () => this.setState({ threat: k, coas: [], results: null }), border: a[0], bg: a[1], fg: a[2] }; }), threatDesc: T.desc,
       intelCount: s.intel.length, worldState: s.worldState || defaultWorld, onWorldState: set('worldState'),
-      intent: s.intent || (s.threat === 'RUS' ? s.planDocs[0].intent : `Deter ${T.name} aggression against allies and partners; if deterrence fails, deny ${T.name} its objectives while limiting escalation beyond the theater and preserving the force for a prolonged campaign.`), onIntent: set('intent'),
-      endState: s.endState || (s.threat === 'RUS' ? s.planDocs[0].endState : `${T.name} force projection halted; allied territory and sea lines of communication secure; conditions set for a negotiated settlement.`), onEndState: set('endState'),
+      intent: s.intent || (s.threat === 'RUS' && s.planDocs[0] ? s.planDocs[0].intent : `Deter ${T.name} aggression against allies and partners; if deterrence fails, deny ${T.name} its objectives while limiting escalation beyond the theater and preserving the force for a prolonged campaign.`), onIntent: set('intent'),
+      endState: s.endState || (s.threat === 'RUS' && s.planDocs[0] ? s.planDocs[0].endState : `${T.name} force projection halted; allied territory and sea lines of communication secure; conditions set for a negotiated settlement.`), onEndState: set('endState'),
       assumptions: s.assumptions.map((a, i) => ({ n: i + 1, text: a.text, conf: a.conf, link: a.link ? 'Tracked via ' + a.link : 'Unlinked', status: this.A_STATUS[a.status][0], bg: this.A_STATUS[a.status][1], fg: this.A_STATUS[a.status][2],
         remove: () => this.setState({ assumptions: s.assumptions.filter((_, j) => j !== i) }),
         cycle: () => this.setState({ assumptions: s.assumptions.map((x, j) => j === i ? { ...x, status: (x.status + 1) % 3 } : x), results: null }),

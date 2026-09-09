@@ -62,7 +62,7 @@ class Component extends DCLogic {
     this.setState({ ingestBusy: `Reading ${f.name}…`, ingestError: null });
     let doc;
     try {
-      const mod = await import('./assets/docreader.js');
+      const mod = await import(new URL('assets/docreader.js', document.baseURI).href);
       doc = await mod.readDocument(f);
     } catch (e) {
       this.setState({

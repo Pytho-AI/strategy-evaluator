@@ -106,3 +106,20 @@ it, and expiry or contradiction can reopen it.
 - Constraints and restraints in the frozen dataset are text fields without
   source spans. The product shows that absence and does not invent provenance.
 - No external collection request is sent. Routing is an internal queue update.
+
+## Live upload (added 09 September 2026)
+
+The demo now starts with **no strategy loaded**. Drop the plan on stage 1 during the demo:
+
+```text
+docs/demo/USEUCOM_OPORD_26-004_AMBER_SHIELD.docx     (also .txt)
+```
+
+It is parsed in the browser — no upload to a server, no model key — and populates the
+commander's intent, the military end state, eight planning assumptions (each "under review"
+at 50% confidence, tracked back to the document) and seven priority intelligence requirements
+(each marked as a gap). Those gaps are what stage 2 turns into collection requirements, so the
+upload sets up the rest of the demo.
+
+The document is fictional and marked `UNCLASSIFIED — SYNTHETIC`. A real `.docx` or `.txt` can be
+dropped instead; `.pdf` needs network access for its parser and should be avoided offline.
