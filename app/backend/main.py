@@ -1,4 +1,4 @@
-"""FastAPI app for the Strategy Option Evaluation workbench (read-only replay API)."""
+"""FastAPI app and static UI for the Strategy Option Evaluation workbench."""
 from __future__ import annotations
 
 import os
@@ -7,6 +7,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from .adapter import DatasetAdapter
 from .branding import MARKING, PRODUCT_NAME
@@ -61,6 +62,8 @@ def create_app(adapter: DatasetAdapter | None = None) -> FastAPI:
 
     for router in ROUTERS:
         app.include_router(router)
+    ui_dir = Path(__file__).resolve().parents[1] / "ui"
+    app.mount("/", StaticFiles(directory=ui_dir, html=True), name="workbench")
     return app
 
 

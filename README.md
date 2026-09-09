@@ -18,7 +18,7 @@ pytho-vite or pytho-app. Their simulators are recorded as not used, with the evi
 |---|---|
 | `dataset/` | The frozen dataset release: `schema/`, `truth/`, `corpus/`, `injects/`, `eval/`, `extensions/`, `gen/`, `doctrine/EXTRACTS.md`, `DATA_CARD.md`, `USE_CASE_MATRIX.md`, `loader.py`, and the archive. A contract — read only. |
 | `app/backend` | FastAPI service on Python 3.12, importing `dataset.load` and `dataset/eval` directly. Owns loading, filtering, recomputation, joins and trace construction. |
-| `app/ui` | The recovered operator UI, served as static files. Renders typed API responses; no dataset formula is copied into it. |
+| `app/ui` | The UI V2 operator shell with API-backed screens, served by FastAPI. Renders typed API responses; no dataset formula is copied into it. |
 | `docs/` | [`STATE.md`](docs/STATE.md) — precheck, architecture decision, dataset facts, phase table, risks. [`CAPABILITY_MATRIX.md`](docs/CAPABILITY_MATRIX.md) — every submitted claim against what exists. [`DEMO.md`](docs/DEMO.md) — the guided demo script. |
 | `doctrine/` | The five source PDFs, read-only and not committed. Copy them here. |
 
@@ -27,9 +27,9 @@ pytho-vite or pytho-app. Their simulators are recorded as not used, with the evi
     make app-run     # serves the workbench at http://127.0.0.1:8765
     make app-test    # the product's own test suite
 
-One command, offline, no credentials. **Not yet confirmed** — the target is owned by the backend
-agent and the URL, the served UI and the offline guarantee are verified in P4 by the browser
-acceptance flow. See `docs/STATE.md` for the current phase.
+One command, offline, no credentials. Verified at 1440x900 against the production
+server with the full T0 → batch 1 → batch 2 → batch 3 → T0 flow and no console or
+network failures.
 
 ## The dataset
 

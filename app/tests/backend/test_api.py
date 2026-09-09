@@ -18,6 +18,13 @@ def test_health_reports_dataset_identity_and_load_time(client):
     assert body["load_ms"] > 0
 
 
+def test_one_server_hosts_the_operator_workbench_and_api(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert '<script src="./src/api.js"></script>' in response.text
+    assert client.get("/api/meta").status_code == 200
+
+
 def test_meta_reports_branding_marking_batches_and_worlds(client):
     response = client.get("/api/meta")
     assert response.status_code == 200

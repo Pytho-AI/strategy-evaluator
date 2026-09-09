@@ -1,18 +1,20 @@
-/* The only place product/team naming lives.
+/* Branding holder. It carries no product identity of its own.
  *
- * `app.dc.html` renders `{{ brandMark }}` and `{{ brandTitle }}`; `renderVals()`
- * in `app.logic.js` copies them off this object. Renaming the product therefore
- * never touches markup or logic.
+ * `productName` and `marking` have exactly one source: `GET /api/meta`
+ * (`app/backend/branding.py`). `boot.js` fills them in before the app mounts
+ * and shows a visible error instead of the app if `/api/meta` fails — the UI
+ * never invents a product name or a classification marking.
  *
- * The values below are the strings the supplied artifact ships today. Only
- * `productName` and `classification` are new: the artifact contains no
- * occurrence of "Stratistics" (it exists only in the download filename) and no
- * classification marking at all.
+ * `teamMark` and `title` are the two chrome strings the recovered artifact
+ * draws in the command bar and workflow header. They are not product identity
+ * and the API does not serve them; they stay here so a rename still touches
+ * one file only.
  */
 window.BRANDING = {
-  productName: 'Stratistics',        // product name (placeholder, per handoff)
+  productName: null,                 // from /api/meta product_name
+  marking: null,                     // from /api/meta marking
   teamName: 'Pytho',                 // project/team name
-  teamMark: '【Pytho】',              // the team mark as drawn in the left nav
+  teamMark: '【Pytho】',              // the team mark in the command bar
   title: 'Strategy Adjudicator',     // product title on the workflow header
-  classification: 'UNCLASSIFIED — SYNTHETIC',
+  error: null,                       // {code, message} when /api/meta failed
 };

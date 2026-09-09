@@ -24,6 +24,20 @@
     border: 1px solid rgb(130, 78, 0); border-bottom: 0;
     border-radius: 4px 4px 0 0; padding: 5px 12px;
   }
+  /* Shown instead of the app when GET /api/meta fails. */
+  #boot-error {
+    max-width: 640px; margin: 12vh auto; padding: 24px 28px;
+    border: 1px solid rgb(174, 25, 85); border-radius: 8px;
+    background: rgb(30, 8, 18); color: rgb(254, 236, 244);
+    font: 14px/1.6 var(--font-body, system-ui, sans-serif);
+  }
+  #boot-error h1 { font-size: 22px; margin: 0 0 10px; }
+  #boot-error .code {
+    margin: 0 0 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  #boot-error .msg { margin: 0 0 12px; }
+  #boot-error .hint { margin: 0; opacity: .75; font-size: 13px; }
 </style>
 
 <!-- React 18.3.1 UMD, vendored and pinned. Loading them here makes
@@ -36,6 +50,9 @@
 <script src="./vendor/ds-bundle-industry.js"></script>
 
 <script src="./src/branding.js"></script>
+<!-- window.API — the typed fetch client. Same-origin /api unless a page sets
+     window.API_BASE before this script runs. -->
+<script src="./src/api.js"></script>
 <script src="./src/boot.js" defer></script>
 </head>
 <body>

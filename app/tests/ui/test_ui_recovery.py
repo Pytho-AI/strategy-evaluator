@@ -1,34 +1,19 @@
-"""P0 equivalence tests: the recovered tree under app/ui must render and behave
-like the supplied artifact.
+"""The API-backed product keeps the UI V2 shell and removes simulated behavior.
 
-What is asserted:
-
-* the artifact is unmodified (checked in conftest, before and after serving it);
-* app/ui/index.html loads with zero page-origin console errors and zero failed
-  or 4xx/5xx requests — including the JIPOE map iframe, which 404'd on
-  `{{ mapSrc }}` in the original;
-* all 9 nav entries render the same headings and the same screen text as the
-  original. The comparison is over `#dc-root`, the app root; the
-  `UNCLASSIFIED — SYNTHETIC` marking added during recovery sits outside it and
-  is asserted separately;
-* `runSim`, the collection `cycle` control and manual `ingest` still work.
-
-Screenshots go to app/tests/ui/screenshots/ at 1440x900.
+The V2 artifact is immutable and checked by SHA-256 in ``conftest.py``. These
+tests cover the top command bar, the four-stage workflow, and direct access to
+supporting screens. Other browser modules test the API-backed screen content.
 """
-import re
 from pathlib import Path
 
 import pytest
 
 SCREENSHOTS = Path(__file__).parent / "screenshots"
 VIEWPORT = {"width": 1440, "height": 900}
-
-# Left-nav labels, in document order. Three of them route to the `coa` view at
-# different steps, which is why there are 9 entries over 7 view values.
 NAV = [
     "Strategy Option Evaluation",
     "Collection Management Agent",
-    "Predictive Risk Engine",
+    "Predictive Interconnected Risk Engine",
     "Option Recommendation",
     "Intelligence",
     "Plans & Strategic Guidance",
@@ -37,16 +22,8 @@ NAV = [
     "Doctrine",
 ]
 
-MARKING = "UNCLASSIFIED — SYNTHETIC"
-
-
-def slug(label):
-    return re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_")
-
 
 class Recorder:
-    """Collects page-origin console errors and every failed / 4xx response."""
-
     def __init__(self, page):
         self.console = []
         self.failed = []
@@ -65,22 +42,21 @@ class Recorder:
             self.failed.append("HTTP %d %s" % (response.status, response.url))
 
 
-@pytest.fixture(scope="session", autouse=True)
-def screenshot_dir():
-    SCREENSHOTS.mkdir(parents=True, exist_ok=True)
-    return SCREENSHOTS
-
-
 def open_app(browser, url):
     page = browser.new_page(viewport=VIEWPORT)
     recorder = Recorder(page)
     page.goto(url, wait_until="networkidle")
-    page.wait_for_selector("#dc-root aside button", timeout=15000)
+    page.wait_for_selector("#dc-root .command-bar button", timeout=15000)
     return page, recorder
 
 
 def nav_to(page, label):
-    page.get_by_role("button", name=label, exact=True).first.click()
+    target = page.get_by_role("button", name=label, exact=True)
+    if target.count() == 0:
+        page.get_by_role("button", name="Strategy evaluation home").click()
+        page.wait_for_timeout(100)
+        target = page.get_by_role("button", name=label, exact=True)
+    target.first.click()
     page.wait_for_timeout(250)
 
 
@@ -88,8 +64,10 @@ def screen_text(page):
     return page.locator("#dc-root").inner_text()
 
 
-def headings(page):
-    return page.locator("#dc-root h1, #dc-root h2, #dc-root h3").all_inner_texts()
+@pytest.fixture(scope="session", autouse=True)
+def screenshot_dir():
+    SCREENSHOTS.mkdir(parents=True, exist_ok=True)
+    return SCREENSHOTS
 
 
 @pytest.fixture(scope="module")
@@ -101,111 +79,96 @@ def app(browser, ui_url):
 
 @pytest.fixture(scope="module")
 def original(browser, original_url):
-    page, _ = open_app(browser, original_url)
+    page = browser.new_page(viewport=VIEWPORT)
+    page.goto(original_url, wait_until="networkidle")
+    page.wait_for_selector("#dc-root main button", timeout=15000)
     yield page
     page.close()
 
 
 def test_index_loads_clean(app):
     page, recorder = app
-    assert page.title() == "Stratistics — Strategy Adjudicator"
     assert page.locator("#dc-root h1").first.inner_text() == "Strategy Adjudicator"
-    assert page.locator("#classification-marking").inner_text() == MARKING
     assert page.locator("#classification-marking").is_visible()
     assert recorder.console == []
     assert recorder.failed == []
 
 
-def test_branding_comes_from_the_branding_object(app):
+def test_branding_comes_from_the_api_backed_branding_object(app):
     page, _ = app
     branding = page.evaluate("window.BRANDING")
-    assert branding["productName"] == "Stratistics"
     assert branding["teamName"] == "Pytho"
     assert branding["title"] == "Strategy Adjudicator"
-    # The nav mark and the header title are rendered from it, not hard-coded:
-    # the recovered template interpolates, it does not carry the strings.
-    assert branding["teamMark"] in screen_text(page)
-    template = page.evaluate(
-        "fetch('./src/app.dc.html').then(r => r.text())")
+    template = page.evaluate("fetch('./src/app.dc.html').then(r => r.text())")
     assert "{{ brandMark }}" in template
     assert "{{ brandTitle }}" in template
     assert branding["teamMark"] not in template
     assert branding["title"] not in template
 
 
+def test_product_uses_the_v2_top_bar_instead_of_the_old_sidebar(app, original):
+    page, _ = app
+    assert original.locator("#dc-root aside").count() == 0
+    assert page.locator("#dc-root aside").count() == 0
+    assert page.locator("#dc-root .command-bar").is_visible()
+    assert page.get_by_role("button", name="Strategy evaluation home").is_visible()
+    assert page.get_by_role("button", name="Doctrine", exact=True).is_visible()
+
+
 @pytest.mark.parametrize("label", NAV)
-def test_screen_matches_original(app, original, label):
+def test_every_product_area_is_reachable(app, label):
     page, recorder = app
     nav_to(page, label)
-    nav_to(original, label)
-
-    expected = screen_text(original)
-    assert len(expected) > 500, "%s: original rendered nothing to compare" % label
-    assert len(headings(original)) >= 1, label
-    assert headings(page) == headings(original), label
-    assert screen_text(page) == expected, label
-    # The added marking lives outside the compared subtree and stays visible.
-    assert page.locator("#classification-marking").is_visible()
-    assert MARKING not in screen_text(page)
-
-    page.screenshot(path=str(SCREENSHOTS / ("nav_%s.png" % slug(label))),
-                    full_page=True)
+    assert len(screen_text(page)) > 500, label
+    assert page.locator("#dc-root h1, #dc-root h2, #dc-root h3").count() >= 1
     assert recorder.failed == []
 
 
-def test_jipoe_map_iframe_loads(app):
-    """The original fired GET /{{ mapSrc }} -> 404. The recovered page must not."""
+def test_the_fabricated_wargame_is_gone(app):
+    page, recorder = app
+    nav_to(page, "Predictive Interconnected Risk Engine")
+    body = screen_text(page).lower()
+    for gone in ("run wargame", "p(success)", "80% ci", "casualties p90",
+                 "p(escalation)", "action – reaction – counteraction"):
+        assert gone not in body, gone
+    assert page.get_by_role(
+        "button", name="Recompute from dataset", exact=True).is_visible()
+    page.screenshot(path=str(SCREENSHOTS / "risk_engine.png"), full_page=True)
+    assert recorder.console == []
+    assert recorder.failed == []
+
+
+def test_jipoe_map_iframe_loads_from_local_assets(app):
     page, recorder = app
     nav_to(page, "Intelligence")
     frame = page.frame_locator('iframe[title="JIPOE map"]')
     frame.locator("#threat").wait_for(timeout=10000)
-    # inner_text() would come back upper-cased by the map's text-transform.
     assert frame.locator("#threat").text_content() == "Olvana"
-    # d3 drew the basemap from the vendored TopoJSON.
-    assert page.frame_locator('iframe[title="JIPOE map"]').locator(
-        "#map path").first.is_visible()
-    assert recorder.failed == []
-    assert not any("mapSrc" in f or "%7B%7B" in f for f in recorder.failed)
-
-
-def test_run_sim(app):
-    page, recorder = app
-    nav_to(page, "Predictive Risk Engine")
-    page.get_by_role("button", name="Run Wargame", exact=True).click()
-    page.get_by_role("button", name="Re-run Wargame", exact=True).wait_for(
-        timeout=20000)
-    text = screen_text(page)
-    assert "P(SUCCESS)" in text.upper()
-    page.screenshot(path=str(SCREENSHOTS / "run_sim.png"), full_page=True)
-    assert recorder.console == []
+    assert frame.locator("#map path").first.is_visible()
     assert recorder.failed == []
 
 
-def test_collection_cycle(app):
+def test_collection_uses_stable_api_requirements(app):
     page, recorder = app
     nav_to(page, "Collection Management Agent")
-    before = screen_text(page)
-    button = page.get_by_role("button", name="Collection returned",
-                              exact=True).first
-    button.click()
-    page.wait_for_timeout(250)
-    assert screen_text(page) != before
-    page.screenshot(path=str(SCREENSHOTS / "collection_cycle.png"),
-                    full_page=True)
+    for gone in ("Collection returned", "Task assets", "Add PIR"):
+        assert page.get_by_role("button", name=gone, exact=True).count() == 0
+    body = screen_text(page)
+    assert "Draft requirement" in body
+    assert "Closure basis" in body or "Open — no closure recorded" in body
     assert recorder.console == []
     assert recorder.failed == []
 
 
-def test_manual_ingest(app):
+def test_report_form_keeps_text_for_the_real_ingestion_endpoint(app):
     page, recorder = app
     nav_to(page, "Intelligence")
-    title = "UI RECOVERY TEST REPORT"
-    page.get_by_placeholder("Title").fill(title)
-    page.get_by_placeholder("Paste report text or drop a file…").fill(
-        "body text, discarded by the placeholder handler")
-    page.get_by_role("button", name="Ingest & Tag to PIR", exact=True).click()
-    page.wait_for_timeout(250)
-    assert title in screen_text(page)
-    page.screenshot(path=str(SCREENSHOTS / "manual_ingest.png"), full_page=True)
+    assert page.get_by_role(
+        "button", name="Ingest & Tag to PIR", exact=True).count() == 0
+    body_text = "body text the old placeholder handler used to discard"
+    page.get_by_label("Report title").fill("UI V2 RECOVERY TEST REPORT")
+    page.get_by_label("Report text").fill(body_text)
+    assert page.get_by_label("Report text").input_value() == body_text
+    assert page.get_by_role("button", name="Ingest report", exact=True).count() == 1
     assert recorder.console == []
     assert recorder.failed == []

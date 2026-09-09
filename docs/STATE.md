@@ -9,7 +9,28 @@ with completed work, exact checks, remaining work, blockers, and current ETA.
   `/tmp/precheck/ui/B_ui_artifact.md`, `/tmp/precheck/C_existing_apps.md`,
   `/tmp/precheck/D_capability_matrix.md`. Paths inside those reports say `claimgraph-dataset`
   because they were written before the rename; read them as this repository.
-- Last updated: 2026-09-09, end of P0 documentation.
+- Last updated: 2026-09-09, P4 complete and P5 validation in progress.
+
+## Current build result
+
+- P0 through P4 are complete. P1 backend work is commit `962bf1d`; P2/P3/P4
+  product work is ready for a local commit after the final P5 gate.
+- `make app-run` serves the UI and API from one offline process at
+  `http://127.0.0.1:8765/`.
+- The current shell comes from `UI_V2.html`, SHA-256
+  `b949279befe8fbe7856601cd0f55a6cc1675a707272d81928459b6896c7fdf0c`.
+  The artifact is unchanged. Only its top command bar and workflow layout were
+  ported; its simulated scoring, fake feed, and local collection cycle were not.
+- Application gate before the V2 merge: `339 passed, 6 warnings`. Focused V2
+  shell and workbench gate: `24 passed`. Evidence, risk, collection, ingestion,
+  review, routing, and reset gate after the V2 merge: `30 passed`.
+- Final application gate after the V2 merge: `332 passed, 6 dependency
+  deprecation warnings in 101.49s`.
+- Production browser flow passed at 1440x900: T0 → batch 1 → batch 2 → batch 3
+  → T0, no restart, no console errors, no failed requests.
+- Dataset archive SHA-256 remains
+  `fc5c9d311fd1392d0af367f4522842afa807b29ad60ba41cda446cbbeac54418`;
+  `git diff -- dataset` is empty and `unzip -t` reports no errors.
 
 ---
 
@@ -258,12 +279,12 @@ preserved byte-identical (SHA-256 `0d8e9e47…1c1aebed`). The product copies a r
 
 | Phase | Status | Acceptance test | ETA |
 |---|---|---|---|
-| **P0** — foundation and contracts | **In progress** (this documentation set is the first half) | `docs/STATE.md` records the precheck and the architecture decision; a read-only dataset adapter and typed response contracts exist; tests prove batch 0-3 loading, rejection of invalid batch/ID inputs, clear failure when the dataset is missing, and that no source file under `dataset/` is written | 2026-09-09 |
-| **P1** — evaluation service | Planned | Contract tests prove every key manifest effect for batches 1-3 (the beats in §3.6) and at least one full provenance chain from source span to strategy validity, all through `dataset.load` + `dataset/eval` | 2026-09-09 → 2026-09-10 |
-| **P2** — connect the existing operator workbench | Planned | Frontend tests prove an invalid strategy is never recommended and that changing the selected batch updates the decision overview, timeline and comparison panels consistently; no placeholder value from `COA_LIB` / `compute()` remains on a connected screen | 2026-09-10 |
-| **P3** — evidence, risk and collection analysis | Planned | Tests cover contradiction, supersession, exact span display, filters, forced-choice rationale, `req_01` closure and `req_07` creation; and the new-report → proposed claim → review → accepted evidence → recomputation flow with a report authored after the fixture, its value and date varied in a test, proven unable to read gold claims, answer keys or manifest `expected_effects` | 2026-09-10 → 2026-09-11 |
-| **P4** — demo hardening | Planned | Reset, loading, empty, error and incompatible-schema states exist; one documented offline command launches the demo; browser acceptance passes at 1440x900, 1280x800 and a narrow mobile width with no console errors, no failed API calls, no clipped or overflowing content; `docs/DEMO.md` is verified step by step | 2026-09-11 |
-| **P5** — final validation | Planned | All repo unit, contract, type, lint and build checks pass; the browser acceptance flow passes against a production build; `make check` and `make test` pass again; the archive SHA-256 is unchanged; `git diff --check` and `git status --short` are clean in every touched repository; the T0 → 1 → 2 → 3 → T0 flow works without a restart | 2026-09-11 |
+| **P0** — foundation and contracts | **Done** | `docs/STATE.md` records the precheck and architecture; adapter and response-contract tests cover all batches, invalid inputs, missing data, and source-write protection | 2026-09-09 |
+| **P1** — evaluation service | Done 2026-09-09, commit 962bf1d (snapshot decision_overview, strategies, claims+trace, risks, collection, injects diff; 228 backend tests at P1) | Contract tests prove every key manifest effect for batches 1-3 (the beats in §3.6) and at least one full provenance chain from source span to strategy validity, all through `dataset.load` + `dataset/eval` | 2026-09-09 → 2026-09-10 |
+| **P2** — connect the existing operator workbench | **Done** | Browser tests prove invalid options cannot be recommended and batch changes update the decision overview, timeline, comparison, and recommendation | 2026-09-09 |
+| **P3** — evidence, risk and collection analysis | **Done** | Contract and browser tests cover spans, traces, contradictions, forced choice, collection priorities, report review, recomputation, satisfaction, reopening, deduplication, persistence, and reset | 2026-09-09 |
+| **P4** — demo hardening | **Done** | One process serves UI and API; V2 desktop browser checks and production batch flow pass without console or request failures; `docs/DEMO.md` is current | 2026-09-09 |
+| **P5** — final validation | **In progress** | Full app, dataset, checksum, source-diff, and Git gates; local commits; GitLab target confirmation | 2026-09-09 |
 
 Every step marked "to be verified in P4" in `docs/DEMO.md` is part of P4's acceptance, not P0's.
 
@@ -272,6 +293,13 @@ Every step marked "to be verified in P4" in `docs/DEMO.md` is part of P4's accep
 ## 6. Blockers and risks
 
 **Blockers — none.** Every precheck gate passes and the dataset baseline is green.
+
+Current status: implementation risks 1, 3, 4, 5, 7, and 8 below are resolved.
+New-report ingestion, API-backed evaluation, stable IDs, reviewed-evidence
+satisfaction, the local JIPOE map, and local PDF parsing are implemented and
+tested. Items 2 and 6 remain honest source/schema limits. Item 9 is a dataset
+documentation issue and the product does not repeat either disputed edition
+date. The numbered list below is retained as the precheck record.
 
 **Risks, in order of how much they can cost:**
 
@@ -376,3 +404,12 @@ history; it is not the product's state.
 > baseline result may be fabricated. Six further items are recorded in the untracked
 > `HANDOFF_CODEX.md`; the precheck refuted its first item (the forced-choice rule does fire, see
 > §3.7) and confirmed the rest.
+
+## Takeover notes (updated 2026-09-09, after P3 backend)
+
+- Commits on branch `dataset`: `9299540` P0 (tag app-p0-done), `962bf1d` P1+P3 backend.
+- Uncommitted, in progress by agents: `app/ui/**`, `app/tests/ui/**` (P2a done + P3 UI screens);
+  `app/run.py`, `app/scripts/**`, Makefile `demo`/`demo-check` targets, static mount in `app/backend/main.py` (P4 launcher).
+- Gates: `make app-test` (backend + Playwright UI), `(cd dataset && ../.venv/bin/python -m gen check --seed 20260908)`, `make test`.
+- Remaining after those land: P4 browser acceptance at 1440x900 / 1280x800 / 390x844 with console and network clean; empty/loading/error/incompatible-schema states verified in the UI; DEMO.md verified step by step; P5 final validation (all checks, archive sha `fc5c9d31…c54418` unchanged, `git diff --check`, capability matrix final, report).
+- Reviewer (Codex) notes live in `docs/reviews/`; not committed.

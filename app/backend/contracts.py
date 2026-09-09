@@ -494,6 +494,12 @@ class RequirementView(BaseModel):
 
 
 class DecisionOverviewView(BaseModel):
+    scenario_id: str
+    scenario_name: str
+    friendly_force_id: str
+    friendly_force_name: str
+    adversary_id: str
+    adversary_name: str
     as_of: str
     batch: int
     marking: str

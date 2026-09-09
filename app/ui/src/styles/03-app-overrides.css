@@ -13,4 +13,12 @@
     a{color:var(--color-accent-700)} a:hover{color:var(--color-accent-900)}
     input[type=range]{accent-color:var(--color-accent)}
     @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
-  
+
+    /* Keep dense tables and the four-stage sequence usable in narrow windows. */
+    @media (max-width: 900px){
+      .stage-strip{grid-template-columns:1fr!important;overflow:hidden}
+      .stage-strip button>span:first-child{display:none!important}
+      .app-shell main section{padding-left:16px!important;padding-right:16px!important}
+      .app-shell main header{padding-left:16px!important;padding-right:16px!important}
+      .app-shell main>div{padding-left:16px!important;padding-right:16px!important}
+    }

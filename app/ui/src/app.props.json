@@ -1,7 +1,7 @@
 {
   "startView": {
     "editor": "enum",
-    "default": "coa",
+    "default": "docs",
     "options": [
       "coa",
       "docs",

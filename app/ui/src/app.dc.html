@@ -1,50 +1,12 @@
 
 
 
-<div style="display:flex;min-height:100vh;background:var(--color-bg)">
-
-  <!-- ══════════ LEFT NAV ══════════ -->
-  <aside style="width:236px;flex:none;border-right:1px solid var(--color-divider);display:flex;flex-direction:column;padding:18px 14px;gap:18px;position:sticky;top:0;height:100vh;overflow:auto">
-    <div style="display:flex;align-items:baseline;gap:8px;padding:0 6px">
-      <span style="font-family:var(--font-heading);font-weight:500;font-size:26px">{{ brandMark }}</span>
+<div class="app-shell" style="min-height:100vh;background:var(--color-bg)">
+  <main style="display:flex;flex-direction:column;min-width:0">
+    <div class="command-bar" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 32px;border-bottom:1px solid var(--color-divider)">
+      <div style="display:flex;align-items:center;gap:18px;min-width:0"><button type="button" aria-label="Strategy evaluation home" sc-camel-on-click="{{ goHome }}" style="border:0;background:transparent;padding:0;font-family:var(--font-heading);font-weight:500;font-size:22px;color:var(--color-text);cursor:pointer">{{ brandMark }}</button><span style="font-size:14px;color:var(--color-neutral-600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ crumb }}</span></div>
+      <div style="display:flex;align-items:center;gap:12px"><span class="tag tag-outline" style="white-space:nowrap">{{ scenarioLabel }} · vs {{ threatName }}</span><button type="button" class="btn btn-ghost" style="font-size:13px" sc-camel-on-click="{{ goDoctrine }}">Doctrine</button><span aria-label="Planning cell" style="width:34px;height:34px;border-radius:50%;background:rgb(30,41,59);display:grid;place-items:center;font-weight:600;font-size:13px">WC</span></div>
     </div>
-
-    <div style="display:flex;flex-direction:column;gap:2px">
-      <sc-for list="{{ globalNav }}" as="n" hint-placeholder-count="3">
-        
-      </sc-for>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:6px">
-      <span style="font-size:13px;color:var(--color-neutral-600);padding:0 10px">Strategy</span>
-      <div class="blueprint" style="padding:8px 12px;display:flex;flex-direction:column;gap:2px;border:1px solid var(--color-accent);background:rgb(16,36,62)">
-        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><span style="font-family: var(--font-heading); font-weight: 600; font-size: 16px; line-height: 1.1; left: -1px">{{ planLabel }}</span><i class="corner br"></i>
-        
-        <span style="font-size:11px;color:var(--color-neutral-700)">{{ ccmd }} · vs {{ threatName }}</span>
-      </div>
-    </div>
-
-    <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <sc-if value="{{ s.hasLabel }}" hint-placeholder-val="{{ true }}"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600);padding:0 10px 4px">{{ s.label }}</span></sc-if>
-        <sc-for list="{{ s.items }}" as="n" hint-placeholder-count="2">
-          <button sc-camel-on-click="{{ n.go }}" style="display:flex;align-items:center;gap:10px;padding:7px 10px;border:0;border-radius:6px;background:{{ n.border }};font:inherit;font-size:14px;color:var(--color-text);text-align:left;cursor:pointer;opacity:{{ n.opacity }}" style-hover="background:rgb(30,41,59)">
-            <span style="width:6px;height:6px;border:1px solid var(--color-accent-700);background:{{ n.dot }}"></span>{{ n.label }}
-          </button>
-        </sc-for>
-      </div>
-    </sc-for>
-
-    <div style="margin-top:auto;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600);padding:0 10px;line-height:1.6">Notional data · Unclassified<br>Prototype — no live feeds</div>
-  </aside>
-
-  <!-- ══════════ MAIN ══════════ -->
-  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--color-divider)">
-      <span style="font-size:20px;color:var(--color-neutral-600)">←</span>
-      <div style="display:flex;align-items:center;gap:18px"><span style="width:18px;height:18px;border-radius:50%;border:1.5px solid var(--color-neutral-600)"></span><span style="width:40px;height:40px;border-radius:50%;background:rgb(30,41,59);display:grid;place-items:center;font-weight:600;font-size:14px">WC</span></div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 32px;border-bottom:1px solid var(--color-divider);font-size:15px"><span>Home <span style="color:var(--color-neutral-600)">/ {{ crumb }}</span></span><span style="color:var(--color-neutral-600);font-size:13px">AI Chat ▸</span></div>
 
     <!-- ─── WORKFLOW HEADER ─── -->
     <sc-if value="{{ showWorkflow }}" hint-placeholder-val="{{ true }}">
@@ -52,13 +14,13 @@
         <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
           <h1 style="font-size:28px;margin:0">{{ brandTitle }}</h1>
           <div style="display:flex;gap:8px;align-items:center;padding-bottom:4px">
-            <span class="tag tag-outline">Run {{ runId }}</span>
-            <button class="btn btn-secondary" sc-camel-on-click="{{ resetRun }}">New Run</button>
+            <span class="tag tag-outline">{{ batchName }} · {{ asOf }}</span>
+            <button type="button" class="btn btn-secondary" sc-camel-on-click="{{ goUpdates }}">Evidence Updates</button>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:20px">
+        <div class="stage-strip" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:20px">
           <sc-for list="{{ stages }}" as="st" hint-placeholder-count="4">
-            <button sc-camel-on-click="{{ st.go }}" style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 12px 14px;border:0;background:transparent;font:inherit;cursor:pointer;color:var(--color-text);position:relative;text-align:center">
+            <button aria-label="{{ st.label }}" sc-camel-on-click="{{ st.go }}" style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 12px 14px;border:0;background:transparent;font:inherit;cursor:pointer;color:var(--color-text);position:relative;text-align:center">
               <span style="position:absolute;top:16px;left:calc(50% + 22px);right:-50%;height:1px;background:var(--color-divider);display:{{ st.lineShow }}"></span>
               <span style="width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:13px;border:1px solid {{ st.ring }};background:{{ st.bg }};color:{{ st.fg }};position:relative;z-index:1">{{ st.n }}</span>
               <span style="font-size:15px;font-weight:600;opacity:{{ st.opacity }}">{{ st.label }}</span>
@@ -84,509 +46,375 @@
       </header>
     </sc-if>
 
-    <!-- ─── STRATEGY OPTION EVALUATION / RISK ENGINE (COA steps) ─── -->
+    <!-- ─── STRATEGY OPTION EVALUATION (dataset-backed COA steps) ─── -->
     <sc-if value="{{ isCoa }}" hint-placeholder-val="{{ true }}">
 
-      <!-- STEP 1 PREPARATION -->
-      <sc-if value="{{ step1 }}" hint-placeholder-val="{{ true }}">
-        <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:24px">
-          <div>
-            <h2 style="font-size:26px;margin:0">Strategic Document Preparation</h2>
-            <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Mission analysis products that bound every course of action: plan type, supported command, pacing threat, commander's guidance and planning assumptions.</p>
-          </div>
-
-          <div class="blueprint" style="padding:18px;display:grid;grid-template-columns:minmax(260px,1fr) minmax(0,1.4fr);gap:18px;align-items:start">
-            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <label sc-camel-on-drag-over="{{ prevent }}" sc-camel-on-drop="{{ dropPlan }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 18px;border:1px dashed var(--color-accent);border-radius:8px;cursor:pointer;text-align:center;background:rgb(16,36,62)">
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Upload Strategy</span>
-              <span style="font-weight:600;font-size:15px">Drop the Strategy or Plan Document Here</span>
-              <span style="font-size:12px;color:var(--color-neutral-700)">.docx · .pdf · .txt — parsed in your browser; mission, intent, end state and assumptions are pulled into the fields below</span>
-              <input type="file" accept=".docx,.pdf,.txt,.md" multiple="{{ true }}" sc-camel-on-change="{{ pickPlan }}" style="display:none">
-            </label>
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Strategy Under Adjudication</span><button class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ goDocs }}">Open Library →</button></div>
-              <sc-for list="{{ planDocs }}" as="d" hint-placeholder-count="2">
-                <button sc-camel-on-click="{{ d.select }}" style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid {{ d.border }};border-radius:8px;background:{{ d.bg }};color:var(--color-text);font:inherit;text-align:left;cursor:pointer">
-                  <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:600;font-size:14px">{{ d.name }}</span><span style="font-size:11.5px;color:var(--color-neutral-700)">{{ d.meta }}</span></span>
-                  <span style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end"><sc-for list="{{ d.risks }}" as="k" hint-placeholder-count="3"><span style="padding:2px 7px;border-radius:6px;font-size:10.5px;font-weight:600;white-space:nowrap;background:{{ k.bg }};color:{{ k.fg }}">{{ k.short }} {{ k.level }}</span></sc-for></span>
-                </button>
-              </sc-for>
-              
-            </div>
-          </div>
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
-            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Plan Type</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <sc-for list="{{ planTypes }}" as="p" hint-placeholder-count="5">
-                  <button sc-camel-on-click="{{ p.pick }}" style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};font:inherit;text-align:left;cursor:pointer">
-                    <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-weight:600;font-size:15px">{{ p.label }}</span><span style="font-size:11.5px;opacity:.8">{{ p.desc }}</span></span>
-                    <span style="font-size:11px;letter-spacing:.08em">{{ p.abbr }}</span>
-                  </button>
-                </sc-for>
-              </div>
-              <sc-if value="{{ isContingency }}" hint-placeholder-val="{{ false }}">
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <span style="font-size:12px;color:var(--color-neutral-700)">Level of Planning Detail</span>
-                  <div class="seg" style="display:flex">
-                    <sc-for list="{{ levels }}" as="l" hint-placeholder-count="4">
-                      <label class="seg-opt" style="flex:1;justify-content:center"><input type="radio" name="lvl" checked="{{ l.on }}" sc-camel-on-change="{{ l.pick }}">{{ l.label }}</label>
-                    </sc-for>
-                  </div>
-                  <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ levelDesc }}</span>
-                </div>
-              </sc-if>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:22px">
-              <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
-                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Joint Staff or Combatant Command</div>
-                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px">
-                  <sc-for list="{{ ccmds }}" as="c" hint-placeholder-count="11">
-                    <button sc-camel-on-click="{{ c.pick }}" style="padding:8px 6px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};font-family:var(--font-heading);font-weight:600;font-size:13px;letter-spacing:.04em;cursor:pointer">{{ c.label }}</button>
-                  </sc-for>
-                </div>
-                <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ ccmdDesc }}</span>
-              </div>
-              <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
-                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Pacing Threat / Adversary</div>
-                <div style="display:flex;gap:6px;flex-wrap:wrap">
-                  <sc-for list="{{ threats }}" as="t" hint-placeholder-count="5">
-                    <button sc-camel-on-click="{{ t.pick }}" style="padding:7px 12px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};font:inherit;font-size:13px;cursor:pointer">{{ t.label }}</button>
-                  </sc-for>
-                </div>
-                <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ threatDesc }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
-              <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Scenario · World State</div>
-              <span style="font-size:11px;color:var(--color-neutral-700)">Seeded from {{ intelCount }} ingested reports and the current JIPOE</span>
-            </div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <sc-for list="{{ scenarios }}" as="sc" hint-placeholder-count="3">
-                <button sc-camel-on-click="{{ sc.pick }}" style="display:flex;flex-direction:column;gap:2px;padding:9px 12px;border:1px solid {{ sc.border }};border-radius:6px;background:{{ sc.bg }};color:var(--color-text);font:inherit;text-align:left;cursor:pointer;min-width:200px;flex:1">
-                  <span style="font-weight:600;font-size:14px">{{ sc.label }}</span><span style="font-size:11.5px;color:var(--color-neutral-700)">{{ sc.desc }}</span>
-                </button>
-              </sc-for>
-            </div>
-            <textarea class="input" style="min-height:120px;font-size:14px;line-height:1.5" value="{{ worldState }}" sc-camel-on-change="{{ onWorldState }}"></textarea>
-          </div>
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
-            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Commander's Intent</div>
-              <textarea class="input" style="min-height:84px;font-size:13.5px" value="{{ intent }}" sc-camel-on-change="{{ onIntent }}"></textarea>
-              <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-top:6px">Military End State</div>
-              <textarea class="input" style="min-height:64px;font-size:13.5px" value="{{ endState }}" sc-camel-on-change="{{ onEndState }}"></textarea>
-            </div>
-            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Planning Assumptions · Tracker</div><span style="font-size:11px;color:var(--color-neutral-700)">{{ assumptionSummary }}</span></div>
-              <div style="display:flex;flex-direction:column;gap:4px">
-                <sc-for list="{{ assumptions }}" as="a" hint-placeholder-count="3">
-                  <div style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;padding:7px 0;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
-                    <div style="display:flex;gap:10px;align-items:flex-start">
-                      <span style="font-family:var(--font-heading);font-weight:600;color:var(--color-accent-700);min-width:26px">A{{ a.n }}</span>
-                      <span style="flex:1">{{ a.text }}</span>
-                      <button sc-camel-on-click="{{ a.remove }}" class="btn btn-ghost" style="padding:0 6px;font-size:12px">Remove</button>
-                    </div>
-                    <div style="display:flex;gap:8px;align-items:center;padding-left:36px;flex-wrap:wrap">
-                      <button sc-camel-on-click="{{ a.cycle }}" style="padding:2px 8px;border-radius:6px;border:0;font:inherit;font-size:11px;font-weight:600;cursor:pointer;background:{{ a.bg }};color:{{ a.fg }}">{{ a.status }}</button>
-                      <span style="font-size:11px;color:var(--color-neutral-700)">Confidence {{ a.conf }}%</span>
-                      <input type="range" min="10" max="100" step="10" value="{{ a.conf }}" sc-camel-on-change="{{ a.setConf }}" style="width:90px">
-                      <span style="font-size:11px;color:var(--color-neutral-700)">{{ a.link }}</span>
-                    </div>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="display:flex;gap:8px">
-                <input class="input" placeholder="Add Assumption (must be valid, necessary and logical)" value="{{ newAssumption }}" sc-camel-on-change="{{ onNewAssumption }}" sc-camel-on-key-down="{{ onAssumptionKey }}">
-                <button class="btn btn-secondary" sc-camel-on-click="{{ addAssumption }}">Add</button>
-              </div>
-            </div>
-            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Constraints &amp; Restraints</div>
-              <div style="display:flex;flex-direction:column;gap:4px">
-                <sc-for list="{{ constraints }}" as="c" hint-placeholder-count="4">
-                  <div style="display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:5px 0;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
-                    <span style="font-family:var(--font-heading);font-weight:600;color:var(--color-accent-700);min-width:26px">{{ c.code }}</span>
-                    <span style="flex:1">{{ c.text }}</span>
-                    <button sc-camel-on-click="{{ c.remove }}" class="btn btn-ghost" style="padding:0 6px;font-size:12px">Remove</button>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <div class="seg" style="display:flex;align-self:flex-start">
-                  <sc-for list="{{ constraintKinds }}" as="k" hint-placeholder-count="2"><label class="seg-opt" style="padding:7px 12px;font-size:12px"><input type="radio" name="ckind" checked="{{ k.on }}" sc-camel-on-change="{{ k.pick }}">{{ k.label }}</label></sc-for>
-                </div>
-                <div style="display:flex;gap:8px">
-                  <input class="input" style="flex:1;min-width:0" placeholder="{{ constraintPlaceholder }}" value="{{ newConstraint }}" sc-camel-on-change="{{ onNewConstraint }}" sc-camel-on-key-down="{{ onConstraintKey }}">
-                  <button class="btn btn-secondary" sc-camel-on-click="{{ addConstraint }}">Add</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="blueprint" style="padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;align-items:end">
-            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Courses of Action to Develop</span>
-              <div class="seg" style="display:flex">
-                <sc-for list="{{ coaCounts }}" as="k" hint-placeholder-count="4">
-                  <label class="seg-opt" style="flex:1;justify-content:center"><input type="radio" name="ncoa" checked="{{ k.on }}" sc-camel-on-change="{{ k.pick }}">{{ k.label }}</label>
-                </sc-for>
-              </div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Wargame Iterations · {{ numSims }}</span>
-              <input type="range" min="500" max="10000" step="500" value="{{ numSims }}" sc-camel-on-change="{{ onNumSims }}">
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Adversary Aggression · {{ aggressionLabel }}</span>
-              <input type="range" min="0" max="100" step="5" value="{{ aggressionPct }}" sc-camel-on-change="{{ onAggression }}">
-            </div>
-            <button class="btn btn-primary blueprint" style="padding:12px 18px;font-size:14px;justify-self:end" sc-camel-on-click="{{ startDevelopment }}">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Adjudicate Strategy →
-            </button>
+      <!-- API ERROR -->
+      <sc-if value="{{ hasApiError }}" hint-placeholder-val="{{ false }}">
+        <section style="padding:28px 32px 0">
+          <div role="alert" class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:8px;border:1px solid rgb(174,25,85);background:rgb(30,8,18)">
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgb(254,236,244)">API error · {{ apiError.code }}</span>
+            <span style="font-size:14px;line-height:1.5">{{ apiError.message }}</span>
+            <span style="font-size:12.5px;color:var(--color-neutral-700)">Nothing on this screen falls back to sample data. Fix the API, then retry.</span>
+            <div><button type="button" class="btn btn-secondary" sc-camel-on-click="{{ retry }}">Retry</button></div>
           </div>
         </section>
       </sc-if>
 
-      <!-- STEP 2 DEVELOPMENT -->
-      <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
-        <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
-            <div>
-              <h2 style="font-size:26px;margin:0">COA Development</h2>
-              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">{{ coaCount }} courses of action for {{ ccmd }} against {{ threatName }} · each screened for feasibility, acceptability, suitability, distinguishability and completeness.</p>
-            </div>
-            <button class="btn btn-primary blueprint" style="padding:12px 18px;font-size:14px" sc-camel-on-click="{{ startWargame }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Proceed to Wargame →</button>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px">
-            <sc-for list="{{ coas }}" as="c" hint-placeholder-count="3">
-              <article class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                <div style="display:flex;justify-content:space-between;align-items:baseline">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">COA {{ c.n }}</span>
-                  <span class="tag tag-accent">{{ c.approach }}</span>
-                </div>
-                <h3 style="font-size:24px;margin:0">{{ c.title }}</h3>
-                <p style="margin:0;font-size:13.5px;line-height:1.5">{{ c.concept }}</p>
-                <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:4px">Key Tasks</div>
-                <ol style="margin:0;padding-left:18px;font-size:13px;line-height:1.55;display:flex;flex-direction:column;gap:2px">
-                  <sc-for list="{{ c.tasks }}" as="t" hint-placeholder-count="3"><li>{{ t }}</li></sc-for>
-                </ol>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;border-top:1px solid var(--color-divider);padding-top:10px">
-                  <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Duration</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.days }} d</div></div>
-                  <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Force Demand</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.res }}%</div></div>
-                  <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Decision Points</div><div style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ c.dps }}</div></div>
-                </div>
-                <div style="display:flex;gap:4px;flex-wrap:wrap">
-                  <sc-for list="{{ c.screen }}" as="s" hint-placeholder-count="5"><span class="tag" style="background:{{ s.bg }};color:{{ s.fg }}">{{ s.label }}</span></sc-for>
-                </div>
-              </article>
-            </sc-for>
-          </div>
+      <!-- FIRST LOAD -->
+      <sc-if value="{{ noSnapshot }}" hint-placeholder-val="{{ false }}">
+        <section style="padding:28px 32px">
+          <div class="blueprint" style="padding:28px;text-align:center;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>{{ batchStatus }}</div>
         </section>
       </sc-if>
 
-      <!-- STEP 3 WARGAME -->
-      <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
-        <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+      <!-- ══ DECISION OVERVIEW · entry screen and Option Recommendation ══ -->
+      <sc-if value="{{ showOverview }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ hasSnapshot }}" hint-placeholder-val="{{ true }}">
+          <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
             <div>
-              <h2 style="font-size:26px;margin:0">COA Wargame</h2>
-              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">The Predictive Interconnected Risk Engine reads the graph's edges — how one problem set depends on another — and propagates: change a claim here, see what shifts there. Each COA is played {{ numSims }} times against {{ threatName }} reactions at {{ aggressionLabel }} aggression; outcomes drive the three governing risks.</p>
+              <h2 style="font-size:26px;margin:0">Decision Overview</h2>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">The recommended COA, why it ranks first, its main tradeoff, and the assumptions that could change the decision.</p>
             </div>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-secondary" sc-camel-on-click="{{ runSim }}">{{ runLabel }}</button>
-              <button class="btn btn-primary blueprint" style="padding:12px 18px;font-size:14px" sc-camel-on-click="{{ goCompare }}" disabled="{{ noResults }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Proceed to Comparison →</button>
-            </div>
-          </div>
 
-          <sc-if value="{{ simRunning }}" hint-placeholder-val="{{ false }}">
-            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="animation:pulse 1.2s infinite">{{ simStatus }}</span><span style="font-family:var(--font-heading);font-weight:600">{{ simProgress }}%</span></div>
-              <div style="height:6px;border:1px solid var(--color-divider)"><div style="height:100%;background:var(--color-accent);width:{{ simProgress }}%"></div></div>
-            </div>
-          </sc-if>
+            <sc-if value="{{ noRec }}" hint-placeholder-val="{{ false }}">
+              <div class="blueprint" style="padding:20px;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>No valid strategy at this batch: the API's ranking for the Blue actor is empty, so there is no recommendation to make.</div>
+            </sc-if>
 
-          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
-              <sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
-                <article class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px;cursor:pointer;outline:{{ r.outline }}" sc-camel-on-click="{{ r.select }}">
+            <sc-if value="{{ hasRec }}" hint-placeholder-val="{{ true }}">
+              <div class="blueprint" style="padding:22px;display:flex;flex-direction:column;gap:12px;background:rgb(16,36,62);border:1px solid var(--color-accent)">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+                  <div>
+                    <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Recommended Strategy · {{ batchName }} · as of {{ asOf }}</span>
+                    <h3 style="font-size:28px;margin:2px 0 0">{{ rec.name }} <span style="font-size:14px;color:var(--color-neutral-700);font-family:var(--font-body)">{{ rec.id }}</span></h3>
+                  </div>
+                  <span style="padding:6px 12px;border-radius:6px;font-weight:600;font-size:14px;background:{{ rec.statusBg }};color:{{ rec.statusFg }}">{{ rec.statusLabel }}</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+                  <div style="padding:12px;border-radius:8px;background:rgb(15,23,42);display:flex;flex-direction:column;gap:3px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Expected value</span><span style="font-size:22px;font-weight:600;line-height:1.1">{{ rec.value }}</span><span style="font-size:11.5px;color:var(--color-neutral-700)">scenario-relative decision-support output</span></div>
+                  <div style="padding:12px;border-radius:8px;background:rgb(15,23,42);display:flex;flex-direction:column;gap:3px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">{{ rangeLabel }}</span><span style="font-size:22px;font-weight:600;line-height:1.1">{{ rec.range }}</span><span style="font-size:11.5px;color:var(--color-neutral-700)">{{ rangeNote }}</span></div>
+                  <div style="padding:12px;border-radius:8px;background:rgb(15,23,42);display:flex;flex-direction:column;gap:3px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Robustness</span><span style="font-size:22px;font-weight:600;line-height:1.1">{{ rec.robustness }}</span><span style="font-size:11.5px;color:var(--color-neutral-700)">value under the worst adversary COA</span></div>
+                  <div style="padding:12px;border-radius:8px;background:rgb(15,23,42);display:flex;flex-direction:column;gap:3px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Risk functional</span><span style="font-size:22px;font-weight:600;line-height:1.1">{{ rec.riskFunctional }}</span><span style="font-size:11.5px;color:var(--color-neutral-700)">how the value aggregates over worlds</span></div>
+                </div>
+                <p style="margin:0;font-size:13.5px;line-height:1.5">{{ rec.rankNote }}</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-secondary" sc-camel-on-click="{{ goCompare }}">Compare all options →</button></div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start">
+                <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
                   <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                  <div style="display:flex;justify-content:space-between;align-items:baseline">
-                    <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">COA {{ r.n }} · {{ r.title }}</span>
-                    <span style="font-size:11px;color:var(--color-neutral-700)">{{ r.sims }} runs</span>
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Briefing Rationale</span>
+                  <p style="margin:0;font-size:14px;line-height:1.55">{{ briefingRationale }}</p>
+                  <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:4px">Evaluation basis</span>
+                  <sc-for list="{{ whyRows }}" as="x" hint-placeholder-count="3">
+                    <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;font-size:12.5px;line-height:1.5;padding:5px 0;border-bottom:1px solid var(--color-divider)"><span style="font-weight:600">{{ x.label }}</span><span>{{ x.text }}</span></div>
+                  </sc-for>
+                  <span style="font-size:11.5px;color:var(--color-neutral-700)">Source: {{ whySource }}</span>
+                </div>
+                <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Main tradeoff</span>
+                  <p style="margin:0;font-size:13px;line-height:1.55">{{ tradeoff }}</p>
+                  <span style="font-size:11.5px;color:var(--color-neutral-700)">Source: {{ tradeoffSource }}</span>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start">
+                <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Assumptions</span>
+                  <sc-for list="{{ topSensitivities }}" as="a" hint-placeholder-count="3">
+                    <button type="button" sc-camel-on-click="{{ a.go }}" style="display:flex;flex-direction:column;gap:4px;text-align:left;font:inherit;color:var(--color-text);background:transparent;border:0;border-bottom:1px solid var(--color-divider);padding:7px 0;cursor:pointer">
+                      <span style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><span style="font-weight:600;font-size:12.5px;color:var(--color-accent-700)">{{ a.id }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ a.bg }};color:{{ a.fg }}">{{ a.statusLabel }}</span></span>
+                      <span style="font-size:12.5px;line-height:1.45">{{ a.statement }}</span>
+                      <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ a.strategy }} · sensitivity {{ a.sens }} · EVPI {{ a.evpi }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:22px">
+                  <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+                    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                    <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Open requirement with the greatest value of information</span>
+                    <sc-if value="{{ topReq.has }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ topReq.id }}</span>
+                      <span style="font-size:12.5px;color:var(--color-neutral-700)">{{ topReq.line }}</span>
+                      <span style="font-size:13px;line-height:1.5">{{ topReq.pir }}</span>
+                      <span style="font-size:12px;color:var(--color-neutral-700)">{{ topReq.gap }}</span>
+                    </sc-if>
+                    <sc-if value="{{ topReq.has }}" hint-placeholder-val="{{ false }}"></sc-if>
                   </div>
-                  <div style="display:flex;align-items:flex-end;gap:2px;height:84px;border-bottom:1px solid var(--color-divider)">
-                    <sc-for list="{{ r.bins }}" as="b" hint-placeholder-count="10">
-                      <div style="flex:1;height:{{ b.h }}%;background:{{ b.bg }}"></div>
+                  <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+                    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                    <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Highest current risks</span>
+                    <sc-for list="{{ topRisks }}" as="k" hint-placeholder-count="3">
+                      <button type="button" sc-camel-on-click="{{ k.go }}" style="display:flex;flex-direction:column;gap:4px;text-align:left;font:inherit;color:var(--color-text);background:transparent;border:0;border-bottom:1px solid var(--color-divider);padding:7px 0;cursor:pointer">
+                        <span style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><span style="font-weight:600;font-size:13px">{{ k.label }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ k.chipBg }};color:{{ k.chipFg }}">{{ k.chipLabel }}</span></span>
+                        <span style="font-size:12px;color:var(--color-neutral-700);line-height:1.45">{{ k.text }}</span>
+                      </button>
                     </sc-for>
                   </div>
-                  <div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)"><span>Mission Failure</span><span>Objective Secured</span></div>
-                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">P(success)</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.pSuccess }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">80% CI {{ r.ci }}</div></div>
-                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Casualties P90</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.cas }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">of committed force</div></div>
-                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">P(escalation)</div><div style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ r.pEsc }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">{{ r.pMajor }}% beyond theater</div></div>
+                </div>
+              </div>
+
+              <div class="blueprint" style="padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">JP 5-0 Appendix F caution</span>
+                <p style="margin:0;font-size:13px;line-height:1.55">{{ caution }}</p>
+                <span style="font-size:11.5px;color:var(--color-neutral-700)">Source: {{ cautionSource }}</span>
+              </div>
+            </sc-if>
+          </section>
+        </sc-if>
+      </sc-if>
+
+      <!-- ══ STRATEGY COMPARISON ══ -->
+      <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ hasSnapshot }}" hint-placeholder-val="{{ true }}">
+          <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
+            <div>
+              <h2 style="font-size:26px;margin:0">Strategy Comparison</h2>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Every Blue option at {{ batchName }}, side by side: the five JP 5-0 validity tests with their evidence, expected value, {{ rangeLabel }}, robustness, risk functional, objective weights and contributions, assumptions, resources, theory of victory, constraints and restraints, and harmful events. Invalid options stay on the screen and name the gate that failed.</p>
+            </div>
+
+            <div class="blueprint" style="padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">JP 5-0 Appendix F caution</span>
+              <p style="margin:0;font-size:13px;line-height:1.55">{{ caution }}</p>
+              <span style="font-size:11.5px;color:var(--color-neutral-700)">Source: {{ cautionSource }}</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:22px;align-items:start">
+              <sc-for list="{{ options }}" as="c" hint-placeholder-count="3">
+                <article class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px;border-color:{{ c.border }}">
+                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+                    <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ c.id }} · {{ c.rankLabel }}</span>
+                    <span style="padding:3px 9px;border-radius:6px;font-weight:600;font-size:12px;white-space:nowrap;background:{{ c.statusBg }};color:{{ c.statusFg }}">{{ c.statusLabel }}</span>
                   </div>
-                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;border-top:1px solid var(--color-divider);padding-top:10px">
-                    <sc-for list="{{ r.risks }}" as="k" hint-placeholder-count="3">
-                      <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">{{ k.label }}</span><span style="padding:4px 8px;font-family:var(--font-heading);font-weight:600;font-size:13px;text-align:center;background:{{ k.bg }};color:{{ k.fg }};border-radius:6px">{{ k.level }}</span></div>
-                    </sc-for>
+                  <h3 style="font-size:24px;margin:0">{{ c.name }}</h3>
+                  <sc-if value="{{ c.hasSummary }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font-size:13.5px;line-height:1.5">{{ c.summary }}</p></sc-if>
+                  <p style="margin:0;font-size:12.5px;line-height:1.5;color:var(--color-neutral-800)">{{ c.gateNote }}</p>
+
+                  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;border-top:1px solid var(--color-divider);padding-top:10px">
+                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Expected value</div><div style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ c.value }}</div></div>
+                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">{{ rangeLabel }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ c.range }}</div></div>
+                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Robustness</div><div style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ c.robustness }}</div></div>
+                    <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Risk functional</div><div style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ c.riskFunctional }}</div></div>
                   </div>
+
+                  <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">JP 5-0 validity tests</div>
+                  <sc-for list="{{ c.validity }}" as="v" hint-placeholder-count="5">
+                    <div style="display:flex;flex-direction:column;gap:2px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+                      <span style="display:flex;gap:8px;align-items:baseline"><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ v.bg }};color:{{ v.fg }}">{{ v.verdict }}</span><span style="font-weight:600;font-size:13px">{{ v.test }}</span></span>
+                      <span style="font-size:12px;line-height:1.45;color:var(--color-neutral-800)">{{ v.evidence }}</span>
+                    </div>
+                  </sc-for>
+
+                  <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Assumptions</div>
+                  <sc-for list="{{ c.assumptions }}" as="a" hint-placeholder-count="3">
+                    <div style="display:flex;flex-direction:column;gap:2px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+                      <span style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><span style="font-weight:600;font-size:12px;color:var(--color-accent-700)">{{ a.id }} · k{{ a.k }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ a.bg }};color:{{ a.fg }}">{{ a.statusLabel }}</span></span>
+                      <span style="font-size:12.5px;line-height:1.45">{{ a.statement }}</span>
+                      <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ a.detail }}</span>
+                    </div>
+                  </sc-for>
+
+                  <sc-for list="{{ c.panels }}" as="pn" hint-placeholder-count="4">
+                    <div style="display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--color-divider);padding-top:8px">
+                      <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">{{ pn.title }}</span>
+                      <sc-for list="{{ pn.items }}" as="it" hint-placeholder-count="2">
+                        <div style="display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px;font-size:12px;line-height:1.45"><span style="font-weight:600">{{ it.label }}</span><span>{{ it.text }}</span></div>
+                      </sc-for>
+                      <sc-if value="{{ pn.empty }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">{{ pn.note }}</span></sc-if><sc-if value="{{ pn.unavailable }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:rgb(255,203,71)">{{ pn.note }}</span></sc-if>
+                    </div>
+                  </sc-for>
                 </article>
               </sc-for>
             </div>
+          </section>
+        </sc-if>
+      </sc-if>
 
-            <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
-                <h3 style="font-size:22px;margin:0">Propagation · Change a Claim Here, See What Shifts There</h3>
-                <span style="font-size:11px;color:var(--color-neutral-700)">Fail one assumption; the engine re-runs {{ numSims }} iterations and follows the graph's edges to options and problem sets</span>
-              </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <sc-for list="{{ failToggles }}" as="f" hint-placeholder-count="4">
-                  <button sc-camel-on-click="{{ f.pick }}" style="padding:6px 10px;border:1px solid {{ f.border }};border-radius:6px;background:{{ f.bg }};color:var(--color-text);font:inherit;font-size:12.5px;cursor:pointer">{{ f.label }}</button>
-                </sc-for>
-              </div>
-              <sc-if value="{{ hasFail }}" hint-placeholder-val="{{ false }}">
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start">
-                  <div style="display:flex;flex-direction:column;gap:6px">
-                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">If A{{ failN }} fails — {{ failText }}</span>
-                    <sc-for list="{{ propagation }}" as="p" hint-placeholder-count="3">
-                      <div style="display:grid;grid-template-columns:minmax(0,1fr) 90px 150px;gap:10px;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
-                        <span><span style="font-weight:600">COA {{ p.n }}</span> · {{ p.title }}</span>
-                        <span style="font-weight:600;color:{{ p.color }}">{{ p.delta }} P(success)</span>
-                        <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ p.riskShift }}</span>
-                      </div>
-                    </sc-for>
-                  </div>
-                  <div style="display:flex;flex-direction:column;gap:6px">
-                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">How far the effect travels · problem sets</span>
-                    <sc-for list="{{ problemSets }}" as="ps" hint-placeholder-count="3">
-                      <div style="display:flex;gap:10px;align-items:center;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)"><span style="width:{{ ps.w }}px;height:8px;background:{{ ps.bg }};border-radius:2px;flex:none"></span><span style="flex:1">{{ ps.label }}</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ ps.hop }}</span></div>
-                    </sc-for>
-                    <span style="font-size:12px;color:var(--color-neutral-700)">{{ propagationText }}</span>
-                  </div>
-                </div>
-              </sc-if>
+      <!-- ══ PREDICTIVE INTERCONNECTED RISK ENGINE ══ -->
+      <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ hasSnapshot }}" hint-placeholder-val="{{ true }}">
+          <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
+            <div>
+              <h2 style="font-size:26px;margin:0">Predictive Interconnected Risk Engine</h2>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Problem sets and harmful events as the API recomputes them at {{ batchName }}: probability and consequence, the JRAM risk level, trend, the claims that drive each event, and the cascade edges between events. Names come from the API; ids are shown beside them so a trace can be followed.</p>
+              <p style="margin:6px 0 0;font-size:12px;color:var(--color-neutral-700)">{{ overlay.label }} · {{ overlay.note }}</p>
             </div>
 
-            <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
-                <h3 style="font-size:22px;margin:0">Action – Reaction – Counteraction · COA {{ selN }} {{ selTitle }}</h3>
-                <span style="font-size:11px;color:var(--color-neutral-700)">Select a COA card above to change · red cell reactions drawn from JIPOE most likely / most dangerous COAs</span>
+            <sc-if value="{{ riskView.missing }}" hint-placeholder-val="{{ false }}">
+              <div role="status" class="blueprint" style="padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Unavailable</span>
+                <p style="margin:0;font-size:13px;color:rgb(255,203,71)">{{ riskView.note }}</p>
               </div>
+            </sc-if>
+
+            <sc-if value="{{ riskView.has }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:22px">
+                <div class="blueprint" style="padding:0;overflow-x:auto">
+                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <div style="padding:14px 18px;border-bottom:1px solid var(--color-divider);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Problem sets · JSPS horizons</div>
+                  <sc-raw-table class="table">
+                    <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:190px">Problem set</sc-raw-th><sc-raw-th style="width:110px">Horizon</sc-raw-th><sc-raw-th style="width:140px">Max risk level</sc-raw-th><sc-raw-th>Harmful events and aggregated statement</sc-raw-th></sc-raw-tr></sc-raw-thead>
+                    <sc-raw-tbody>
+                      <sc-for list="{{ riskView.problemSets }}" as="ps" hint-placeholder-count="4">
+                        <sc-for list="{{ ps.horizons }}" as="h" hint-placeholder-count="3">
+                          <sc-raw-tr>
+                            <sc-raw-td style="font-size:12.5px"><span style="font-weight:600">{{ ps.name }}</span><br><span style="color:var(--color-neutral-700);font-size:11px">{{ ps.id }} · owner {{ ps.owner }}</span></sc-raw-td>
+                            <sc-raw-td style="font-size:12.5px">{{ h.horizon }}</sc-raw-td>
+                            <sc-raw-td><span style="padding:3px 9px;border-radius:6px;font-weight:600;font-size:12px;white-space:nowrap;background:{{ h.bg }};color:{{ h.fg }}">{{ h.levelLabel }}</span></sc-raw-td>
+                            <sc-raw-td style="font-size:12px"><span style="color:var(--color-neutral-700)">{{ h.events }}</span><br>{{ h.statement }}</sc-raw-td>
+                          </sc-raw-tr>
+                        </sc-for>
+                      </sc-for>
+                    </sc-raw-tbody>
+                  </sc-raw-table>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:16px">
+                  <h3 style="font-size:20px;margin:0">Harmful events</h3>
+                  <sc-for list="{{ riskView.events }}" as="he" hint-placeholder-count="4">
+                    <article class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px;border:1px solid {{ he.border }}">
+                      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+                        <h4 style="font-size:17px;margin:0">{{ he.statement }} <span style="color:var(--color-neutral-700);font-size:12px;font-weight:400">{{ he.id }}</span></h4>
+                        <span class="tag tag-outline">{{ he.problemSet }}</span>
+                      </div>
+                      <span style="font-size:12px;color:var(--color-neutral-700)">{{ he.riskType }} · thing of value: {{ he.thing }} · {{ he.condition }} · sources of risk: {{ he.sources }}</span>
+                      <sc-for list="{{ he.horizons }}" as="h" hint-placeholder-count="3">
+                        <div style="border-top:1px solid var(--color-divider);padding-top:10px;display:flex;flex-direction:column;gap:6px">
+                          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                            <span style="font-weight:600;font-size:13px">{{ h.horizon }}</span>
+                            <span style="padding:3px 9px;border-radius:6px;font-weight:600;font-size:12px;white-space:nowrap;background:{{ h.bg }};color:{{ h.fg }}">{{ h.levelLabel }}</span>
+                            <span class="tag tag-neutral">Probability {{ h.probability }}</span>
+                            <span class="tag tag-neutral">Consequence {{ h.consequence }}</span>
+                            <span class="tag tag-neutral">{{ h.trend }}</span>
+                          </div>
+                          <p style="margin:0;font-size:12.5px;line-height:1.5">{{ h.statement }}</p>
+                          <sc-if value="{{ h.forced }}" hint-placeholder-val="{{ false }}">
+                            <div style="padding:8px 10px;border-left:2px solid var(--color-accent);background:rgb(16,36,62);font-size:12.5px;line-height:1.5">
+                              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Forced-choice rationale</span><br>{{ h.rationale }}
+                            </div>
+                          </sc-if>
+                          <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Active drivers</div>
+                          <sc-if value="{{ h.noDrivers }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">No driver is active in this horizon.</span></sc-if>
+                          <sc-for list="{{ h.drivers }}" as="d" hint-placeholder-count="2">
+                            <div style="display:flex;flex-direction:column;gap:4px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+                              <span style="font-size:12.5px;font-weight:600">{{ d.label }} <span style="font-weight:400;color:var(--color-neutral-700)">{{ d.kind }} · {{ d.delta }} · {{ d.dominantLabel }}</span></span>
+                              <span style="font-size:12px;color:var(--color-neutral-700)">Satisfied when {{ d.test }}</span>
+                              <sc-if value="{{ d.noClaims }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">No approved claim satisfies this driver at this batch.</span></sc-if>
+                              <sc-for list="{{ d.claims }}" as="c" hint-placeholder-count="1">
+                                <button type="button" sc-camel-on-click="{{ c.open }}" aria-label="{{ c.aria }}" style="text-align:left;background:transparent;border:1px solid var(--color-divider);border-radius:6px;padding:6px 8px;color:var(--color-text);font:inherit;font-size:12px;cursor:pointer" style-hover="border-color:var(--color-accent)">
+                                  {{ c.label }} <span style="color:var(--color-neutral-700)">· {{ c.id }} · {{ c.meta }}</span>
+                                </button>
+                              </sc-for>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-for>
+                      <div style="border-top:1px solid var(--color-divider);padding-top:10px;display:flex;flex-direction:column;gap:4px">
+                        <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Cascade</div>
+                        <sc-if value="{{ he.noCascade }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">No escalation edge into or out of this event.</span></sc-if>
+                        <sc-for list="{{ he.cascadeUp }}" as="e" hint-placeholder-count="1">
+                          <span style="font-size:12.5px">↑ {{ e.names }} <span style="color:var(--color-neutral-700)">· {{ e.ids }} · {{ e.detail }}</span></span>
+                        </sc-for>
+                        <sc-for list="{{ he.cascadeDown }}" as="e" hint-placeholder-count="1">
+                          <span style="font-size:12.5px">↓ {{ e.names }} <span style="color:var(--color-neutral-700)">· {{ e.ids }} · {{ e.detail }}</span></span>
+                        </sc-for>
+                        <sc-for list="{{ he.paths }}" as="p" hint-placeholder-count="1">
+                          <span style="font-size:12.5px;color:var(--color-neutral-700)">path {{ p.label }}</span>
+                        </sc-for>
+                      </div>
+                    </article>
+                  </sc-for>
+                </div>
+
+                <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:6px">
+                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Escalation edges</span>
+                  <sc-for list="{{ riskView.escalation }}" as="e" hint-placeholder-count="3">
+                    <span style="font-size:12.5px">{{ e.names }} <span style="color:var(--color-neutral-700)">· {{ e.ids }} · {{ e.detail }}</span></span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </section>
+        </sc-if>
+      </sc-if>
+
+      <!-- ══ ASSUMPTIONS AND COLLECTION REQUIREMENTS ══ -->
+      <sc-if value="{{ step4 }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ hasSnapshot }}" hint-placeholder-val="{{ true }}">
+          <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
+            <div>
+              <h2 style="font-size:26px;margin:0">Assumptions &amp; Collection Requirements</h2>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Every Blue assumption at {{ batchName }} with its status, probability of holding, sensitivity and expected value of perfect information, and the collection requirements the API ranks against them.</p>
+            </div>
+            <div class="blueprint" style="padding:0;overflow-x:auto">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
               <sc-raw-table class="table">
-                <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:70px">Turn</sc-raw-th><sc-raw-th>Friendly Action</sc-raw-th><sc-raw-th>{{ threatName }} Reaction</sc-raw-th><sc-raw-th>Counteraction</sc-raw-th><sc-raw-th style="width:130px">Decision Point</sc-raw-th></sc-raw-tr></sc-raw-thead>
+                <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:150px">Assumption</sc-raw-th><sc-raw-th style="width:130px">Option</sc-raw-th><sc-raw-th>Statement</sc-raw-th><sc-raw-th style="width:130px">Status</sc-raw-th><sc-raw-th style="width:90px">p(holds)</sc-raw-th><sc-raw-th style="width:110px">Sensitivity</sc-raw-th><sc-raw-th style="width:90px">EVPI</sc-raw-th></sc-raw-tr></sc-raw-thead>
                 <sc-raw-tbody>
-                  <sc-for list="{{ arc }}" as="a" hint-placeholder-count="3">
-                    <sc-raw-tr><sc-raw-td style="font-family:var(--font-heading);font-weight:600">T+{{ a.turn }}</sc-raw-td><sc-raw-td>{{ a.action }}</sc-raw-td><sc-raw-td>{{ a.reaction }}</sc-raw-td><sc-raw-td>{{ a.counter }}</sc-raw-td><sc-raw-td><span class="tag tag-outline">{{ a.dp }}</span></sc-raw-td></sc-raw-tr>
+                  <sc-for list="{{ assumptionRows }}" as="a" hint-placeholder-count="8">
+                    <sc-raw-tr>
+                      <sc-raw-td style="font-weight:600;font-size:12px">{{ a.id }}</sc-raw-td>
+                      <sc-raw-td style="font-size:12.5px">{{ a.strategy }}</sc-raw-td>
+                      <sc-raw-td style="font-size:12.5px">{{ a.statement }}</sc-raw-td>
+                      <sc-raw-td><span style="padding:2px 8px;border-radius:6px;font-weight:600;font-size:11.5px;white-space:nowrap;background:{{ a.bg }};color:{{ a.fg }}">{{ a.statusLabel }}</span></sc-raw-td>
+                      <sc-raw-td>{{ a.pHolds }}</sc-raw-td>
+                      <sc-raw-td>{{ a.sens }}</sc-raw-td>
+                      <sc-raw-td>{{ a.evpi }}</sc-raw-td>
+                    </sc-raw-tr>
                   </sc-for>
                 </sc-raw-tbody>
               </sc-raw-table>
             </div>
-          </sc-if>
-        </section>
-      </sc-if>
-
-      <!-- STEP 4 COMPARISON -->
-      <sc-if value="{{ step4 }}" hint-placeholder-val="{{ false }}">
-        <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
-            <div>
-              <h2 style="font-size:26px;margin:0">COA Comparison</h2>
-              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Strategy Option Evaluation sits on top and scores options against assumptions, where each assumption is a claim in the graph. Governing criteria are risk to mission, risk to personnel and risk of escalation, rated Low / Moderate / Significant / High.</p>
-            </div>
-            <button class="btn btn-primary blueprint" style="padding:12px 18px;font-size:14px" sc-camel-on-click="{{ goApprove }}" disabled="{{ noResults }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Proceed to Approval →</button>
-          </div>
-          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
-            <div class="blueprint" style="padding:28px;text-align:center;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>No wargame results yet. Run the Monte Carlo wargame in step 3 first.</div>
-          </sc-if>
-          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
             <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Where the Analysis Stands on Thin Evidence</span><button class="btn btn-secondary" style="font-size:12.5px" sc-camel-on-click="{{ sendWeakToCollection }}">Send {{ weakCount }} weak assumptions to Collection Agent →</button></div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
-                <sc-for list="{{ evidence }}" as="e" hint-placeholder-count="3">
-                  <div style="display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid {{ e.border }};border-radius:8px">
-                    <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:600;font-size:14px">COA {{ e.n }} · {{ e.title }}</span><span style="font-size:11px;color:var(--color-neutral-700)">Rank #{{ e.rank }}</span></div>
-                    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Load-bearing claims</span>
-                    <sc-for list="{{ e.deps }}" as="d" hint-placeholder-count="2">
-                      <div style="display:flex;gap:8px;align-items:center;font-size:12.5px"><span style="font-weight:600;color:var(--color-accent-700);min-width:24px">A{{ d.n }}</span><span style="flex:1;color:var(--color-neutral-800)">{{ d.short }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ d.bg }};color:{{ d.fg }}">{{ d.conf }}% · {{ d.status }}</span></div>
-                    </sc-for>
-                    <span style="font-size:12px;color:{{ e.verdictColor }}">{{ e.verdict }}</span>
-                  </div>
-                </sc-for>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+                <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Collection requirements · JIPCL order</span>
+                <button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ goCollection }}">Open the Collection Management Agent →</button>
               </div>
+              <sc-for list="{{ collectionView.requirements }}" as="r" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:110px 150px 150px minmax(0,1fr);gap:10px;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+                  <span style="font-weight:600">{{ r.id }}</span><span>{{ r.status }}</span><span>{{ r.rank }}</span><span style="color:var(--color-neutral-700)">{{ r.eei }} · {{ r.basis }}</span>
+                </div>
+              </sc-for>
+              <sc-if value="{{ collectionView.missing }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:rgb(255,203,71)">{{ collectionView.note }}</span></sc-if>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,560px),2fr));gap:22px;align-items:start">
-              <div class="blueprint" style="padding:0;overflow-x:auto">
-                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                <sc-raw-table class="table">
-                  <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:220px">Criterion · Weight</sc-raw-th>
-                    <sc-for list="{{ results }}" as="r" hint-placeholder-count="3"><sc-raw-th style="text-align:center">COA {{ r.n }}<br><span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px">{{ r.title }}</span></sc-raw-th></sc-for>
-                  </sc-raw-tr></sc-raw-thead>
-                  <sc-raw-tbody>
-                    <sc-for list="{{ matrix }}" as="row" hint-placeholder-count="5">
-                      <sc-raw-tr>
-                        <sc-raw-td><div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--font-heading);font-weight:600;font-size:15px">{{ row.label }}</span><div style="display:flex;align-items:center;gap:8px"><input type="range" min="0" max="5" step="1" value="{{ row.weight }}" sc-camel-on-change="{{ row.setWeight }}" style="width:100px"><span style="font-size:11px;color:var(--color-neutral-700)">×{{ row.weight }}</span></div></div></sc-raw-td>
-                        <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="3">
-                          <sc-raw-td style="text-align:center;vertical-align:middle"><div style="display:inline-flex;flex-direction:column;gap:3px;align-items:center"><span style="padding:4px 10px;font-family:var(--font-heading);font-weight:600;font-size:13px;background:{{ c.bg }};color:{{ c.fg }};border-radius:6px;min-width:96px">{{ c.level }}</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ c.detail }}</span></div></sc-raw-td>
-                        </sc-for>
-                      </sc-raw-tr>
-                    </sc-for>
-                    <sc-raw-tr style="background:color-mix(in srgb,var(--color-accent) 6%,transparent)">
-                      <sc-raw-td style="font-family:var(--font-heading);font-weight:600;font-size:15px">Weighted Score</sc-raw-td>
-                      <sc-for list="{{ ranked }}" as="r" hint-placeholder-count="3">
-                        <sc-raw-td style="text-align:center"><div style="font-family:var(--font-heading);font-weight:600;font-size:26px">{{ r.pct }}%</div><div style="font-size:11px;color:var(--color-neutral-700)">Rank #{{ r.rank }} · {{ r.score }}</div></sc-raw-td>
-                      </sc-for>
-                    </sc-raw-tr>
-                  </sc-raw-tbody>
-                </sc-raw-table>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:22px">
-                <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:10px;background:rgb(16,36,62);border:1px solid var(--color-accent)">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.8">Staff Recommendation</span>
-                  <h3 style="font-size:26px;margin:0">COA {{ best.n }} · {{ best.title }}</h3>
-                  <p style="margin:0;font-size:13.5px;line-height:1.5;opacity:.92">{{ best.reason }}</p>
-                  <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-top:6px">Risk Accepted</div>
-                  <p style="margin:0;font-size:13px;line-height:1.5;opacity:.92">{{ best.riskAccepted }}</p>
-                </div>
-                <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Why COA {{ best.n }} · Score Contribution vs Runner-up</span>
-                  <sc-for list="{{ explain }}" as="x" hint-placeholder-count="5">
-                    <div style="display:grid;grid-template-columns:130px minmax(0,1fr) 44px;gap:8px;align-items:center;font-size:12.5px">
-                      <span>{{ x.label }}</span>
-                      <div style="display:flex;height:10px;background:rgb(30,41,59);border-radius:3px;overflow:hidden"><div style="width:{{ x.bestW }}%;background:var(--color-accent)"></div><div style="width:{{ x.otherW }}%;background:rgb(100,116,139)"></div></div>
-                      <span style="text-align:right;font-weight:600;color:{{ x.color }}">{{ x.delta }}</span>
-                    </div>
-                  </sc-for>
-                  <div style="display:flex;gap:14px;font-size:11px;color:var(--color-neutral-700)"><span><span style="display:inline-block;width:10px;height:10px;background:var(--color-accent);border-radius:2px;vertical-align:-1px"></span> COA {{ best.n }}</span><span><span style="display:inline-block;width:10px;height:10px;background:rgb(100,116,139);border-radius:2px;vertical-align:-1px"></span> COA {{ runnerUp.n }} {{ runnerUp.title }}</span></div>
-                  <p style="margin:0;font-size:12.5px;line-height:1.5;color:var(--color-neutral-800)">{{ explainText }}</p>
-                </div>
-                <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
-                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Key Trade-offs</span>
-                  <sc-for list="{{ tradeoffs }}" as="t" hint-placeholder-count="3"><div style="font-size:13px;line-height:1.5;padding:6px 0;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">{{ t }}</div></sc-for>
-                </div>
-              </div>
-            </div>
-            <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:14px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h3 style="font-size:22px;margin:0">Sensitivity Analysis</h3><span style="font-size:11px;color:var(--color-neutral-700)">How robust is the recommendation to changes in weights, adversary behavior and assumptions?</span></div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px">
-                <div style="display:flex;flex-direction:column;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Rank Stability · 500 random weight sets (±2 each)</span>
-                  <sc-for list="{{ stability }}" as="r" hint-placeholder-count="3">
-                    <div style="display:grid;grid-template-columns:70px minmax(0,1fr) 44px;gap:8px;align-items:center;font-size:12.5px"><span>COA {{ r.n }}</span><div style="height:12px;background:rgb(30,41,59);border-radius:3px;overflow:hidden"><div style="height:100%;width:{{ r.pct }}%;background:{{ r.bg }}"></div></div><span style="text-align:right;font-weight:600">{{ r.pct }}%</span></div>
-                  </sc-for>
-                  <span style="font-size:12px;color:var(--color-neutral-700)">{{ stabilityText }}</span>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Weight Tornado · Does the #1 change if a weight moves ±2?</span>
-                  <sc-for list="{{ tornado }}" as="t" hint-placeholder-count="5">
-                    <div style="display:grid;grid-template-columns:110px 1fr 1fr;gap:6px;align-items:center;font-size:11px">
-                      <span style="font-size:12px">{{ t.label }}</span>
-                      <span style="padding:3px 6px;border-radius:6px;text-align:center;font-weight:600;white-space:nowrap;background:{{ t.loBg }};color:{{ t.loFg }}">−2 → COA {{ t.lo }}</span>
-                      <span style="padding:3px 6px;border-radius:6px;text-align:center;font-weight:600;white-space:nowrap;background:{{ t.hiBg }};color:{{ t.hiFg }}">+2 → COA {{ t.hi }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Adversary Aggression Sweep · P(success)</span>
-                  <sc-raw-table class="table" style="font-size:12.5px">
-                    <sc-raw-thead><sc-raw-tr><sc-raw-th>COA</sc-raw-th><sc-raw-th>Restrained</sc-raw-th><sc-raw-th>Moderate</sc-raw-th><sc-raw-th>Aggressive</sc-raw-th></sc-raw-tr></sc-raw-thead>
-                    <sc-raw-tbody><sc-for list="{{ sweep }}" as="r" hint-placeholder-count="3"><sc-raw-tr><sc-raw-td style="font-weight:600">COA {{ r.n }}</sc-raw-td><sc-raw-td>{{ r.lo }}%</sc-raw-td><sc-raw-td>{{ r.mid }}%</sc-raw-td><sc-raw-td>{{ r.hi }}%</sc-raw-td></sc-raw-tr></sc-for></sc-raw-tbody>
-                  </sc-raw-table>
-                  <span style="font-size:12px;color:var(--color-neutral-700)">{{ sweepText }}</span>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600)">Assumption Exposure</span>
-                  <sc-for list="{{ assumptionRisk }}" as="a" hint-placeholder-count="3">
-                    <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:5px 0;border-bottom:1px solid var(--color-divider)"><span style="font-weight:600;color:var(--color-accent-700);min-width:24px">A{{ a.n }}</span><span style="flex:1">{{ a.text }}</span><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ a.bg }};color:{{ a.fg }}">{{ a.status }} · {{ a.conf }}%</span></div>
-                  </sc-for>
-                  <span style="font-size:12px;color:var(--color-neutral-700)">{{ assumptionText }}</span>
-                </div>
-              </div>
-            </div>
-          </sc-if>
-        </section>
+          </section>
+        </sc-if>
       </sc-if>
 
-      <!-- STEP 5 APPROVAL -->
+      <!-- ══ OPTION RECOMMENDATION · ranked options and record of decision ══ -->
       <sc-if value="{{ step5 }}" hint-placeholder-val="{{ false }}">
-        <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
-          <div>
-            <h2 style="font-size:26px;margin:0">Option Recommendation</h2>
-            <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Strategy evaluation that takes in every gap and risk surfaced upstream — thin evidence, open collection, propagation exposure and adversary behavior — and offers the Commander a recommended option with the risk being accepted.</p>
-          </div>
-          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
-            <div class="blueprint" style="padding:22px;display:flex;flex-direction:column;gap:14px;background:rgb(16,36,62);border:1px solid var(--color-accent)">
-              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
-                <div><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Strategy Evaluation · {{ planLabel }} · vs {{ threatName }}</span><h3 style="font-size:28px;margin:2px 0 0">Recommend COA {{ best.n }} · {{ best.title }}</h3></div>
-                <span style="padding:6px 12px;border-radius:6px;font-weight:600;font-size:14px;background:{{ evalGrade.bg }};color:{{ evalGrade.fg }}">Confidence in recommendation · {{ evalGrade.label }}</span>
-              </div>
-              <p style="margin:0;font-size:14px;line-height:1.55">{{ evalSummary }}</p>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
-                <sc-for list="{{ evalStats }}" as="st" hint-placeholder-count="5">
-                  <div style="padding:12px;border-radius:8px;background:rgb(15,23,42);display:flex;flex-direction:column;gap:3px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">{{ st.label }}</span><span style="font-size:22px;font-weight:600;line-height:1.1;color:{{ st.color }}">{{ st.value }}</span><span style="font-size:11.5px;color:var(--color-neutral-700)">{{ st.note }}</span></div>
-                </sc-for>
-              </div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Gaps carried into the decision</span>
-                  <sc-for list="{{ evalGaps }}" as="g" hint-placeholder-count="3"><div style="display:flex;gap:8px;font-size:13px;line-height:1.5;padding:5px 0;border-bottom:1px solid var(--color-divider)"><span style="color:rgb(255,203,71);flex:none">▲</span><span>{{ g }}</span></div></sc-for>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Risks the Commander accepts</span>
-                  <sc-for list="{{ evalRisks }}" as="g" hint-placeholder-count="3"><div style="display:flex;gap:8px;font-size:13px;line-height:1.5;padding:5px 0;border-bottom:1px solid var(--color-divider)"><span style="color:rgb(255,120,120);flex:none">●</span><span>{{ g }}</span></div></sc-for>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Conditions and mitigations</span>
-                  <sc-for list="{{ evalConditions }}" as="g" hint-placeholder-count="3"><div style="display:flex;gap:8px;font-size:13px;line-height:1.5;padding:5px 0;border-bottom:1px solid var(--color-divider)"><span style="color:rgb(76,195,138);flex:none">✓</span><span>{{ g }}</span></div></sc-for>
-                </div>
-              </div>
-            </div>
-          </sc-if>
-          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
-            <div class="blueprint" style="padding:28px;text-align:center;color:var(--color-neutral-700)"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Run the wargames in the Predictive Risk Engine before a recommendation can be offered.</div>
-          </sc-if>
-          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ hasSnapshot }}" hint-placeholder-val="{{ true }}">
+          <section style="padding:0 32px 40px;display:flex;flex-direction:column;gap:22px">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
-              <sc-for list="{{ ranked }}" as="r" hint-placeholder-count="3">
-                <button class="blueprint" sc-camel-on-click="{{ r.choose }}" style="padding:18px;display:flex;flex-direction:column;gap:8px;text-align:left;font:inherit;color:var(--color-text);background:{{ r.chooseBg }};cursor:pointer;border-color:{{ r.chooseBorder }}">
+              <sc-for list="{{ rankedCards }}" as="r" hint-placeholder-count="3">
+                <article class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px;background:{{ r.chooseBg }};border-color:{{ r.border }}">
                   <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                  <div style="display:flex;justify-content:space-between"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Rank #{{ r.rank }} · COA {{ r.n }}</span><span class="tag tag-outline">{{ r.pct }}%</span></div>
-                  <span style="font-family:var(--font-heading);font-weight:600;font-size:22px;line-height:1.1">{{ r.title }}</span>
-                  <span style="font-size:12.5px;color:var(--color-neutral-700)">{{ r.riskLine }}</span>
-                </button>
+                  <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ r.rankLabel }} · {{ r.id }}</span><span style="padding:2px 8px;border-radius:6px;font-weight:600;font-size:11.5px;white-space:nowrap;background:{{ r.bg }};color:{{ r.fg }}">{{ r.statusLabel }}</span></div>
+                  <span style="font-family:var(--font-heading);font-weight:600;font-size:22px;line-height:1.1">{{ r.name }}</span>
+                  <span style="font-size:12.5px;color:var(--color-neutral-700)">Expected value {{ r.value }} · {{ rangeLabel }} {{ r.range }}</span>
+                  <span style="font-size:12.5px;line-height:1.45">{{ r.note }}</span>
+                  <div><button type="button" class="btn btn-secondary" style="font-size:12.5px" sc-camel-on-click="{{ r.select }}" disabled="{{ r.selectDisabled }}">{{ r.selectLabel }}</button></div>
+                </article>
               </sc-for>
             </div>
             <div class="blueprint" style="padding:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px">
               <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
               <div style="display:flex;flex-direction:column;gap:10px">
-                <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Decision · COA {{ chosen.n }} {{ chosen.title }}</span>
+                <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Decision · {{ rec.name }} {{ rec.id }}</span>
                 <textarea class="input" style="min-height:90px;font-size:13.5px" placeholder="Commander's guidance, modifications, branches to develop…" value="{{ decisionNote }}" sc-camel-on-change="{{ onDecisionNote }}"></textarea>
                 <div style="display:flex;gap:8px;flex-wrap:wrap">
-                  <button class="btn btn-primary blueprint" style="padding:11px 16px" sc-camel-on-click="{{ approve }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Approve COA</button>
-                  <button class="btn btn-secondary" sc-camel-on-click="{{ approveMod }}">Approve with Modifications</button>
-                  <button class="btn btn-secondary" sc-camel-on-click="{{ returnRework }}">Return for Rework</button>
+                  <button type="button" class="btn btn-primary blueprint" style="padding:11px 16px" sc-camel-on-click="{{ approve }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Approve</button>
+                  <button type="button" class="btn btn-secondary" sc-camel-on-click="{{ approveMod }}">Approve with Modifications</button>
+                  <button type="button" class="btn btn-secondary" sc-camel-on-click="{{ returnRework }}">Return for Rework</button>
                 </div>
               </div>
               <div style="display:flex;flex-direction:column;gap:10px">
@@ -594,127 +422,414 @@
                 <sc-if value="{{ hasDecision }}" hint-placeholder-val="{{ false }}">
                   <div style="border:1px solid var(--color-accent);border-radius:8px;padding:14px;background:rgb(16,36,62);display:flex;flex-direction:column;gap:6px;font-size:13px">
                     <div style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ decision.status }}</div>
-                    <div>{{ planLabel }} · {{ ccmd }} · vs {{ threatName }}</div>
-                    <div>COA {{ decision.n }} — {{ decision.title }}</div>
-                    <div style="color:var(--color-neutral-700)">Risk accepted: {{ decision.risk }}</div>
-                    <div style="color:var(--color-neutral-700)">{{ decision.time }} · Run {{ runId }}</div>
+                    <div>{{ decision.name }} — {{ decision.id }}</div>
+                    <div style="color:var(--color-neutral-700)">Expected value {{ decision.value }} · {{ rangeLabel }} {{ decision.range }}</div>
+                    <div style="color:var(--color-neutral-700)">{{ decision.batch }} · as of {{ decision.asOf }} · recorded {{ decision.time }}</div>
                     <sc-if value="{{ decision.hasNote }}" hint-placeholder-val="{{ false }}"><div style="border-top:1px solid var(--color-divider);padding-top:6px">{{ decision.note }}</div></sc-if>
                   </div>
                 </sc-if>
-                <sc-if value="{{ noDecision }}" hint-placeholder-val="{{ true }}"><div style="font-size:13px;color:var(--color-neutral-700)">No decision recorded for this run.</div></sc-if>
+                <sc-if value="{{ noDecision }}" hint-placeholder-val="{{ true }}"><div style="font-size:13px;color:var(--color-neutral-700)">No decision recorded at {{ batchName }}.</div></sc-if>
               </div>
             </div>
-          </sc-if>
-        </section>
+          </section>
+        </sc-if>
       </sc-if>
     </sc-if>
 
-    <!-- ─── DOCUMENT LIBRARY: PLANS + STRATEGIC GUIDANCE → RISK ─── -->
+
+
+      <!-- ══ INJECT TIMELINE · CHANGE EXPLANATION ══ -->
+      <sc-if value="{{ step6 }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ hasSnapshot }}" hint-placeholder-val="{{ true }}">
+          <section style="padding:28px 32px 40px;display:flex;flex-direction:column;gap:22px">
+            <div>
+              <h2 style="font-size:26px;margin:0">Evidence Updates</h2>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Each update is a dated set of new intelligence reports in the supplied dataset. Select an update to see which claims, assumptions, COA screening results, risks, and collection requirements changed.</p>
+            </div>
+            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div role="group" aria-label="Evidence update sequence" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ batchButtons }}" as="b" hint-placeholder-count="4">
+                  <button type="button" sc-camel-on-click="{{ b.pick }}" aria-pressed="{{ b.pressed }}" aria-label="{{ b.aria }}" style="padding:7px 13px;border:1px solid {{ b.border }};border-radius:6px;background:{{ b.bg }};color:var(--color-text);font:inherit;font-size:13px;cursor:pointer">{{ b.label }}</button>
+                </sc-for>
+                <button type="button" class="btn btn-ghost" style="font-size:12.5px" sc-camel-on-click="{{ recompute }}">Refresh Current Evidence</button>
+                <button type="button" class="btn btn-ghost" style="font-size:12.5px" sc-camel-on-click="{{ resetWorkspace }}" disabled="{{ resetDisabled }}" title="{{ resetNote }}">Clear Reviewed Evidence</button>
+              </div>
+              <span role="status" aria-live="polite" style="font-size:12px;color:var(--color-neutral-700)">{{ batchStatus }}</span>
+              <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ dataSourceNote }}</span>
+              <sc-if value="{{ hasResetNotice }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:12.5px;color:rgb(76,195,138)">{{ resetNotice }}</span></sc-if>
+              <sc-if value="{{ hasResetError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:12.5px;color:rgb(255,203,71)">{{ resetError.code }} — {{ resetError.message }}</span></sc-if>
+            </div>
+            <div>
+              <h3 style="font-size:20px;margin:0">{{ diffView.heading }}</h3>
+              <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:13px">{{ diffView.sub }}</p>
+            </div>
+            <sc-if value="{{ diffView.baseline }}" hint-placeholder-val="{{ false }}">
+              <div role="status" class="blueprint" style="padding:22px;text-align:center;color:var(--color-neutral-700);font-size:14px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                Baseline — no preceding evidence update. Select update 1, 2, or 3 to see what changed.
+              </div>
+            </sc-if>
+            <sc-if value="{{ diffView.unavailable }}" hint-placeholder-val="{{ false }}">
+              <div role="status" class="blueprint" style="padding:16px 18px;color:rgb(255,203,71);font-size:13px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>{{ diffView.note }}
+              </div>
+            </sc-if>
+            <sc-for list="{{ diffView.panels }}" as="p" hint-placeholder-count="6">
+              <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ p.title }}</span>
+                <sc-if value="{{ p.empty }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:var(--color-neutral-700)">{{ p.emptyNote }}</span></sc-if>
+                <sc-for list="{{ p.rows }}" as="row" hint-placeholder-count="3">
+                  <button type="button" sc-camel-on-click="{{ row.go }}" style="display:grid;grid-template-columns:190px minmax(0,1fr);gap:10px;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--color-divider);padding:7px 0;color:var(--color-text);font:inherit;font-size:12.5px;cursor:pointer" style-hover="background:rgb(30,41,59)">
+                    <span style="font-weight:600">{{ row.label }}</span><span style="color:var(--color-neutral-700)">{{ row.text }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </section>
+        </sc-if>
+      </sc-if>
+
+    <!-- ─── PLANS & STRATEGIC GUIDANCE · TRACKED PLANNING OBJECTS ─── -->
     <sc-if value="{{ isDocs }}" hint-placeholder-val="{{ false }}">
       <section style="padding:22px 32px 40px;display:flex;flex-direction:column;gap:22px">
         <div>
-          <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Anvil · Inputs</div>
-          <h1 style="font-size:34px;margin:2px 0 0">Plans &amp; Strategic Guidance</h1>
-          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Drop plan documents (.docx OPLAN/CONPLAN/CCP drafts) and the strategic guidance they must nest under (NDS, NMS, JSCP, CPG, GEF, UCP). Each plan is read, decomposed, and compared against the guidance set to produce risk to mission, personnel and escalation.</p>
+          <h2 style="font-size:26px;margin:0">Plans &amp; Strategic Guidance</h2>
+          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Add the plan under review and the strategic guidance it must support. The service stores the original, records its SHA-256, extracts proposed claims with exact source spans, and holds them for analyst review.</p>
         </div>
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px">
           <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
             <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Plans Under Evaluation</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ planDocCount }} documents</span></div>
-            <label sc-camel-on-drag-over="{{ prevent }}" sc-camel-on-drop="{{ dropPlan }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px;border:1px dashed var(--color-accent);border-radius:8px;cursor:pointer;text-align:center;background:rgb(16,36,62)">
-              <span style="font-weight:600;font-size:15px">Drop .docx Plan Here</span>
-              <span style="font-size:12px;color:var(--color-neutral-700)">or click to browse · .docx, .pdf, .txt · the document is parsed in your browser</span>
-              <input type="file" accept=".docx,.pdf,.txt,.md" multiple="{{ true }}" sc-camel-on-change="{{ pickPlan }}" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Plan Under Evaluation</span><span style="font-size:11px;color:var(--color-neutral-700)">OPLAN · CONPLAN · campaign plan</span></div>
+            <label sc-camel-on-drag-over="{{ prevent }}" sc-camel-on-drop="{{ dropReport }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px;border:1px dashed var(--color-accent);border-radius:8px;cursor:pointer;text-align:center;background:rgb(16,36,62)">
+              <span style="font-weight:600;font-size:15px">Drop Plan Here</span>
+              <span style="font-size:12px;color:var(--color-neutral-700)">or click to browse · .docx, .pdf, .txt, .md</span>
+              <input type="file" aria-label="Choose plan document" accept=".docx,.pdf,.txt,.md" sc-camel-on-change="{{ pickReport }}" style="display:none">
             </label>
-            <sc-for list="{{ planDocs }}" as="d" hint-placeholder-count="2">
-              <button sc-camel-on-click="{{ d.select }}" style="display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid {{ d.border }};border-radius:8px;background:{{ d.bg }};color:var(--color-text);font:inherit;text-align:left;cursor:pointer">
-                <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-weight:600;font-size:15px">{{ d.name }}</span><span class="tag tag-accent">{{ d.kind }}</span></div>
-                <span style="font-size:12px;color:var(--color-neutral-700)">{{ d.meta }}</span>
-                <div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ d.risks }}" as="k" hint-placeholder-count="3"><span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ k.bg }};color:{{ k.fg }}">{{ k.label }} · {{ k.level }}</span></sc-for></div>
-              </button>
-            </sc-for>
+            <sc-if value="{{ ingestView.isPlan }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:3px"><span style="font-weight:600;font-size:14px">{{ ingestView.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ ingestView.bytes }}</span></div></sc-if>
           </div>
-
           <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
             <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Strategic Guidance Set</span><span style="font-size:11px;color:var(--color-neutral-700)">Plans are compared against these</span></div>
-            <label sc-camel-on-drag-over="{{ prevent }}" sc-camel-on-drop="{{ dropGuide }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;border:1px dashed var(--color-divider);border-radius:8px;cursor:pointer;text-align:center">
-              <span style="font-weight:600;font-size:14px">Drop Guidance Document</span>
-              <span style="font-size:12px;color:var(--color-neutral-700)">NDS · NMS · JSCP · CPG · GEF · theater strategy · CCDR guidance</span>
-              <input type="file" accept=".docx,.pdf,.txt,.md" multiple="{{ true }}" sc-camel-on-change="{{ pickGuide }}" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Strategic Guidance Set</span><span style="font-size:11px;color:var(--color-neutral-700)">The plan must nest under these</span></div>
+            <label sc-camel-on-drag-over="{{ prevent }}" sc-camel-on-drop="{{ dropGuidance }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px;border:1px dashed var(--color-divider);border-radius:8px;cursor:pointer;text-align:center">
+              <span style="font-weight:600;font-size:15px">Drop Guidance Document</span>
+              <span style="font-size:12px;color:var(--color-neutral-700)">NDS · NMS · JSCP · CPG · GEF · CCDR guidance</span>
+              <input type="file" aria-label="Choose guidance document" accept=".docx,.pdf,.txt,.md" sc-camel-on-change="{{ pickGuidance }}" style="display:none">
             </label>
-            <sc-raw-table class="table">
-              <sc-raw-thead><sc-raw-tr><sc-raw-th>Document</sc-raw-th><sc-raw-th>Tier</sc-raw-th><sc-raw-th>Directs</sc-raw-th><sc-raw-th></sc-raw-th></sc-raw-tr></sc-raw-thead>
-              <sc-raw-tbody>
-                <sc-for list="{{ guideDocs }}" as="g" hint-placeholder-count="4">
-                  <sc-raw-tr><sc-raw-td style="font-weight:500">{{ g.name }}</sc-raw-td><sc-raw-td><span class="tag tag-neutral">{{ g.tier }}</span></sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:13px">{{ g.directs }}</sc-raw-td><sc-raw-td style="text-align:right"><button class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ g.remove }}">Remove</button></sc-raw-td></sc-raw-tr>
-                </sc-for>
-              </sc-raw-tbody>
-            </sc-raw-table>
+            <sc-if value="{{ ingestView.isGuidance }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:3px"><span style="font-weight:600;font-size:14px">{{ ingestView.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ ingestView.bytes }}</span></div></sc-if>
           </div>
         </div>
 
-        <sc-if value="{{ hasPlanSel }}" hint-placeholder-val="{{ false }}">
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start">
-            <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h3 style="font-size:22px;margin:0">Risk assessment · {{ planSel.name }}</h3><button class="btn btn-secondary" sc-camel-on-click="{{ sendToCoa }}">Use as COA Input →</button></div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
-                <sc-for list="{{ planSel.risks }}" as="k" hint-placeholder-count="3">
-                  <div style="padding:14px;border-radius:8px;background:{{ k.bg }};color:{{ k.fg }};display:flex;flex-direction:column;gap:4px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.85">{{ k.label }}</span><span style="font-size:20px;font-weight:600;line-height:1;overflow-wrap:anywhere">{{ k.level }}</span><span style="font-size:12px;opacity:.9">{{ k.why }}</span></div>
-                </sc-for>
-              </div>
-              <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:4px">Alignment with Guidance</div>
-              <sc-for list="{{ planSel.alignment }}" as="a" hint-placeholder-count="4">
-                <div style="display:grid;grid-template-columns:150px minmax(0,1fr) 110px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--color-divider);font-size:13px">
-                  <span style="font-weight:600">{{ a.doc }}</span>
-                  <span style="color:var(--color-neutral-700)">{{ a.note }}</span>
-                  <span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;text-align:center;background:{{ a.bg }};color:{{ a.fg }}">{{ a.level }}</span>
-                </div>
-              </sc-for>
-              <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-600);margin-top:4px">Findings</div>
-              <ul style="margin:0;padding-left:18px;font-size:13.5px;line-height:1.55"><sc-for list="{{ planSel.findings }}" as="f" hint-placeholder-count="3"><li>{{ f }}</li></sc-for></ul>
-            </div>
-            <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:10px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Extracted from Document</span>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Mission</div><p style="margin:0;font-size:13px;line-height:1.5">{{ planSel.mission }}</p>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Commander's Intent</div><p style="margin:0;font-size:13px;line-height:1.5">{{ planSel.intent }}</p>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">End State</div><p style="margin:0;font-size:13px;line-height:1.5">{{ planSel.endState }}</p>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Assumptions Found</div>
-              <ul style="margin:0;padding-left:16px;font-size:12.5px;line-height:1.5;color:var(--color-neutral-800)"><sc-for list="{{ planSel.assumptions }}" as="a" hint-placeholder-count="2"><li>{{ a }}</li></sc-for></ul>
-              <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><sc-for list="{{ planSel.phases }}" as="p" hint-placeholder-count="2"><span class="tag tag-neutral">{{ p }}</span></sc-for></div>
-              <span style="font-size:11px;color:var(--color-neutral-700);margin-top:4px">{{ planSel.words }} words · {{ planSel.pages }} est. pages · {{ planSel.status }}</span>
-            </div>
+        <sc-if value="{{ ingestView.hasFile }}" hint-placeholder-val="{{ false }}">
+          <div class="blueprint" style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--color-accent)">
+            <span style="font-size:13px"><strong>{{ ingestView.name }}</strong> is ready for source review and claim extraction.</span>
+            <button type="button" class="btn btn-primary" sc-camel-on-click="{{ goIntel }}">Review &amp; Ingest Document</button>
           </div>
         </sc-if>
+        <sc-if value="{{ ingestView.isBusy }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:12.5px;color:var(--color-neutral-700)">{{ ingestView.busy }}</span></sc-if>
+        <sc-if value="{{ ingestView.hasError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:12.5px;color:rgb(254,236,244)">{{ ingestView.error.code }} — {{ ingestView.error.message }}</span></sc-if>
+
+        <div style="font-size:11.5px;color:var(--color-neutral-700)">{{ dataSourceNote }}</div>
+
+        <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Tracked assumptions</span>
+          <sc-for list="{{ planningView.assumptions }}" as="a" hint-placeholder-count="4">
+            <div style="border-top:1px solid var(--color-divider);padding-top:10px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+                <span style="font-size:13.5px;font-weight:600">{{ a.statement }} <span style="font-weight:400;color:var(--color-neutral-700)">{{ a.id }} · {{ a.option }}</span></span>
+                <span style="display:flex;gap:6px;align-items:center"><span style="padding:2px 8px;border-radius:6px;font-weight:600;font-size:11.5px;background:{{ a.bg }};color:{{ a.fg }}">{{ a.statusLabel }}</span></span>
+              </div>
+              <span style="font-size:12px;color:var(--color-neutral-700)">{{ a.detail }} · {{ a.screen }}</span>
+              <span style="font-size:12px;color:var(--color-neutral-700)">{{ a.jp50 }}</span>
+              <span style="font-size:12px;color:var(--color-neutral-700)">Review state: {{ a.review }}</span>
+              <sc-if value="{{ a.flagged }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:rgb(255,203,71)">{{ a.flagLabel }}</span></sc-if>
+              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Change history</div>
+              <sc-if value="{{ a.hasHistory }}" hint-placeholder-val="{{ true }}">
+                <span style="display:flex;flex-direction:column;gap:2px"><sc-for list="{{ a.history }}" as="h" hint-placeholder-count="2"><span style="font-size:12px">{{ h.text }}</span></sc-for></span>
+              </sc-if>
+              <sc-if value="{{ a.noHistory }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">{{ a.historyNote }}</span></sc-if>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ a.loadEvidence }}">Show grounding evidence</button>
+                <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ a.evidenceNote }}</span>
+              </div>
+              <sc-if value="{{ a.evidenceLoading }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:12px;color:var(--color-neutral-700)">Loading grounding claims…</span></sc-if>
+              <sc-if value="{{ a.hasEvidenceError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:12px;color:rgb(254,236,244)">{{ a.evidenceError }}</span></sc-if>
+              <sc-if value="{{ a.emptyEvidence }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">The frozen dependency table records no grounding claim for this assumption at this batch.</span></sc-if>
+              <sc-for list="{{ a.evidence }}" as="c" hint-placeholder-count="1">
+                <button type="button" sc-camel-on-click="{{ c.open }}" aria-label="Open claim {{ c.id }}" style="text-align:left;background:transparent;border:1px solid var(--color-divider);border-radius:6px;padding:8px 10px;color:var(--color-text);font:inherit;font-size:12px;cursor:pointer">
+                  {{ c.label }} <span style="color:var(--color-neutral-700)">· {{ c.id }}</span><br>
+                  <span style="color:var(--color-neutral-700)">“{{ c.span }}” · {{ c.source }} · valid {{ c.validity }} · confidence {{ c.confidence }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px">
+          <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Constraints (must do)</span>
+            <sc-for list="{{ planningView.constraints }}" as="c" hint-placeholder-count="3">
+              <span style="font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)">{{ c.text }}<br><span style="color:var(--color-neutral-700);font-size:11px">{{ c.id }}</span></span>
+            </sc-for>
+            <span style="font-size:11.5px;color:rgb(255,203,71)">{{ planningView.provenanceNote }}</span>
+          </div>
+          <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Restraints (cannot do)</span>
+            <sc-for list="{{ planningView.restraints }}" as="c" hint-placeholder-count="3">
+              <span style="font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)">{{ c.text }}<br><span style="color:var(--color-neutral-700);font-size:11px">{{ c.id }}</span></span>
+            </sc-for>
+            <span style="font-size:11.5px;color:rgb(255,203,71)">{{ planningView.planningNote }}</span>
+          </div>
+        </div>
       </section>
     </sc-if>
 
-    <!-- ─── INTELLIGENCE INGESTION ─── -->
+    <!-- ─── INTELLIGENCE · EVIDENCE AND CLAIM GRAPH ─── -->
     <sc-if value="{{ isIntel }}" hint-placeholder-val="{{ false }}">
       <section style="padding:22px 32px 40px;display:flex;flex-direction:column;gap:22px">
         <div>
           <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Inputs</div>
           <h1 style="font-size:34px;margin:2px 0 0">Foundational Data Ingestion · Intelligence</h1>
-          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Foundational Data Ingestion builds the claim graph — every claim with source span, validity window, confidence. Reports feed the world state and the JIPOE; every ingested item is tagged to a PIR so collection gaps surface in Collection Management.</p>
+          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">The claim graph the three workflow stages stand on. Every claim carries the exact span it was read from, its source and that source's reliability and credibility, the date it was asserted and the window it is valid for, and its likelihood and confidence as two separate fields. Filter it, open a claim to see its span and its trace, and review the claims a new report proposes.</p>
+          <p style="margin:6px 0 0;font-size:12px;color:var(--color-neutral-700)">{{ batchName }} · {{ asOfLabel }} · {{ overlay.label }} · {{ workspaceLabel }}</p>
         </div>
+
+        <!-- filters -->
+        <div class="blueprint" style="padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Filter the evidence</span>
+            <span style="font-size:11px;color:var(--color-neutral-700)">{{ evidence.batchNote }}</span>
+          </div>
+          <div class="evidence-filter-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) auto;gap:12px;align-items:end">
+            <sc-for list="{{ evidence.selects }}" as="f" hint-placeholder-count="4">
+              <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)">
+                <span>{{ f.label }}</span>
+                <sc-raw-select class="input" style="font-size:12.5px" aria-label="{{ f.aria }}" value="{{ f.value }}" sc-camel-on-change="{{ f.change }}">
+                  <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+                </sc-raw-select>
+              </label>
+            </sc-for>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)">
+              <span>Minimum confidence (0–1)</span>
+              <input class="input" style="font-size:12.5px" type="text" inputmode="decimal" aria-label="Filter claims by minimum confidence" placeholder="0.00 – 1.00" value="{{ evidence.minConfidence }}" sc-camel-on-change="{{ evidence.onMinConfidence }}">
+            </label>
+            <div><button type="button" class="btn btn-secondary" style="font-size:12.5px" sc-camel-on-click="{{ evidence.clear }}">Clear filters</button></div>
+          </div>
+          <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ evidence.icd }}</span>
+        </div>
+
+        <!-- claim list -->
         <div class="blueprint" style="padding:0;overflow-x:auto">
           <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--color-divider)">
-            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Claim Graph · {{ claimCount }} claims</span>
-            <span style="font-size:11px;color:var(--color-neutral-700)">Every claim carries a source span, validity window and confidence; strategy scores assumptions, collection targets gaps, risk propagates along edges</span>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--color-divider)">
+            <span role="status" aria-live="polite" style="font-size:12px;color:var(--color-neutral-700)">{{ evidence.countLabel }}</span>
+            <span style="display:flex;gap:6px">
+              <button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ evidence.prev }}" disabled="{{ evidence.prevDisabled }}">‹ Previous</button>
+              <button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ evidence.next }}" disabled="{{ evidence.nextDisabled }}">Next ›</button>
+            </span>
           </div>
-          <sc-raw-table class="table">
-            <sc-raw-thead><sc-raw-tr><sc-raw-th>Claim</sc-raw-th><sc-raw-th>Type</sc-raw-th><sc-raw-th>Source span</sc-raw-th><sc-raw-th>Validity window</sc-raw-th><sc-raw-th>Confidence</sc-raw-th><sc-raw-th>Edges</sc-raw-th></sc-raw-tr></sc-raw-thead>
+          <sc-if value="{{ evidence.hasError }}" hint-placeholder-val="{{ false }}">
+            <div role="alert" style="padding:16px 18px;color:rgb(254,236,244);background:rgb(30,8,18);font-size:13px">{{ evidence.error.code }} — {{ evidence.error.message }}</div>
+          </sc-if>
+          <sc-if value="{{ evidence.empty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:22px 18px;color:var(--color-neutral-700);font-size:13px">{{ evidence.emptyNote }}</div>
+          </sc-if>
+          <sc-raw-table class="table" data-table="claims">
+            <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:230px">Claim</sc-raw-th><sc-raw-th style="width:120px">Status</sc-raw-th><sc-raw-th style="width:170px">Flags</sc-raw-th><sc-raw-th style="width:130px">Likelihood</sc-raw-th><sc-raw-th style="width:120px">Confidence</sc-raw-th><sc-raw-th>Source · reliability / credibility</sc-raw-th><sc-raw-th style="width:110px">Asserted</sc-raw-th><sc-raw-th style="width:150px">Valid</sc-raw-th><sc-raw-th style="width:150px">Review</sc-raw-th></sc-raw-tr></sc-raw-thead>
             <sc-raw-tbody>
-              <sc-for list="{{ claims }}" as="c" hint-placeholder-count="6">
-                <sc-raw-tr><sc-raw-td style="font-weight:500;max-width:420px">{{ c.text }}</sc-raw-td><sc-raw-td><span class="tag tag-accent">{{ c.type }}</span></sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:13px">{{ c.source }}</sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:13px">{{ c.valid }}</sc-raw-td><sc-raw-td><span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ c.bg }};color:{{ c.fg }}">{{ c.conf }}%</span></sc-raw-td><sc-raw-td style="color:var(--color-neutral-700);font-size:12.5px">{{ c.edges }}</sc-raw-td></sc-raw-tr>
+              <sc-for list="{{ evidence.rows }}" as="c" hint-placeholder-count="8">
+                <sc-raw-tr style="background:{{ c.rowBg }}">
+                  <sc-raw-td style="font-size:12.5px"><button type="button" sc-camel-on-click="{{ c.open }}" aria-label="Open claim {{ c.id }}" style="text-align:left;background:transparent;border:0;padding:0;color:var(--color-text);font:inherit;font-size:12.5px;text-decoration:underline;cursor:pointer">{{ c.label }}</button><br><span style="color:var(--color-neutral-700);font-size:11px">{{ c.id }}</span></sc-raw-td>
+                  <sc-raw-td><span style="padding:2px 8px;border-radius:6px;font-weight:600;font-size:11.5px;white-space:nowrap;background:{{ c.bg }};color:{{ c.fg }}">{{ c.statusLabel }}</span></sc-raw-td>
+                  <sc-raw-td style="font-size:11.5px;color:var(--color-neutral-700)">{{ c.flags }}</sc-raw-td>
+                  <sc-raw-td style="font-size:11.5px">{{ c.likelihood }}</sc-raw-td>
+                  <sc-raw-td style="font-size:11.5px">{{ c.confidence }}</sc-raw-td>
+                  <sc-raw-td style="font-size:11.5px;color:var(--color-neutral-700)">{{ c.source }}</sc-raw-td>
+                  <sc-raw-td style="font-size:11.5px">{{ c.asserted }}</sc-raw-td>
+                  <sc-raw-td style="font-size:11.5px">{{ c.validity }}</sc-raw-td>
+                  <sc-raw-td>
+                    <sc-if value="{{ c.isProposed }}" hint-placeholder-val="{{ false }}">
+                      <span style="display:flex;gap:4px;flex-wrap:wrap">
+                        <button type="button" class="btn btn-secondary" style="font-size:11.5px" sc-camel-on-click="{{ c.accept }}" disabled="{{ c.reviewDisabled }}">Accept</button>
+                        <button type="button" class="btn btn-ghost" style="font-size:11.5px" sc-camel-on-click="{{ c.reject }}" disabled="{{ c.reviewDisabled }}">Reject</button>
+                      </span>
+                    </sc-if>
+                    <sc-if value="{{ c.notProposed }}" hint-placeholder-val="{{ true }}"><span style="font-size:11.5px;color:var(--color-neutral-700)">—</span></sc-if>
+                  </sc-raw-td>
+                </sc-raw-tr>
               </sc-for>
             </sc-raw-tbody>
           </sc-raw-table>
         </div>
+
+        <!-- one claim in full -->
+        <sc-if value="{{ claimDetail.open }}" hint-placeholder-val="{{ false }}">
+          <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:12px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+              <h3 style="font-size:20px;margin:0">{{ claimDetail.label }}</h3>
+              <span style="display:flex;gap:8px;align-items:center"><span style="padding:2px 8px;border-radius:6px;font-weight:600;font-size:11.5px;background:{{ claimDetail.statusBg }};color:{{ claimDetail.statusFg }}">{{ claimDetail.statusLabel }}</span><button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ claimDetail.close }}">Close ✕</button></span>
+            </div>
+            <sc-if value="{{ claimDetail.loading }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:13px;color:var(--color-neutral-700)">Loading the claim and its trace…</span></sc-if>
+            <sc-if value="{{ claimDetail.hasError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:rgb(254,236,244)">{{ claimDetail.error.code }} — {{ claimDetail.error.message }}</span></sc-if>
+            <sc-if value="{{ claimDetail.hasClaim }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Source excerpt · exact span</span>
+                  <blockquote data-span="claim-span" style="margin:0;padding:12px 14px;border-left:2px solid var(--color-accent);background:rgb(16,36,62);font-size:14px;line-height:1.6">{{ claimDetail.span }}</blockquote>
+                  <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ claimDetail.spanRange }}</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;font-size:12.5px">
+                  <span><span style="color:var(--color-neutral-700)">Source</span><br>{{ claimDetail.sourceTitle }}<br><span style="color:var(--color-neutral-700)">{{ claimDetail.sourcePath }}</span></span>
+                  <span><span style="color:var(--color-neutral-700)">Source rating</span><br>{{ claimDetail.sourceMeta }}<br><span style="color:var(--color-neutral-700)">published {{ claimDetail.published }}</span></span>
+                  <span><span style="color:var(--color-neutral-700)">Dates</span><br>asserted {{ claimDetail.asserted }}<br>valid {{ claimDetail.validity }}</span>
+                  <span><span style="color:var(--color-neutral-700)">Likelihood</span><br>{{ claimDetail.likelihood }}</span>
+                  <span><span style="color:var(--color-neutral-700)">Confidence</span><br>{{ claimDetail.confidence }}<br><span style="color:var(--color-neutral-700)">{{ claimDetail.confidenceBasis }}</span></span>
+                  <span><span style="color:var(--color-neutral-700)">Flags</span><br>{{ claimDetail.flags }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Trace · source span → claim → assumption or risk driver → strategy</span>
+                  <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ claimDetail.basisNote }}</span>
+                  <sc-if value="{{ claimDetail.noPaths }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:rgb(255,203,71)">{{ claimDetail.noPathsNote }}</span></sc-if>
+                  <sc-for list="{{ claimDetail.paths }}" as="p" hint-placeholder-count="2">
+                    <div style="border:1px solid var(--color-divider);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px">
+                      <span style="font-size:11px;color:var(--color-neutral-700)">{{ p.title }}</span>
+                      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+                        <sc-for list="{{ p.nodes }}" as="n" hint-placeholder-count="4">
+                          <button type="button" sc-camel-on-click="{{ n.go }}" aria-label="{{ n.aria }}" style="padding:6px 10px;border:1px solid var(--color-divider);border-radius:6px;background:transparent;color:var(--color-text);font:inherit;font-size:12px;text-align:left;cursor:pointer" style-hover="border-color:var(--color-accent)">
+                            <span style="color:var(--color-neutral-700);font-size:10px;letter-spacing:.1em;text-transform:uppercase">{{ n.type }}</span><br>{{ n.name }} <span style="color:var(--color-neutral-700)">{{ n.id }}</span>
+                          </button>
+                        </sc-for>
+                      </div>
+                      <sc-for list="{{ p.hops }}" as="h" hint-placeholder-count="3">
+                        <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;font-size:12px;border-top:1px solid var(--color-divider);padding-top:6px">
+                          <span><span style="font-weight:600">{{ h.kind }}</span><br><span class="tag tag-outline" style="font-size:10px">{{ h.basisLabel }}</span></span>
+                          <span>{{ h.label }}<br><span style="color:var(--color-neutral-700)">{{ h.ids }} · {{ h.basisText }} · {{ h.mechanism }}</span></span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ claimDetail.isProposed }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--color-divider);padding-top:10px">
+                    <span style="font-size:12px;color:var(--color-neutral-700)">This claim is proposed and has not entered the graph.</span>
+                    <button type="button" class="btn btn-secondary" style="font-size:12.5px" sc-camel-on-click="{{ claimDetail.accept }}" disabled="{{ claimDetail.reviewDisabled }}">Accept</button>
+                    <button type="button" class="btn btn-ghost" style="font-size:12.5px" sc-camel-on-click="{{ claimDetail.reject }}" disabled="{{ claimDetail.reviewDisabled }}">Reject</button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- review identity and decision log -->
+        <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Review decisions</span>
+          <span style="font-size:12px;color:var(--color-neutral-700)">Every accept or reject is stored with the actor, the time and the reason. Both fields are required before a decision can be sent.</span>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Actor</span><input class="input" placeholder="who is reviewing" aria-label="Reviewing actor" value="{{ ingestView.actor }}" sc-camel-on-change="{{ ingestView.onActor }}"></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Decision reason</span><input class="input" placeholder="why this decision" aria-label="Decision reason" value="{{ ingestView.reason }}" sc-camel-on-change="{{ ingestView.onReason }}"></label>
+          </div>
+          <sc-if value="{{ review.hasError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:12.5px;color:rgb(254,236,244)">{{ review.error.code }} — {{ review.error.message }}</span></sc-if>
+          <sc-if value="{{ review.notSupported }}" hint-placeholder-val="{{ true }}"><span style="font-size:12.5px;color:rgb(255,203,71)">{{ review.note }}</span></sc-if>
+          <sc-for list="{{ review.rows }}" as="r" hint-placeholder-count="2">
+            <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:10px;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--color-divider)"><span style="font-weight:600">{{ r.label }}</span><span style="color:var(--color-neutral-700)">{{ r.text }}</span></div>
+          </sc-for>
+        </div>
+
+        <!-- ingest a report -->
+        <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Ingest a report</span>
+            <span style="font-size:11px;color:var(--color-neutral-700)">{{ ingestView.bytes }}</span>
+          </div>
+          <sc-if value="{{ ingestView.notSupported }}" hint-placeholder-val="{{ true }}"><span style="font-size:12.5px;color:rgb(255,203,71)">{{ ingestView.note }}</span></sc-if>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Report title</span><input class="input" placeholder="Title or filename" aria-label="Report title" value="{{ ingestView.name }}" sc-camel-on-change="{{ ingestView.onName }}"><span>{{ ingestView.nameNote }}</span></label>
+          <label sc-camel-on-drag-over="{{ prevent }}" sc-camel-on-drop="{{ dropReport }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;border:1px dashed var(--color-accent);border-radius:8px;cursor:pointer;text-align:center;background:rgb(16,36,62)">
+            <span style="font-weight:600;font-size:14px">Drop a report here</span>
+            <span style="font-size:12px;color:var(--color-neutral-700)">or click to browse · .txt, .md, .csv, .json, .docx, .pdf · the file is read in your browser and the whole text is kept</span>
+            <input type="file" accept=".docx,.pdf,.txt,.md,.csv,.json" sc-camel-on-change="{{ pickReport }}" style="display:none">
+          </label>
+          <textarea class="input" style="min-height:120px;font-size:13px" placeholder="Paste the report text…" aria-label="Report text" value="{{ ingestView.text }}" sc-camel-on-change="{{ ingestView.onText }}"></textarea>
+          <sc-if value="{{ ingestView.isBusy }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:12.5px;color:var(--color-neutral-700)">{{ ingestView.busy }}</span></sc-if>
+          <sc-if value="{{ ingestView.hasError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:12.5px;color:rgb(254,236,244)">{{ ingestView.error.code }} — {{ ingestView.error.message }}</span></sc-if>
+          <div><button type="button" class="btn btn-primary" sc-camel-on-click="{{ ingestView.submit }}" disabled="{{ ingestView.notSupported }}">{{ ingestView.submitLabel }}</button></div>
+        </div>
+
+        <!-- what the ingest produced -->
+        <sc-if value="{{ ingestView.has }}" hint-placeholder-val="{{ false }}">
+          <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Stored report</span>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;font-size:12.5px">
+              <span>{{ ingestView.storedTitle }}<br><span style="color:var(--color-neutral-700)">{{ ingestView.sourceId }}</span></span>
+              <span style="overflow-wrap:anywhere">{{ ingestView.hash }}</span>
+              <span>{{ ingestView.extractor }}<br><span style="color:var(--color-neutral-700)">{{ ingestView.storedMeta }} · {{ ingestView.reportDate }}</span></span>
+            </div>
+            <sc-if value="{{ ingestView.isDedup }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:12.5px;color:rgb(255,203,71)">{{ ingestView.dedup }}</span></sc-if>
+            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Proposed claims</span>
+            <sc-if value="{{ ingestView.noProposed }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:var(--color-neutral-700)">The extractor proposed no claim from this report.</span></sc-if>
+            <sc-for list="{{ ingestView.proposed }}" as="p" hint-placeholder-count="3">
+              <div style="border:1px solid var(--color-divider);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:13px;font-weight:600">{{ p.label }} <span style="font-weight:400;color:var(--color-neutral-700)">{{ p.id }}</span></span>
+                <blockquote style="margin:0;padding:8px 10px;border-left:2px solid var(--color-accent);background:rgb(16,36,62);font-size:13px;line-height:1.55">{{ p.span }}</blockquote>
+                <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ p.spanRange }} · {{ p.asserted }} · {{ p.validity }} · likelihood {{ p.likelihood }} · confidence {{ p.confidence }}</span>
+                <span style="font-size:11.5px;color:var(--color-neutral-700)">{{ p.flags }}</span>
+                <sc-if value="{{ p.hasContradiction }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;color:rgb(255,203,71)">{{ p.contradiction }}</span></sc-if>
+                <span style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button type="button" class="btn btn-secondary" style="font-size:12px" sc-camel-on-click="{{ p.accept }}" disabled="{{ p.reviewDisabled }}">Accept</button>
+                  <button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ p.reject }}" disabled="{{ p.reviewDisabled }}">Reject</button>
+                  <button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ p.open }}">Open in the claim graph</button>
+                </span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ ingestView.hasChanges }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">What changed after review</span>
+                <sc-for list="{{ ingestView.changePanels }}" as="pn" hint-placeholder-count="6">
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:12px;font-weight:600">{{ pn.title }}</span>
+                    <sc-if value="{{ pn.empty }}" hint-placeholder-val="{{ true }}"><span style="font-size:12px;color:var(--color-neutral-700)">{{ pn.emptyNote }}</span></sc-if>
+                    <sc-for list="{{ pn.rows }}" as="row" hint-placeholder-count="2">
+                      <span style="font-size:12px"><span style="font-weight:600">{{ row.label }}</span> <span style="color:var(--color-neutral-700)">{{ row.text }}</span></span>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- source documents -->
+        <div class="blueprint" style="padding:0;overflow-x:auto">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="padding:14px 18px;border-bottom:1px solid var(--color-divider);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Source documents cited at {{ batchName }}</div>
+          <sc-raw-table class="table" data-table="sources">
+            <sc-raw-thead><sc-raw-tr><sc-raw-th>Document</sc-raw-th><sc-raw-th style="width:150px">Type</sc-raw-th><sc-raw-th style="width:170px">Author org</sc-raw-th><sc-raw-th style="width:130px">Reliability / credibility</sc-raw-th><sc-raw-th style="width:110px">Published</sc-raw-th><sc-raw-th style="width:90px">Arrived</sc-raw-th><sc-raw-th style="width:110px">Claims</sc-raw-th></sc-raw-tr></sc-raw-thead>
+            <sc-raw-tbody>
+              <sc-for list="{{ sources }}" as="s" hint-placeholder-count="6">
+                <sc-raw-tr>
+                  <sc-raw-td style="font-size:12.5px"><button type="button" sc-camel-on-click="{{ s.pick }}" aria-label="{{ s.aria }}" style="text-align:left;background:transparent;border:0;padding:0;color:var(--color-text);font:inherit;font-size:12.5px;text-decoration:underline;cursor:pointer">{{ s.title }}</button><br><span style="color:var(--color-neutral-700);font-size:11px">{{ s.id }}</span></sc-raw-td>
+                  <sc-raw-td style="font-size:12px"><span class="tag tag-accent">{{ s.type }}</span></sc-raw-td>
+                  <sc-raw-td style="font-size:12px;color:var(--color-neutral-700)">{{ s.org }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px">{{ s.rating }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px">{{ s.published }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px">{{ s.batchLabel }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px">{{ s.claims }}</sc-raw-td>
+                </sc-raw-tr>
+              </sc-for>
+            </sc-raw-tbody>
+          </sc-raw-table>
+        </div>
+
         <div class="blueprint" style="padding:0;overflow:hidden;display:flex;flex-direction:column">
           <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
           <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--color-divider)">
@@ -723,41 +838,15 @@
           </div>
           <iframe sc-camel-src="{{ mapSrc }}" title="JIPOE map" style="width:100%;height:460px;border:0;display:block;background:rgb(8,17,36)"></iframe>
         </div>
-        <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:22px;align-items:start">
-          <div class="blueprint" style="padding:0">
-            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <sc-raw-table class="table">
-              <sc-raw-thead><sc-raw-tr><sc-raw-th>Report</sc-raw-th><sc-raw-th>Discipline</sc-raw-th><sc-raw-th>Source Reliability</sc-raw-th><sc-raw-th>PIR</sc-raw-th><sc-raw-th>Received</sc-raw-th></sc-raw-tr></sc-raw-thead>
-              <sc-raw-tbody>
-                <sc-for list="{{ intel }}" as="r" hint-placeholder-count="6">
-                  <sc-raw-tr><sc-raw-td style="font-weight:500">{{ r.title }}</sc-raw-td><sc-raw-td><span class="tag tag-accent">{{ r.type }}</span></sc-raw-td><sc-raw-td>{{ r.rel }}</sc-raw-td><sc-raw-td>PIR {{ r.pir }}</sc-raw-td><sc-raw-td style="color:var(--color-neutral-700)">{{ r.when }}</sc-raw-td></sc-raw-tr>
-                </sc-for>
-              </sc-raw-tbody>
-            </sc-raw-table>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:22px">
-            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Ingest Report</span>
-              <input class="input" placeholder="Title" value="{{ newIntelTitle }}" sc-camel-on-change="{{ onNewIntelTitle }}">
-              <div class="seg" style="display:flex">
-                <sc-for list="{{ intelTypes }}" as="t" hint-placeholder-count="5"><label class="seg-opt" style="flex:1;justify-content:center;padding:6px 4px;font-size:11.5px"><input type="radio" name="itype" checked="{{ t.on }}" sc-camel-on-change="{{ t.pick }}">{{ t.label }}</label></sc-for>
-              </div>
-              <textarea class="input" style="min-height:70px;font-size:13px" placeholder="Paste report text or drop a file…" value="{{ newIntelBody }}" sc-camel-on-change="{{ onNewIntelBody }}" sc-camel-on-drag-over="{{ prevent }}" sc-camel-on-drop="{{ dropIntel }}"></textarea>
-              <label style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--color-neutral-700);cursor:pointer"><span>Or attach a file (.docx, .pdf, .txt)</span><span class="tag tag-outline">Browse</span><input type="file" accept=".docx,.pdf,.txt,.md" sc-camel-on-change="{{ pickIntel }}" style="display:none"></label>
-              <button class="btn btn-primary" sc-camel-on-click="{{ ingest }}">Ingest &amp; Tag to PIR</button>
-            </div>
-            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">JIPOE · {{ threatName }}</span>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Most Likely COA</div>
-              <p style="margin:0;font-size:13px;line-height:1.5">{{ ipoe.likely }}</p>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Most Dangerous COA</div>
-              <p style="margin:0;font-size:13px;line-height:1.5">{{ ipoe.dangerous }}</p>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Decisive Terrain</div>
-              <p style="margin:0;font-size:13px;line-height:1.5">{{ ipoe.terrain }}</p>
-            </div>
-          </div>
+        <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">JIPOE · {{ threatName }}</span>
+          <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Most Likely COA</div>
+          <p style="margin:0;font-size:13px;line-height:1.5">{{ ipoe.likely }}</p>
+          <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Most Dangerous COA</div>
+          <p style="margin:0;font-size:13px;line-height:1.5">{{ ipoe.dangerous }}</p>
+          <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Decisive Terrain</div>
+          <p style="margin:0;font-size:13px;line-height:1.5">{{ ipoe.terrain }}</p>
         </div>
       </section>
     </sc-if>
@@ -768,82 +857,145 @@
         <div>
           <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Inputs</div>
           <h1 style="font-size:34px;margin:2px 0 0">Collection Management Agent</h1>
-          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">The Collection Management Agent reads the graph's gaps — low-confidence claims, expired validity, entities with no supporting source — and turns each into a draft collection requirement: tagged, routed, tracked. Ingestion finds the hole; the agent asks for the data to fill it. Unanswered PIRs raise the uncertainty applied in the wargame.</p>
+          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Decision-relevant gaps as collection requirements, in the JIPCL order the API ranks them: the PIR they answer, the EEI and indicators, the gap type, LTIOV, routing and approval authority, the assets that could cover them, why each is prioritised, and what would close it. A requirement closes only on evidence that meets it — arrival of a document is not closure.</p>
+          <p style="margin:6px 0 0;font-size:12px;color:var(--color-neutral-700)">{{ batchName }} · {{ asOfLabel }} · {{ overlay.label }} · {{ workspaceLabel }}</p>
         </div>
-        <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Gaps Defined by the Strategy Question · Weak Assumptions</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ weakCount }} claims below 70% confidence, unvalidated or expired</span></div>
-          <sc-for list="{{ weakList }}" as="w" hint-placeholder-count="3">
-            <div style="display:grid;grid-template-columns:30px minmax(0,1fr) auto auto;gap:10px;align-items:center;font-size:13px;padding:7px 0;border-bottom:1px solid var(--color-divider)">
-              <span style="font-weight:600;color:var(--color-accent-700)">A{{ w.n }}</span>
-              <span style="display:flex;flex-direction:column;gap:2px"><span>{{ w.text }}</span><span style="font-size:11px;color:var(--color-neutral-700)">Load-bearing for {{ w.bearing }} · source {{ w.link }} · valid {{ w.valid }}</span></span>
-              <span style="padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;background:{{ w.bg }};color:{{ w.fg }}">{{ w.status }} · {{ w.conf }}%</span>
-              <sc-if value="{{ w.hasCr }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="white-space:nowrap">{{ w.crLabel }}</span></sc-if>
-              <sc-if value="{{ w.noCr }}" hint-placeholder-val="{{ true }}"><button class="btn btn-secondary" style="font-size:12px;white-space:nowrap" sc-camel-on-click="{{ w.draft }}">Draft collection requirement</button></sc-if>
-            </div>
-          </sc-for>
-          <sc-if value="{{ noWeak }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--color-neutral-700)">No weak assumptions. Every load-bearing claim is validated above 70% confidence.</span></sc-if>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
-          <sc-for list="{{ pirs }}" as="p" hint-placeholder-count="3">
-            <article class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
-              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">PIR {{ p.n }}</span><span class="tag" style="background:{{ p.bg }};color:{{ p.fg }}">{{ p.status }}</span></div>
-              <h3 style="font-size:20px;margin:0;line-height:1.2">{{ p.q }}</h3>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Indicators</div>
-              <ul style="margin:0;padding-left:16px;font-size:13px;line-height:1.5"><sc-for list="{{ p.ind }}" as="i" hint-placeholder-count="2"><li>{{ i }}</li></sc-for></ul>
-              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Tasked Assets</div>
-              <div style="display:flex;gap:4px;flex-wrap:wrap"><sc-for list="{{ p.assets }}" as="a" hint-placeholder-count="2"><span class="tag tag-neutral">{{ a }}</span></sc-for></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--color-divider);padding-top:8px;font-size:12px;color:var(--color-neutral-700);gap:8px;flex-wrap:wrap"><span>{{ p.reports }} reports · LTIOV {{ p.ltiov }}{{ p.tied }}</span><button class="btn btn-ghost" sc-camel-on-click="{{ p.cycle }}" style="font-size:12px">{{ p.cycleLabel }}</button></div>
-            </article>
-          </sc-for>
-          <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px;border-style:dashed">
-            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">New PIR</span>
-            <textarea class="input" style="min-height:70px;font-size:13px" placeholder="What must the commander know to decide?" value="{{ newPir }}" sc-camel-on-change="{{ onNewPir }}"></textarea>
-            <button class="btn btn-secondary" sc-camel-on-click="{{ addPir }}">Add PIR</button>
+
+        <sc-if value="{{ collectionView.missing }}" hint-placeholder-val="{{ false }}">
+          <div role="status" class="blueprint" style="padding:16px 18px;font-size:13px;color:rgb(255,203,71)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>{{ collectionView.note }}
           </div>
+        </sc-if>
+
+        <!-- draft a requirement from a strategy question or PIR -->
+        <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px;border-style:dashed">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Draft a collection requirement</span>
+          <span style="font-size:12px;color:var(--color-neutral-700)">A draft starts from an explicit strategy question or a PIR and records the evidence that would close it, the assumption or option it affects, why the gap exists and who is proposed to own it. Ids come from the API; nothing is keyed to a row position.</span>
+          <sc-if value="{{ draft.notSupported }}" hint-placeholder-val="{{ true }}"><span style="font-size:12.5px;color:rgb(255,203,71)">{{ draft.note }}</span></sc-if>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Strategy question</span><textarea class="input" style="min-height:60px;font-size:13px" placeholder="What must the commander know to decide?" aria-label="Strategy question" value="{{ draft.question }}" sc-camel-on-change="{{ draft.onQuestion }}"></textarea></label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>PIR</span>
+              <sc-raw-select class="input" style="font-size:12.5px" aria-label="Link the draft to a PIR" value="{{ draft.pir }}" sc-camel-on-change="{{ draft.onPir }}">
+                <sc-for list="{{ draft.pirOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+              </sc-raw-select></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Linked assumption</span>
+              <sc-raw-select class="input" style="font-size:12.5px" aria-label="Link the draft to an assumption" value="{{ draft.assumption }}" sc-camel-on-change="{{ draft.onAssumption }}">
+                <sc-for list="{{ draft.assumptionOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.value }}">{{ o.label }}</option></sc-for>
+              </sc-raw-select></label>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Required evidence</span><input class="input" placeholder="what would close this gap" aria-label="Required evidence" value="{{ draft.evidence }}" sc-camel-on-change="{{ draft.onEvidence }}"></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Gap reason</span><input class="input" placeholder="why the gap exists" aria-label="Gap reason" value="{{ draft.gap }}" sc-camel-on-change="{{ draft.onGap }}"></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Proposed owner</span><input class="input" placeholder="proposed owner" aria-label="Proposed owner" value="{{ draft.owner }}" sc-camel-on-change="{{ draft.onOwner }}"></label>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Gap type</span><sc-raw-select class="input" aria-label="Gap type" value="{{ draft.gapType }}" sc-camel-on-change="{{ draft.onGapType }}"><sc-for list="{{ draft.gapTypes }}" as="o" hint-placeholder-count="4"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></sc-raw-select></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>LTIOV</span><input class="input" inputmode="numeric" placeholder="YYYY-MM-DD" aria-label="LTIOV" value="{{ draft.ltiov }}" sc-camel-on-change="{{ draft.onLtiov }}"></label>
+          </div>
+          <sc-if value="{{ draft.hasError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:12.5px;color:rgb(254,236,244)">{{ draft.error.code }} — {{ draft.error.message }}</span></sc-if>
+          <sc-if value="{{ draft.has }}" hint-placeholder-val="{{ false }}">
+            <div role="status" style="font-size:12.5px;display:flex;flex-direction:column;gap:4px">
+              <span>Recorded as {{ draft.resultId }} · {{ draft.resultStatus }}</span>
+              <sc-if value="{{ draft.isDedup }}" hint-placeholder-val="{{ false }}"><span style="color:rgb(255,203,71)">{{ draft.dedup }}</span></sc-if>
+            </div>
+          </sc-if>
+          <div><button type="button" class="btn btn-primary" sc-camel-on-click="{{ draft.submit }}" disabled="{{ draft.notSupported }}">Draft requirement</button></div>
         </div>
+
+        <!-- ranked requirements -->
+        <sc-for list="{{ collectionView.requirements }}" as="r" hint-placeholder-count="4">
+          <article class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:10px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+              <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ r.id }} · {{ r.rank }}</span>
+              <span style="display:flex;gap:6px;align-items:center"><span class="tag tag-outline">{{ r.status }}</span><span class="tag tag-neutral">{{ r.gap }}</span><span class="tag tag-neutral">{{ r.ltiov }}</span></span>
+            </div>
+            <h3 style="font-size:19px;margin:0;line-height:1.25">{{ r.eei }}</h3>
+            <span style="font-size:12.5px;color:var(--color-neutral-700)">PIR: {{ r.pir }}<br>{{ r.pirMeta }}</span>
+            <span style="font-size:12.5px">Specific requirement: {{ r.sir }}</span>
+            <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Indicators</div>
+            <sc-if value="{{ r.noIndicators }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:var(--color-neutral-700)">No indicator recorded in the dataset.</span></sc-if>
+            <ul style="margin:0;padding-left:16px;font-size:12.5px;line-height:1.5"><sc-for list="{{ r.indicators }}" as="i" hint-placeholder-count="2"><li>{{ i.text }}</li></sc-for></ul>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;font-size:12.5px;border-top:1px solid var(--color-divider);padding-top:10px">
+              <span><span style="color:var(--color-neutral-700)">Subject</span><br>{{ r.subject }}<br><span style="color:var(--color-neutral-700)">{{ r.created }}</span></span>
+              <span><span style="color:var(--color-neutral-700)">Priority</span><br>{{ r.priority }}<br><span style="color:var(--color-neutral-700)">{{ r.basis }}</span></span>
+              <span><span style="color:var(--color-neutral-700)">Routing</span><br>{{ r.routing }} · {{ r.disposition }}<br><span style="color:var(--color-neutral-700)">{{ r.authority }}</span></span>
+              <span><span style="color:var(--color-neutral-700)">Closure</span><br>{{ r.closure }}</span>
+            </div>
+            <sc-if value="{{ r.hasAnswer }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:var(--color-neutral-700)">{{ r.answered }}</span></sc-if>
+            <sc-if value="{{ r.hasReopen }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:rgb(255,203,71)">Reopened — {{ r.reopen }}</span></sc-if>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <sc-if value="{{ r.hasAssumption }}" hint-placeholder-val="{{ true }}">
+                <button type="button" sc-camel-on-click="{{ r.goAssumption }}" style="text-align:left;background:transparent;border:1px solid var(--color-divider);border-radius:6px;padding:6px 8px;color:var(--color-text);font:inherit;font-size:12px;cursor:pointer">Assumption · {{ r.assumption }}</button>
+              </sc-if>
+              <sc-for list="{{ r.affected }}" as="a" hint-placeholder-count="2">
+                <button type="button" sc-camel-on-click="{{ a.go }}" style="text-align:left;background:transparent;border:1px solid var(--color-divider);border-radius:6px;padding:6px 8px;color:var(--color-text);font:inherit;font-size:12px;cursor:pointer">Option · {{ a.label }}</button>
+              </sc-for>
+              <sc-if value="{{ r.noAffected }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--color-neutral-700)">No option is linked to this requirement at this batch.</span></sc-if>
+            </div>
+            <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Candidate assets · {{ r.disciplines }}</div>
+            <sc-if value="{{ r.noAssets }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:var(--color-neutral-700)">No candidate asset in the collection_assets extension for this requirement.</span></sc-if>
+            <sc-for list="{{ r.assets }}" as="a" hint-placeholder-count="2">
+              <span style="font-size:12px">{{ a.label }} <span style="color:var(--color-neutral-700)">· {{ a.detail }}</span></span>
+            </sc-for>
+            <div style="border-top:1px solid var(--color-divider);padding-top:10px;display:flex;flex-direction:column;gap:8px">
+              <div><button type="button" class="btn btn-ghost" style="font-size:12px" sc-camel-on-click="{{ r.toggle }}">{{ r.toggleLabel }}</button></div>
+              <sc-if value="{{ r.expanded }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-if value="{{ reqControls.notSupported }}" hint-placeholder-val="{{ true }}"><span style="font-size:12.5px;color:rgb(255,203,71)">{{ reqControls.note }}</span></sc-if>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+                    <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Route to (internal queue)</span><input class="input" placeholder="e.g. JIOC" aria-label="Route to" value="{{ reqControls.routeTo }}" sc-camel-on-change="{{ reqControls.onRouteTo }}"></label>
+                    <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Status</span><sc-raw-select class="input" aria-label="Requirement status" value="{{ reqControls.statusValue }}" sc-camel-on-change="{{ reqControls.onStatusValue }}"><sc-for list="{{ reqControls.statusOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.value }}">{{ o.label }}</option></sc-for></sc-raw-select></label>
+                    <label style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--color-neutral-700)"><span>Reason</span><input class="input" placeholder="why" aria-label="Reason for the change" value="{{ reqControls.statusReason }}" sc-camel-on-change="{{ reqControls.onStatusReason }}"></label>
+                  </div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button type="button" class="btn btn-secondary" style="font-size:12.5px" sc-camel-on-click="{{ r.route }}" disabled="{{ reqControls.routeDisabled }}">Route requirement</button>
+                    <button type="button" class="btn btn-secondary" style="font-size:12.5px" sc-camel-on-click="{{ r.setStatus }}" disabled="{{ reqControls.statusDisabled }}">Record status</button>
+                  </div>
+                  <sc-if value="{{ reqControls.hasError }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:12.5px;color:rgb(254,236,244)">{{ reqControls.error.code }} — {{ reqControls.error.message }}</span></sc-if>
+                  <sc-if value="{{ reqControls.has }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:12.5px">{{ reqControls.resultText }}</span></sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </article>
+        </sc-for>
       </section>
     </sc-if>
 
-    <!-- ─── RFI ─── -->
+    <!-- ─── RFI / ROUTING QUEUE ─── -->
     <sc-if value="{{ isRfi }}" hint-placeholder-val="{{ false }}">
       <section style="padding:22px 32px 40px;display:flex;flex-direction:column;gap:22px">
         <div>
           <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Inputs</div>
           <h1 style="font-size:34px;margin:2px 0 0">RFI Management</h1>
-          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">Requests for information raised by the planning team, routed to J2, supporting commands and the interagency.</p>
+          <p style="margin:2px 0 0;color:var(--color-neutral-700);font-size:14px">The same collection requirements seen as the routing queue: where each is routed, which authority tier approves it, what it is tied to, and its disposition. Routing is an internal draft or queue assignment inside this workbench — nothing is sent to an external recipient.</p>
+          <p style="margin:6px 0 0;font-size:12px;color:var(--color-neutral-700)">{{ batchName }} · {{ asOfLabel }} · {{ overlay.label }}</p>
         </div>
-        <div class="blueprint" style="padding:0">
+        <sc-if value="{{ collectionView.missing }}" hint-placeholder-val="{{ false }}">
+          <div role="status" class="blueprint" style="padding:16px 18px;font-size:13px;color:rgb(255,203,71)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>{{ collectionView.note }}
+          </div>
+        </sc-if>
+        <div class="blueprint" style="padding:0;overflow-x:auto">
           <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-          <sc-raw-table class="table">
-            <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:80px">RFI</sc-raw-th><sc-raw-th>Question</sc-raw-th><sc-raw-th>Routed To</sc-raw-th><sc-raw-th>Ties To</sc-raw-th><sc-raw-th>Status</sc-raw-th></sc-raw-tr></sc-raw-thead>
+          <sc-raw-table class="table" data-table="routing">
+            <sc-raw-thead><sc-raw-tr><sc-raw-th style="width:90px">Requirement</sc-raw-th><sc-raw-th>Question</sc-raw-th><sc-raw-th style="width:120px">Routed to</sc-raw-th><sc-raw-th style="width:170px">Approval authority</sc-raw-th><sc-raw-th style="width:220px">Ties to</sc-raw-th><sc-raw-th style="width:120px">LTIOV</sc-raw-th><sc-raw-th style="width:130px">Status</sc-raw-th></sc-raw-tr></sc-raw-thead>
             <sc-raw-tbody>
-              <sc-for list="{{ rfis }}" as="r" hint-placeholder-count="4">
-                <sc-raw-tr><sc-raw-td style="font-family:var(--font-heading);font-weight:600">{{ r.id }}</sc-raw-td><sc-raw-td>{{ r.q }}</sc-raw-td><sc-raw-td>{{ r.to }}</sc-raw-td><sc-raw-td style="color:var(--color-neutral-700)">{{ r.ties }}</sc-raw-td><sc-raw-td><span class="tag" style="background:{{ r.bg }};color:{{ r.fg }}">{{ r.status }}</span></sc-raw-td></sc-raw-tr>
+              <sc-for list="{{ routingQueue }}" as="r" hint-placeholder-count="4">
+                <sc-raw-tr>
+                  <sc-raw-td style="font-family:var(--font-heading);font-weight:600"><button type="button" sc-camel-on-click="{{ r.go }}" aria-label="Open {{ r.id }} on the Collection Management Agent" style="background:transparent;border:0;padding:0;color:var(--color-text);font:inherit;text-decoration:underline;cursor:pointer">{{ r.id }}</button></sc-raw-td>
+                  <sc-raw-td style="font-size:12.5px">{{ r.question }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12.5px">{{ r.routing }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px;color:var(--color-neutral-700)">{{ r.authority }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px;color:var(--color-neutral-700)">{{ r.ties }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px">{{ r.ltiov }}</sc-raw-td>
+                  <sc-raw-td style="font-size:12px"><span class="tag tag-outline">{{ r.status }}</span><br><span style="color:var(--color-neutral-700)">{{ r.disposition }}</span></sc-raw-td>
+                </sc-raw-tr>
               </sc-for>
             </sc-raw-tbody>
           </sc-raw-table>
         </div>
-        <div style="display:flex;justify-content:flex-end">
-          <button class="btn btn-primary" style="padding:11px 18px;font-size:14px" sc-camel-on-click="{{ openRfi }}">+ New RFI</button>
-        </div>
-        <sc-if value="{{ rfiOpen }}" hint-placeholder-val="{{ false }}">
-          <div class="dialog-backdrop" style="z-index:50" sc-camel-on-click="{{ closeRfi }}">
-            <div class="dialog" style="width:min(560px,100%);background:var(--color-surface);border:1px solid var(--color-divider);border-radius:10px;gap:14px" sc-camel-on-click="{{ stop }}">
-              <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="dialog-title" style="font-size:22px">Submit Request for Information</span><button class="btn btn-ghost" style="font-size:13px" sc-camel-on-click="{{ closeRfi }}">✕</button></div>
-              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--color-neutral-700)">Question</span><textarea class="input" style="min-height:96px;font-size:14px" placeholder="What does the planning team need to know, and by when?" value="{{ newRfi }}" sc-camel-on-change="{{ onNewRfi }}"></textarea></div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--color-neutral-700)">Route To</span>
-                  <div class="seg" style="display:flex"><sc-for list="{{ rfiRoutes }}" as="r" hint-placeholder-count="4"><label class="seg-opt" style="flex:1;justify-content:center;padding:7px 4px;font-size:12px"><input type="radio" name="rfiroute" checked="{{ r.on }}" sc-camel-on-change="{{ r.pick }}">{{ r.label }}</label></sc-for></div></div>
-                <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--color-neutral-700)">Ties To</span><input class="input" placeholder="PIR 2, Assumption A1, COA 3…" value="{{ newRfiTies }}" sc-camel-on-change="{{ onNewRfiTies }}"></div>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--color-neutral-700)">Latest Time Information Is of Value</span><input class="input" placeholder="e.g. D-5 or 12 Sep 1800Z" value="{{ newRfiLtiov }}" sc-camel-on-change="{{ onNewRfiLtiov }}"></div>
-              <div class="dialog-actions"><button class="btn btn-secondary" sc-camel-on-click="{{ closeRfi }}">Cancel</button><button class="btn btn-primary" sc-camel-on-click="{{ addRfi }}">Submit RFI</button></div>
-            </div>
-          </div>
-        </sc-if>
       </section>
     </sc-if>
 

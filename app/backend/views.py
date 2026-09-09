@@ -535,7 +535,18 @@ def decision_overview(index: Index) -> DecisionOverviewView:
         key=lambda r: (-levels.index(r["risk_level"]), -r["p_raw"], r["he_id"]),
     )
     top_level = risk_rows[0]["risk_level"] if risk_rows else None
+    game = index.by("games", "game_id")[BLUE_GAME_ID]
     return DecisionOverviewView(
+        scenario_id=BLUE_GAME_ID,
+        scenario_name=game["name"],
+        friendly_force_id=BLUE_ACTOR_ID,
+        friendly_force_name=index.entity_name(BLUE_ACTOR_ID) or BLUE_ACTOR_ID,
+        adversary_id=next(
+            actor_id for actor_id in game["actor_ids"] if actor_id != BLUE_ACTOR_ID
+        ),
+        adversary_name=index.entity_name(next(
+            actor_id for actor_id in game["actor_ids"] if actor_id != BLUE_ACTOR_ID
+        )) or "Unknown adversary",
         as_of=index.snapshot.as_of,
         batch=index.batch,
         marking=MARKING,
