@@ -9,13 +9,13 @@ and marked `UNCLASSIFIED — SYNTHETIC`.
 ```sh
 make app-run          # http://127.0.0.1:8765/
 make image            # build the container image
-make image-run        # run it on http://127.0.0.1:8790/
+make image-run        # run it on http://127.0.0.1:9010/
 ```
 
 ## Deploy to the box (EC2, docker compose)
 
 ```sh
-HOST=ubuntu@54.90.137.38 SSH_KEY=~/.ssh/ml-docker-test.pem HOST_PORT=8790 ./deploy/deploy-ec2.sh
+HOST=ubuntu@54.90.137.38 SSH_KEY=~/.ssh/ml-docker-test.pem HOST_PORT=9010 ./deploy/deploy-ec2.sh
 ```
 
 The script rsyncs the repository to `/home/ubuntu/strategy-evaluation-workbench` on the
@@ -24,15 +24,16 @@ waits for `/api/health`. It uses its own directory, its own compose project and 
 named volume, so it does not touch the `pytho-app` stack on the same box. The image is
 built on the host, so nothing is cross-compiled and no registry is needed.
 
-Result: `http://54.90.137.38:8790/`. Port 8790 must be open in the security group for
-whoever needs to reach it.
+Result: `http://54.90.137.38:9010/`. Port 9010 was already open to `0.0.0.0/0` in the
+instance security group, so no firewall change was needed. Ports 8765 and 8766 on that
+box belong to `coa-engine`; do not reuse them.
 
 | Variable | Default | Meaning |
 |---|---|---|
 | `HOST` | `ubuntu@54.90.137.38` | ssh target |
 | `SSH_KEY` | `~/.ssh/ml-docker-test.pem` | ssh key |
 | `REMOTE_DIR` | `/home/ubuntu/strategy-evaluation-workbench` | where the repo lands |
-| `HOST_PORT` | `8790` | published port on the host |
+| `HOST_PORT` | `9010` | published port on the host; 9010 is already open in the instance security group |
 | `STRATEGY_WORKSPACE_DIR` | `/data/workspace` (in the image) | product state; a named volume |
 
 ## Redeploy after a new UI artifact
@@ -46,9 +47,9 @@ HOST=ubuntu@54.90.137.38 ./deploy/deploy-ec2.sh
 ## Verify a deployment
 
 ```sh
-curl -s http://54.90.137.38:8790/api/health
-curl -s http://54.90.137.38:8790/api/meta
-curl -s 'http://54.90.137.38:8790/api/snapshot?batch=1'   # str_blue_1 invalid, ranking str_blue_2, str_blue_3
+curl -s http://54.90.137.38:9010/api/health
+curl -s http://54.90.137.38:9010/api/meta
+curl -s 'http://54.90.137.38:9010/api/snapshot?batch=1'   # str_blue_1 invalid, ranking str_blue_2, str_blue_3
 ```
 
 Then walk `docs/QA_CHEATSHEET.md` in a browser.

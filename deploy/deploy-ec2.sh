@@ -12,7 +12,7 @@ set -euo pipefail
 HOST="${HOST:-ubuntu@54.90.137.38}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/ml-docker-test.pem}"
 REMOTE_DIR="${REMOTE_DIR:-/home/ubuntu/strategy-evaluation-workbench}"
-HOST_PORT="${HOST_PORT:-8790}"
+HOST_PORT="${HOST_PORT:-9010}"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 ssh_run() { ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new "$HOST" "$@"; }

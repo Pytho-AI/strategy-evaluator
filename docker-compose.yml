@@ -7,7 +7,7 @@ services:
     container_name: strategy-workbench
     restart: unless-stopped
     ports:
-      - "${HOST_PORT:-8790}:8765"
+      - "${HOST_PORT:-9010}:8765"
     environment:
       PORT: 8765
       STRATEGY_WORKSPACE_DIR: /data/workspace
