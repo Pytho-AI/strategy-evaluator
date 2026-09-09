@@ -27,7 +27,7 @@ resources, COA 5 worst on mission and time.
 """
 from __future__ import annotations
 
-from .scenario import BLUE, COAS, GAME_ID, RED, RED_COAS
+from .scenario import COAS, RED_COAS
 
 # COA_LIB's authored constants, verbatim: (s, cas, esc, days, res)
 AUTHORED = {
@@ -161,4 +161,5 @@ def build(objective_order_blue: list[str], objective_order_red: list[str]) -> li
     return rows
 
 
-__all__ = ["AUTHORED", "BLUE", "GAME_ID", "K_BLUE", "K_RED", "RED", "authored_utility", "build", "delta", "floor_utility"]
+__all__ = ["AUTHORED", "BLUE_DEPS", "CRITERION_FIELD", "K_BLUE", "K_RED", "MAGNITUDE",
+           "authored_utility", "build", "delta", "floor_utility"]

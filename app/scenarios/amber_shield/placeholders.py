@@ -27,7 +27,7 @@ SOURCES = [
          title="PLACEHOLDER baseline assessment, Operation AMBER SHIELD",
          published_at=AS_OF.isoformat(), author_org="the United States European Command intelligence directorate",
          reliability="B", credibility="2", real_world=False, public_reference=None,
-         path="app/scenarios/amber_shield/PLACEHOLDER_baseline_assessment.md", batch=0,
+         path="PLACEHOLDER_baseline_assessment.md", batch=0,
          text_sha256="0" * 64, perturbations=[]),
 ]
 

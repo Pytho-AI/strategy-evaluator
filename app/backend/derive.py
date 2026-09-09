@@ -11,7 +11,7 @@ from functools import cached_property
 from pathlib import Path
 from typing import Any
 
-from .adapter import BatchSnapshot, eval_module
+from .adapter import BLUE_ACTOR_ID, BLUE_GAME_ID, BatchSnapshot, eval_module
 
 HORIZONS = ("near", "mid", "long")
 
@@ -39,9 +39,19 @@ def caution() -> str:
 class Index:
     """A read-only, indexed view of one cached batch. Built once per (dataset, batch)."""
 
-    def __init__(self, snapshot: BatchSnapshot, dataset_dir: Path) -> None:
+    def __init__(
+        self,
+        snapshot: BatchSnapshot,
+        dataset_dir: Path,
+        game_id: str = BLUE_GAME_ID,
+        actor_id: str = BLUE_ACTOR_ID,
+    ) -> None:
         self.snapshot = snapshot
         self.dataset_dir = Path(dataset_dir)
+        # The scenario's own (game, actor) pair: which strategies are the operator's
+        # options. Every view reads it here rather than importing a Meridian constant.
+        self.game_id = game_id
+        self.actor_id = actor_id
         self.batch = snapshot.batch
         self.as_of = date.fromisoformat(snapshot.as_of)
         self._t = snapshot.raw

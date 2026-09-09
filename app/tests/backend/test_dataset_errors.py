@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+from conftest import MeridianClient
 from fastapi.testclient import TestClient
 
 from app.backend.adapter import DatasetAdapter
@@ -13,7 +14,7 @@ from app.backend.main import create_app
 
 
 def _client(dataset_dir: Path) -> TestClient:
-    return TestClient(create_app(DatasetAdapter(dataset_dir)))
+    return MeridianClient(create_app(DatasetAdapter(dataset_dir)))
 
 
 def test_missing_dataset_directory_returns_503(tmp_path: Path):

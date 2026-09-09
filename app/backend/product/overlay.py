@@ -120,7 +120,7 @@ def _build(adapter: DatasetAdapter, batch: int, workspace: Workspace) -> Overlay
         load_ms=round((time.perf_counter() - started) * 1000.0, 3),
         _tables=recomputed,
     )
-    index = Index(evaluated, adapter.dataset_dir)
+    index = Index(evaluated, adapter.dataset_dir, adapter.game_id, adapter.actor_id)
     for report in reports.values():
         index.attach_text(report["source_id"], report["text"])
     for record in accepted:

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import time
 
+from conftest import MeridianClient
 from fastapi.testclient import TestClient
 from reports_fixture import dorne_report
 from test_review import BATCH, decide, ingest, range_claim_id
@@ -21,7 +22,7 @@ def test_state_survives_a_fresh_create_app_on_the_same_workspace(client, workspa
     claim_id = range_claim_id(body)
     decide(client, workspace_id, claim_id, reason="corroborated")
 
-    restarted = TestClient(create_app(DatasetAdapter()))
+    restarted = MeridianClient(create_app(DatasetAdapter()))
     clear_cache()  # a new process has no in-memory overlay cache either
     state = restarted.get("/api/workspace", params={"workspace": workspace_id}).json()
     assert state["graph_version"] == 1

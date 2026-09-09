@@ -183,8 +183,32 @@ class Component extends DCLogic {
       tasks: ['Defensive positions at brigade-plus in each Baltic State', 'IAMD and MCM to keep SPODs open', 'Joint Staff-led de-escalation channel', 'StratCom on Alliance unity and Russian pretext'] }
   ];
 
+  // Moving to another stage must put the operator at the top of that screen. Without this
+  // the page keeps the old scroll position, so a button at the foot of a long screen appears
+  // to land on a later stage.
+  toStep(patch, after) {
+    this.setState(patch);
+    if (typeof document !== 'undefined') {
+      // The re-render lands after this call, and the app may scroll the window or an inner
+      // container, so reset every candidate a few times across the next few frames.
+      const toTop = () => {
+        try {
+          if (typeof window !== 'undefined' && window.scrollTo) window.scrollTo(0, 0);
+          const root = document.scrollingElement || document.documentElement;
+          if (root) root.scrollTop = 0;
+          if (document.body) document.body.scrollTop = 0;
+          let node = document.querySelector('#dc-root') || document.body;
+          while (node) { if (node.scrollTop) node.scrollTop = 0; node = node.parentElement; }
+        } catch (e) { /* scrolling is a convenience, never a failure */ }
+      };
+      toTop();
+      [0, 60, 200].forEach(ms => setTimeout(toTop, ms));
+    }
+    if (after) setTimeout(after, 200);
+  }
+
   componentDidMount() { const v = this.props.startView, st = +this.props.startStep; if (v || st) { if (['intel', 'docs', 'posture'].includes(v)) this.setState({ view: 'coa', step: 1, inputTab: v }); else this.setState({ view: v || 'coa', step: st || 1 }); } }
-  go(view) { if (['intel', 'docs', 'posture'].includes(view)) return this.setState({ view: 'coa', step: 1, inputTab: view }); this.setState({ view }); }
+  go(view) { if (['intel', 'docs', 'posture'].includes(view)) return this.toStep({ view: 'coa', step: 1, inputTab: view }); this.toStep({ view }); }
   FEED_POOL = [
     { title: '1st Guards Tank Army forward logistics build observed at Ostrov and Luga', type: 'IMINT', rel: 'B – Usually reliable', pir: 1 },
     { title: 'Karakurt corvettes loitering in Kalibr launch basket off Baltiysk', type: 'SIGINT', rel: 'B – Usually reliable', pir: 5 },
@@ -391,21 +415,21 @@ class Component extends DCLogic {
       showPirDetail: s.details.pir, togglePir: tog('pir'), pirToggle: s.details.pir ? 'Hide indicators and assets' : 'Show indicators and assets',
       pirSummary: `${s.pirs.filter(p => p.status === 0).length} gaps · ${s.pirs.filter(p => p.status === 1).length} collecting · ${s.pirs.filter(p => p.status === 2).length} answered`,
       onPirKey: e => { if (e.key === 'Enter' && s.newPir.trim()) this.setState({ pirs: [...s.pirs, { q: s.newPir.trim(), ind: ['Indicators to be defined'], assets: ['Unassigned'], reports: 0, ltiov: 'TBD', status: 0 }], newPir: '' }); },
-      goCollection: () => this.go('collection'), goDoctrine: () => this.go('doctrine'), goHome: () => this.setState({ view: 'coa', step: 1, inputTab: 'strategy' }),
+      goCollection: () => this.go('collection'), goDoctrine: () => this.go('doctrine'), goHome: () => this.toStep({ view: 'coa', step: 1, inputTab: 'strategy' }),
       feedUrl: s.feedUrl, onFeedUrl: set('feedUrl'), toggleFeed: () => this.toggleFeed(), feedBtn: s.feedOn ? 'Disconnect' : 'Connect', feedLabel: s.feedOn ? `Connected · ${s.feedCount} received` : 'Not connected', feedColor: s.feedOn ? 'rgb(76,195,138)' : 'var(--color-neutral-600)',
-      stages: [['Strategy Option Evaluation', 'Scores strategies against their assumptions and shows exactly where the analysis stands on thin evidence.', 1], ['Collection Management Agent', 'Turns weak assumptions into draft collection requirements: tagged, routed, tracked. Scores re-run as collection returns.', 2], ['Predictive Interconnected Risk Engine', 'Reads the graph\'s edges and propagates: which option degrades if this assumption fails, and how far it travels.', 3], ['Option Recommendation', 'Strategy evaluation taking in every gap and risk; offers the Commander a recommended option and the risk accepted.', 4]].map(([label, sub, n]) => { const active = stage === n; const done = n === 1 ? !!s.results : n === 2 ? s.pirs.every(p => p.status === 2) : n === 3 ? !!s.results : !!s.decision; return { n, label, sub, lineShow: n < 4 ? 'block' : 'none', go: () => n === 1 ? this.setState({ view: 'coa', step: [1, 2, 4].includes(s.step) ? s.step : 1, inputTab: 'strategy' }) : n === 2 ? this.go('collection') : n === 3 ? this.setState({ view: 'coa', step: 3 }) : this.setState({ view: 'coa', step: 5 }), ring: active || done ? 'var(--color-accent)' : 'var(--color-divider)', bg: active ? 'rgb(16,42,76)' : done ? 'rgb(9,84,165)' : 'var(--color-surface)', fg: active || done ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', opacity: active ? 1 : 0.65 }; }),
+      stages: [['Strategy Option Evaluation', 'Scores strategies against their assumptions and shows exactly where the analysis stands on thin evidence.', 1], ['Collection Management Agent', 'Turns weak assumptions into draft collection requirements: tagged, routed, tracked. Scores re-run as collection returns.', 2], ['Predictive Interconnected Risk Engine', 'Reads the graph\'s edges and propagates: which option degrades if this assumption fails, and how far it travels.', 3], ['Option Recommendation', 'Strategy evaluation taking in every gap and risk; offers the Commander a recommended option and the risk accepted.', 4]].map(([label, sub, n]) => { const active = stage === n; const done = n === 1 ? !!s.results : n === 2 ? s.pirs.every(p => p.status === 2) : n === 3 ? !!s.results : !!s.decision; return { n, label, sub, lineShow: n < 4 ? 'block' : 'none', go: () => n === 1 ? this.toStep({ view: 'coa', step: [1, 2, 4].includes(s.step) ? s.step : 1, inputTab: 'strategy' }) : n === 2 ? this.go('collection') : n === 3 ? this.toStep({ view: 'coa', step: 3 }) : this.toStep({ view: 'coa', step: 5 }), ring: active || done ? 'var(--color-accent)' : 'var(--color-divider)', bg: active ? 'rgb(16,42,76)' : done ? 'rgb(9,84,165)' : 'var(--color-surface)', fg: active || done ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', opacity: active ? 1 : 0.65 }; }),
       foundation: { go: () => this.go('intel'), ring: stage === 5 ? 'var(--color-accent)' : 'var(--color-divider)', bg: stage === 5 ? 'rgb(16,42,76)' : 'var(--color-surface)', fg: stage === 5 ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', stat: `${s.assumptions.length + s.intel.length} claims · ${s.intel.length} reports · ${s.planDocs.length + s.guideDocs.length} documents` },
       hasSubtabs: s.view === 'coa' && [1, 2, 4].includes(s.step),
       subtabs: [['Inputs', 1], ['Options', 2], ['Score', 4]].map(([label, st]) => ({ label, go: () => this.goStep(st), line: s.step === st ? 'var(--color-accent)' : 'transparent', opacity: s.step === st ? 1 : 0.65 })),
       step1: s.step === 1, step2: s.step === 2, step3: s.step === 3, step4: s.step === 4, step5: s.step === 5,
       globalNav: [],
       sections: [
-        { hasLabel: true, label: 'Workflow', items: [{ ...navItem('coa', 'Strategy Option Evaluation', 'coa'), border: stage === 1 ? 'rgb(30,41,59)' : 'transparent', dot: stage === 1 ? 'var(--color-accent-700)' : 'transparent', go: () => this.setState({ view: 'coa', step: [1, 2, 4].includes(s.step) ? s.step : 1 }) }, navItem('collection', 'Collection Management Agent', 'collection'), { ...navItem('coa', 'Predictive Risk Engine', 'coa'), border: stage === 3 ? 'rgb(30,41,59)' : 'transparent', dot: stage === 3 ? 'var(--color-accent-700)' : 'transparent', go: () => this.setState({ view: 'coa', step: 3 }) }, { ...navItem('coa', 'Option Recommendation', 'coa'), border: stage === 4 ? 'rgb(30,41,59)' : 'transparent', dot: stage === 4 ? 'var(--color-accent-700)' : 'transparent', go: () => this.setState({ view: 'coa', step: 5 }) }] },
+        { hasLabel: true, label: 'Workflow', items: [{ ...navItem('coa', 'Strategy Option Evaluation', 'coa'), border: stage === 1 ? 'rgb(30,41,59)' : 'transparent', dot: stage === 1 ? 'var(--color-accent-700)' : 'transparent', go: () => this.toStep({ view: 'coa', step: [1, 2, 4].includes(s.step) ? s.step : 1 }) }, navItem('collection', 'Collection Management Agent', 'collection'), { ...navItem('coa', 'Predictive Risk Engine', 'coa'), border: stage === 3 ? 'rgb(30,41,59)' : 'transparent', dot: stage === 3 ? 'var(--color-accent-700)' : 'transparent', go: () => this.toStep({ view: 'coa', step: 3 }) }, { ...navItem('coa', 'Option Recommendation', 'coa'), border: stage === 4 ? 'rgb(30,41,59)' : 'transparent', dot: stage === 4 ? 'var(--color-accent-700)' : 'transparent', go: () => this.toStep({ view: 'coa', step: 5 }) }] },
         { hasLabel: true, label: 'Foundational Data Ingestion', items: [navItem('intel', 'Intelligence', 'intel'), navItem('docs', 'Plans & Strategic Guidance', 'docs'), navItem('posture', 'Force Posture & GFM', 'posture'), navItem('rfi', 'RFI Management', 'rfi')] },
         { hasLabel: true, label: 'Reference', items: [navItem('doctrine', 'Doctrine', 'doctrine')] }
       ],
       planLabel, ccmd: s.ccmd, threatName: T.name, runId: s.runId,
-      resetRun: () => this.setState({ step: 1, coas: [], results: null, decision: null, chosen: null, runId: 'R-' + String(400 + Math.floor(Math.random() * 500)).padStart(4, '0') }),
+      resetRun: () => this.toStep({ step: 1, coas: [], results: null, decision: null, chosen: null, runId: 'R-' + String(400 + Math.floor(Math.random() * 500)).padStart(4, '0') }),
       steps: [['Strategy Preparation', 'Mission Analysis & Guidance'], ['Development', 'Concepts & Screening'], ['Option Adjudication', 'Wargames · ARC'], ['Option\nComparison', 'Decision Matrix'], ['Strategy Decision', "Commander's decision"]].map(([label, sub], i) => ({ n: i + 1, label, sub, go: () => this.goStep(i + 1),
         lineShow: i < 4 ? 'block' : 'none', ring: s.step >= i + 1 ? 'var(--color-accent)' : 'var(--color-divider)', bg: s.step > i + 1 ? 'rgb(9,84,165)' : s.step === i + 1 ? 'rgb(16,42,76)' : 'var(--color-surface)', fg: s.step >= i + 1 ? 'rgb(147,197,253)' : 'var(--color-neutral-600)', opacity: s.step === i + 1 ? 1 : 0.6 })),
       planTypes: this.PLAN_TYPES, planType: s.planType, onPlanType: e => this.setState({ planType: e.target.value }), onCcmd: e => this.setState({ ccmd: e.target.value }), threat: s.threat, onThreat: e => this.setState({ threat: e.target.value, coas: [], results: null }),
@@ -434,15 +458,15 @@ class Component extends DCLogic {
       numSims: s.numSims, onNumSims: e => this.setState({ numSims: +e.target.value, results: null }),
       aggressionPct: Math.round(s.aggression * 100), onAggression: e => this.setState({ aggression: +e.target.value / 100, results: null }),
       aggressionLabel: s.aggression < 0.34 ? 'restrained' : s.aggression < 0.67 ? 'moderate' : 'aggressive',
-      startDevelopment: () => this.setState({ coas: this.buildCoas(), step: 2, results: null }),
+      startDevelopment: () => this.toStep({ coas: this.buildCoas(), step: 2, results: null }),
       coas: (s.coas.length ? s.coas : this.buildCoas()).map(c => ({ ...c, screen: ['Feasible', 'Acceptable', 'Suitable', 'Distinguishable', 'Complete'].map((l, i) => { const warn = (c.res > 85 && i === 0) || (c.esc > 0.5 && i === 1) || (c.s < 0.5 && i === 2); return { label: l, bg: warn ? 'rgb(130,78,0)' : 'rgb(19,57,41)', fg: warn ? 'rgb(254,243,221)' : 'rgb(76,195,138)' }; }) })),
       coaCount: s.numCoas,
-      startWargame: () => { this.setState({ step: 3 }); if (!s.results) setTimeout(() => this.runSim(), 200); },
+      startWargame: () => this.toStep({ step: 3 }, s.results ? null : () => this.runSim()),
       runSim: () => this.runSim(), runLabel: s.results ? 'Re-run Wargame' : 'Run Wargame',
       simRunning: s.simRunning, simProgress: s.simProgress, simStatus: s.simStatus,
       hasResults: !!s.results && !s.simRunning, noResults: !s.results,
       results, selN: sel ? sel.n : '', selTitle: sel ? sel.title : '', arc: sel ? this.arcFor(sel.n) : [],
-      goCompare: () => this.setState({ step: 4 }), goApprove: () => this.setState({ step: 5 }),
+      goCompare: () => this.toStep({ step: 4 }), goApprove: () => this.toStep({ step: 5 }),
       ...this.evaluation(ranked, best, coasNow, isWeak),
       matrix: crit.map(([k, label, fn]) => ({ label, weight: s.weights[k], setWeight: e => this.setState({ weights: { ...s.weights, [k]: +e.target.value } }), cells: (s.results || []).map(fn) })),
       ranked: (s.results || []).map(r => { const rk = ranked.find(x => x.n === r.n); const isCh = (s.chosen ?? best?.n) === r.n; return { ...rk, riskLine: `Mission ${rk.rm} · Personnel ${rk.rp} · Escalation ${rk.re}`, choose: () => this.setState({ chosen: r.n }), chooseBg: isCh ? 'color-mix(in srgb,var(--color-accent) 8%,transparent)' : 'transparent', chooseBorder: isCh ? 'var(--color-accent)' : 'var(--color-divider)' }; }),

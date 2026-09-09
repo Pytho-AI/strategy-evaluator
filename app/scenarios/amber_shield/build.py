@@ -181,6 +181,8 @@ MARKING = SCENARIO["marking"]
 GAME_ID = S.GAME_ID
 ACTOR_ID = S.BLUE
 BATCHES = (0,)
+#: `sources.path` is relative to this directory.
+ROOT = Path(__file__).resolve().parent
 #: The five UI comparison criteria, one objective each, in the UI's own order.
 CRITERIA = list(S.CRITERIA)
 

@@ -475,6 +475,11 @@ class BatchSnapshot:
 class DatasetAdapter:
     """Loads batches 0..3 and hands them out as plain dicts."""
 
+    #: The (game, actor) pair whose strategies are the operator's options. A scenario
+    #: package overrides these; the frozen dataset's are Meridian's Blue player.
+    game_id = BLUE_GAME_ID
+    actor_id = BLUE_ACTOR_ID
+
     def __init__(self, dataset_dir: Path | str = DATASET_DIR) -> None:
         self.dataset_dir = Path(dataset_dir)
         self._identity: DatasetIdentity | None = None
@@ -645,7 +650,7 @@ class DatasetAdapter:
         key = (self.identity.key, batch)
         cached = self._indexes.get(key)
         if cached is None:
-            cached = Index(snapshot, self.dataset_dir)
+            cached = Index(snapshot, self.dataset_dir, self.game_id, self.actor_id)
             self._indexes[key] = cached
         return cached
 

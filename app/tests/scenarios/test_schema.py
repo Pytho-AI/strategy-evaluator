@@ -1,0 +1,65 @@
+"""Every row validates against the dataset's pydantic models, and the applicable invariants pass.
+
+Both checks reuse `dataset/gen/validate.py` rather than restating the rules. The invariants left
+out (02, 11, 12, 13, 15, 16, 17, 20) read the rendered corpus, which the claims agent owns.
+"""
+from __future__ import annotations
+
+import pytest
+
+SCENARIO_INVARIANTS = ["01", "03", "04", "05", "06", "07", "08", "09", "10", "14", "18", "19"]
+
+
+def test_every_row_validates_against_its_model(validate, computed):
+    result = validate.schema_load(computed)
+    assert result.passed, result.detail
+
+
+def test_authored_rows_validate_before_recompute(validate, authored):
+    result = validate.schema_load(authored)
+    assert result.passed, result.detail
+
+
+@pytest.mark.parametrize("invariant", SCENARIO_INVARIANTS)
+def test_dataset_invariant(validate, computed, dataset_dir, S, invariant):
+    results = validate.run_all(computed, dataset_dir, S.AS_OF, S.WORLD_VERSION, only={invariant})
+    assert len(results) == 1
+    assert results[0].passed, f"invariant {invariant}: {results[0].detail}"
+
+
+def test_every_table_the_api_reads_is_populated(computed):
+    from app.scenarios.amber_shield._dataset import eval_module
+
+    assert set(computed) == set(eval_module("tables").TABLE_FILES)
+    empty = sorted(name for name, rows in computed.items() if not rows)
+    assert empty == [], f"empty tables: {empty}"
+
+
+def test_entity_ids_use_typed_prefixes(computed):
+    prefix_for = {
+        "actor": "ent_", "polity": "ent_", "problem_set": "ent_", "location": "loc_",
+        "infrastructure": "inf_", "unit": "unit_", "system": "sys_", "organization_role": "role_",
+    }
+    bad = [e["entity_id"] for e in computed["entities"]
+           if not e["entity_id"].startswith(prefix_for[e["entity_type"]])]
+    assert bad == []
+    assert 60 <= len(computed["entities"]) <= 90
+
+
+def test_marking_and_fiction_notice(build):
+    assert build.SCENARIO["id"] == "amber_shield"
+    assert build.SCENARIO["marking"].startswith("UNCLASSIFIED")
+    assert "SYNTHETIC" in build.SCENARIO["marking"]
+    assert "Not a real plan" in build.SCENARIO["fiction_notice"]
+
+
+def test_registry_surface_the_backend_reads(build, S):
+    """app/backend/scenarios.py::PackageAdapter reads these off the package."""
+    assert build.BATCHES == (0,)
+    assert build.as_of(0) == S.AS_OF.isoformat()
+    assert build.GAME_ID == "amber_shield"
+    assert build.ACTOR_ID == "ent_useucom"
+    assert build.CRITERIA == ["obj_mission", "obj_personnel", "obj_escalation", "obj_time", "obj_resources"]
+    assert build.load(through_batch=0)["strategies"]
+    with pytest.raises(ValueError):
+        build.load(through_batch=1)

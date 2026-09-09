@@ -37,16 +37,20 @@ DEFAULT_WEIGHTS: dict[str, int] = {
 }
 
 #: The perturbation applied to each weight, independently, for weight-stability. The full
-#: Cartesian product is enumerated -- 5**5 = 3125 weightings -- so the answer is exact and
-#: deterministic, not sampled.
+#: Cartesian product of the clamped, de-duplicated per-weight values is enumerated, so the
+#: answer is exact and deterministic rather than sampled. At most 5**5 = 3125 weightings;
+#: fewer when a base weight sits near an end of the 0-5 range and the clamp collapses
+#: values, which is why the response reports ``weightings_evaluated``.
 WEIGHT_PERTURBATIONS = (-2, -1, 0, 1, 2)
 WEIGHT_MIN, WEIGHT_MAX = 0, 5
 
 WEIGHT_STABILITY_METHOD = (
-    "exhaustive enumeration: each of the five weights independently takes "
-    f"w + d for d in {list(WEIGHT_PERTURBATIONS)}, clamped to [{WEIGHT_MIN}, {WEIGHT_MAX}]; "
-    f"the full Cartesian product of {len(WEIGHT_PERTURBATIONS) ** len(CRITERION_KEYS)} "
-    "weightings is scored. No sampling."
+    "exhaustive enumeration, no sampling: each of the five weights independently takes "
+    f"w + d for d in {list(WEIGHT_PERTURBATIONS)}, clamped to "
+    f"[{WEIGHT_MIN}, {WEIGHT_MAX}] and de-duplicated, and every combination in the "
+    "Cartesian product of those value sets is scored (weightings_evaluated says how "
+    "many). Ties on the weighted total go to the higher expected value, then the lower "
+    "option number."
 )
 
 #: Ten bins over the utility scale, matching the histogram the UI draws.

@@ -8,7 +8,6 @@ restraints only as strings on ``strategies``. Those get product-owned sidecar re
 """
 from __future__ import annotations
 
-from ..adapter import BLUE_GAME_ID
 from ..derive import Index
 from ..errors import UnknownId
 from .store import Workspace, now
@@ -32,7 +31,7 @@ def _span(index: Index, claim: dict) -> dict:
 def seeded(index: Index) -> list[dict]:
     """Every tracked object the dataset supports, before any product review is merged in."""
     out: list[dict] = []
-    strategies = [s for s in index.rows("strategies") if s["game_id"] == BLUE_GAME_ID]
+    strategies = [s for s in index.rows("strategies") if s["game_id"] == index.game_id]
     ids = {s["strategy_id"] for s in strategies}
     for assumption in index.rows("assumptions"):
         if assumption["strategy_id"] not in ids:

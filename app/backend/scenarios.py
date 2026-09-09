@@ -256,6 +256,12 @@ class PackageAdapter(DatasetAdapter):
         self.scenario_id = scenario_id
         self.module = module
         self._batches = tuple(package_attr(module, "BATCHES", default=(0,)))
+        # ``BLUE`` is what a package that names its actors by colour calls the friendly
+        # one; ``ACTOR_ID`` is the neutral spelling. Both reach ``Index`` from here.
+        self.game_id = str(package_attr(module, "GAME_ID", default=BLUE_GAME_ID))
+        self.actor_id = str(
+            package_attr(module, "ACTOR_ID", "BLUE", default=BLUE_ACTOR_ID)
+        )
 
     @property
     def batches(self) -> tuple[int, ...]:
@@ -462,12 +468,8 @@ class ScenarioRegistry:
             if module is not None:
                 entry.name = str(package_attr(module, "NAME", default=entry.name))
                 entry.marking = str(package_attr(module, "MARKING", default=entry.marking))
-                entry.game_id = str(package_attr(module, "GAME_ID", default=entry.game_id))
-                # ``BLUE`` is what a package that names its actors by colour calls the
-                # friendly one; ``ACTOR_ID`` is the neutral spelling.
-                entry.actor_id = str(
-                    package_attr(module, "ACTOR_ID", "BLUE", default=entry.actor_id)
-                )
+                entry.game_id = adapter.game_id
+                entry.actor_id = adapter.actor_id
                 if entry.criteria is None:
                     entry.criteria = coerce_criteria(
                         package_attr(module, "CRITERIA"), entry.id

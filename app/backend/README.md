@@ -26,12 +26,16 @@ Dependencies: `app/requirements-app.txt` plus the repo's `requirements.txt`.
 | Endpoint | Returns |
 |---|---|
 | `GET /api/health` | `ok`, dataset identity, `load_ms` for batch 0 |
-| `GET /api/meta` | product name, dataset name, marking, identity, batches 0..3 with `as_of` and per-table row counts, world counts |
+| `GET /api/meta` | product name, dataset name, marking, identity, `scenarios` (id, name, available, as_of, marking, batches, counts), `default_scenario`, batches 0..3 with `as_of` and per-table row counts, world counts |
 | `GET /api/injects` | the three inject manifests: `batch`, `as_of`, `docs`, `change_events`, `expected_effects` |
 | `GET /api/injects/{batch}/diff` | what batch *n* changed, computed from the batch *n-1* and *n* snapshots: `evidence` (claims added / superseded / contradicted), `assumptions_changed`, `validity_changed`, `strategies_restated`, `ranking_before`/`ranking_after`, `risk_assessments_changed` (with `cascade_paths`), `problem_sets_moved`, `requirements_closed`, `jipcl_changed` |
 | `GET /api/snapshot?batch=0..3` | `decision_overview` plus the batch's `strategies`, `rankings`, `assumptions`, `problem_set_assessments`, `collection_requirements` |
 | `GET /api/strategies?batch=0..3` | `caution`, `ranking`, and the three Blue options in full: validity, value, `adversary_range`, robustness, objectives with `expected_contribution`, assumptions, resources, theory of victory, constraints/restraints, harmful events, decision points, opponent model |
 | `GET /api/strategies/{id}?batch=0..3` | the same `StrategyDetailView` for one option |
+| `GET /api/options?scenario=&batch=&mission=&personnel=&escalation=&time=&resources=` | the comparison screen's COAs: id, number, title, approach, concept, tasks, status, the five JP 5-0 validity tests with evidence, `gate_failed`, expected value, `adversary_range`, robustness, the five criterion outcomes with level and contribution, and the assumptions each depends on |
+| `GET`/`POST /api/options/rank` | the ranked list under one weighting, with each option's weighted total and `weight_stability` |
+| `GET /api/options/outcome-distribution?scenario=&batch=&strategy=` | the enumerated outcome distribution: ten bins, `p_meets_aspiration`, the mass-weighted range and the true weighted standard deviation |
+| `GET /api/options/what-if?scenario=&batch=&assumption=` | the comparison recomputed with one assumption failing: value before/after, ranking before/after, status changes, and the risk rows that move |
 | `GET /api/claims?batch=&entity=&source=&status=&min_confidence=&relationship=&assumption=&harmful_event=&limit=&offset=` | `total`, `limit`, `offset`, and claims with full provenance, exact span text and flags |
 | `GET /api/claims/{id}?batch=0..3` | one claim plus its `trace` |
 | `GET /api/risks?batch=0..3` | `problem_sets` (risk context + per-horizon level), `harmful_events` (per-horizon assessment, drivers, cascade, sources of risk), `escalation_edges` |
@@ -47,7 +51,7 @@ Dependencies: `app/requirements-app.txt` plus the repo's `requirements.txt`.
 | `GET /api/workspace` | the workspace's counters and its full audit log |
 | `POST /api/workspace/reset` | clear one workspace; the dataset and other workspaces are untouched |
 
-Every batch-scoped endpoint also takes `workspace=` (default `demo`).
+Every batch-scoped endpoint also takes `workspace=` (default `demo`) and `scenario=` (default: `amber_shield` when its package loads, else `meridian`).
 
 Batch-scoped endpoints default to `batch=0` and return the same envelope: `batch`,
 `as_of`, `marking`, `load_ms`, `response_ms`. An id the loaded batch does not contain
@@ -57,7 +61,10 @@ schema is at `/docs` and `/openapi.json`.
 
 ## Contract decisions
 
-1. **Scope.** Operator views are the Meridian game (`game_id == "meridian"`). The three
+1. **Scope.** Operator views are one scenario's friendly game and actor, which the scenario
+   registry supplies and `derive.Index` carries (`index.game_id` / `index.actor_id`); no view
+   imports a Meridian constant. For `meridian` that pair is the Meridian game
+   (`game_id == "meridian"`) and its Blue player. The three
    Blue options (`actor_id == "ent_blue"`) are the options; the Varenia strategies appear
    only as adversary COAs inside `opponent_model.coas`, carrying their
    `adversary_coa_label` (`most_likely` / `most_dangerous` / `alternative`). The RPS game
@@ -88,6 +95,29 @@ schema is at `/docs` and `/openapi.json`.
    `branding.py` and are the single branding source; `/api/meta` serves both.
 7. **Routers.** `create_app` includes the routers in `routes/`; the joins live in
    `views.py` and the indexed batch view in `derive.py`, so no file carries everything.
+8. **The criterion map.** The v3 UI compares on five criteria the dataset does not name.
+   Each scenario declares which of its objectives or resources each criterion covers
+   (`scenarios.MERIDIAN_CRITERIA`, or `CRITERIA` in a scenario package). An objective
+   criterion's expected value is `eval.value.value` with the option's own weights on those
+   objectives renormalised to sum to one — a single objective therefore reduces to E[u_k]
+   exactly. A resource criterion's is `1 - the tightest worst_case_use / budget ratio`, with
+   `worst_case_use` from `eval.validity.worst_case_cost`. Amber Shield authors one objective
+   per criterion, so all five are objective criteria there; Meridian's objectives do not
+   measure schedule or force demand, so its `time` and `resources` read the resource budgets.
+9. **The level thresholds.** A criterion's shortfall (`1 - expected_value`) is binned by
+   `eval.jram.p_bin` with the JRAM Fig. 6 probability bands (0.20 / 0.50 / 0.80) and the band
+   is read across to the like-ranked Fig. 8 risk level: `very_unlikely -> low`,
+   `unlikely -> moderate`, `likely -> significant`, `very_likely -> high`. The band edges are
+   read out of `eval.jram.P_BANDS` at run time and the 4/3/2/1 score from the length of
+   `eval.jram.RISK_LEVELS`, so no threshold is typed into the backend. The justification: the
+   Meridian and Amber Shield objectives state their metric as a probability or a fraction
+   ("probability that Varenia refrains from armed action", "fraction of combat power
+   retained"), so `1 - E[u_k]` is the probability of the harmful outcome — exactly the
+   quantity Fig. 6 bins — and it is the only quantitative four-way band the doctrine gives.
+   `/api/options` serves the table as `level_thresholds` so a reader never has to trust it.
+10. **Weights are an operator input.** `{mission: 4, personnel: 3, escalation: 4, time: 2,
+    resources: 1}` is the weighting the v3 UI ships with, not dataset content. Every endpoint
+    that uses it accepts an override and reports the weights it applied.
 
 ## decision_overview
 
@@ -476,6 +506,190 @@ no source links, so it is never flagged on a guess.
 - Timings on this laptop: any endpoint cold ≤ ~220 ms; the warm
   snapshot+strategies+claims+risks+collection set ≈ 12 ms.
 
+### Scenarios
+
+`GET /api/meta` lists what this server can serve:
+
+```jsonc
+{"default_scenario": "amber_shield",
+ "scenarios": [
+   {"id": "meridian", "name": "Meridian Sea", "available": true, "default": false,
+    "as_of": "2026-11-17", "marking": "UNCLASSIFIED — SYNTHETIC", "batches": [0,1,2,3],
+    "counts": {"strategies": 9, "claims": 864, "...": 0}, "unavailable_reason": null},
+   {"id": "amber_shield", "name": "USEUCOM Operation AMBER SHIELD", "available": true,
+    "default": true, "as_of": "2026-09-09", "marking": "UNCLASSIFIED — SYNTHETIC",
+    "batches": [0], "counts": {"...": 0}, "unavailable_reason": null}]}
+```
+
+- Pass `scenario=` on every batch-scoped call. Omitting it resolves to `default_scenario`.
+- An unknown id is **422** `unknown_scenario` with `error.detail.valid_scenarios`.
+- A registered scenario whose package will not load reports `available: false` with
+  `unavailable_reason` and answers **503** `scenario_unavailable` — it never becomes the
+  default and never crashes the server.
+- `batches` differs per scenario. A batch a scenario does not have is 422 with
+  `error.detail.valid_batches`.
+
+### The comparison screen
+
+`GET /api/options?scenario=&batch=&mission=&personnel=&escalation=&time=&resources=`
+
+```jsonc
+{
+  "batch": 0, "as_of": "2026-09-09", "marking": "UNCLASSIFIED — SYNTHETIC",
+  "load_ms": 0.0, "response_ms": 0.0,
+  "scenario": "amber_shield", "scenario_name": "USEUCOM Operation AMBER SHIELD",
+  "caution": "This numeric method is not the result of a rigorous mathematical analysis; ...",
+  "weights": {"mission": 4, "personnel": 3, "escalation": 4, "time": 2, "resources": 1},
+  "weighted_max": 56,
+  "level_thresholds": [
+    {"level": "low", "label": "Low", "score": 4,
+     "shortfall_from": 0.0, "shortfall_to": 0.2, "jram_probability_band": "very_unlikely"},
+    {"level": "moderate", "...": 0}],
+  "level_basis": "shortfall = 1 - expected_value, binned by eval.jram.p_bin ...",
+  "options": [{
+    "strategy_id": "str_coa_1", "number": 1,
+    "title": "Rapid Reinforcement, Hold and Restore",
+    "approach": "<main effort> · <sequencing>",
+    "concept": "<the COA's summary>",
+    "tasks": ["<action name>", "..."],
+    "status": "valid",
+    "validity": [{"test": "suitable", "passed": true, "evidence": "..."},
+                 {"test": "feasible", "...": 0}, {"test": "acceptable", "...": 0},
+                 {"test": "distinguishable", "...": 0}, {"test": "complete", "...": 0}],
+    "gate_failed": null, "gates_failed": [],
+    "expected_value": 0.446414835, "aspiration": 0.4295,
+    "adversary_range": {"min": 0.43, "max": 0.46, "basis": "... min/max across the adversary COAs ..."},
+    "robustness": 0.29,
+    "criteria": [{
+      "key": "mission", "label": "Risk to mission", "basis": "objectives",
+      "expected_value": 0.446, "shortfall": 0.554,
+      "level": "moderate", "level_label": "Moderate", "score": 3,
+      "weight": 4, "contribution": 12,
+      "members": [{"id": "obj_mission", "name": "...", "weight_share": 1.0,
+                   "expected_value": 0.446, "aspiration": 0.54}]}],
+    "weighted_total": 30, "weighted_max": 56,
+    "assumptions": [{"assumption_id": "asm_a1_coa_1", "index_k": 0, "statement": "...",
+                     "status": "holds", "p_holds": 0.8995, "sensitivity": 0.36,
+                     "evpi": 0.0179, "subject_id": "...", "subject_name": "...",
+                     "predicate": "..."}]}]
+}
+```
+
+- `criteria` is always the five UI keys, in the UI's order: `mission`, `personnel`,
+  `escalation`, `time`, `resources`.
+- `expected_value` on a criterion is **higher is better**; `shortfall` is `1 - expected_value`
+  and is what the level is binned from. `level` is `low|moderate|significant|high` and
+  `score` is 4/3/2/1 — the same mapping the UI uses.
+- `contribution` is `weight × score`; `weighted_total` is their sum and `weighted_max` is
+  `sum(weights) × 4`. Weights are an operator input: pass `mission=` … `resources=` (0–5) to
+  override; anything omitted keeps the UI's shipped default.
+- A criterion whose `basis` is `resources` reports `budget`, `worst_case_use` and
+  `utilisation` per member; the criterion's shortfall is the tightest of those utilisations.
+- Show `caution` under the table. Never call `adversary_range` a confidence interval.
+
+`POST /api/options/rank` with `{"mission": 5, "time": 0}` (any subset), or the same as
+`GET /api/options/rank?mission=5&time=0`:
+
+```jsonc
+{
+  "scenario": "amber_shield", "caution": "...",
+  "weights": {"mission": 5, "personnel": 3, "escalation": 4, "time": 0, "resources": 1},
+  "weighted_max": 52,
+  "level_thresholds": [{"...": 0}],
+  "ranked": [{"rank": 1, "strategy_id": "str_coa_2", "number": 2,
+              "title": "Defend Forward, Delay D-Day", "status": "valid",
+              "weighted_total": 36, "weighted_pct": 64, "expected_value": 0.4968,
+              "criteria": [{"...": 0}]}],
+  "weight_stability": {
+    "top_option_id": "str_coa_2", "fraction_top": 0.549375,
+    "weightings_evaluated": 1600,
+    "method": "exhaustive enumeration, no sampling: each of the five weights independently takes w + d for d in [-2, -1, 0, 1, 2], clamped to [0, 5] and de-duplicated, ...",
+    "per_option": [{"strategy_id": "str_coa_2", "number": 2, "fraction_top": 0.549375}]}
+}
+```
+
+- `weight_stability.fraction_top` is the fraction of the **enumerated** perturbed weightings
+  in which the top option stays first. It is exact and deterministic — the same request
+  always returns the same number — and `weightings_evaluated` says how many were scored.
+  Label it "of perturbed weightings", not "of simulations".
+- Ties on `weighted_total` go to the higher `expected_value`, then the lower `number`.
+
+`GET /api/options/outcome-distribution?scenario=&batch=&strategy=` — the honest replacement
+for the UI's Monte Carlo. `strategy=` is optional; omitted returns every option.
+
+```jsonc
+{
+  "scenario": "amber_shield",
+  "bin_domain": [0.0, 1.0],
+  "bin_note": "ten equal bins over the utility scale [0, 1]; ...",
+  "aspiration_basis": "the probability the option meets the commander's aspiration (w.tau) across the enumerated assumption worlds ... not a probability of success in the real world.",
+  "options": [{
+    "strategy_id": "str_coa_2", "number": 2, "title": "Defend Forward, Delay D-Day",
+    "aspiration": 0.4295, "expected_value": 0.496789945,
+    "mean_outcome": 0.496789945, "std_dev": 0.063262022,
+    "p_meets_aspiration": 0.790916699,
+    "total_mass": 1.0,
+    "outcome_range": [0.31, 0.68],
+    "assumption_worlds": 256, "adversary_coas": 3, "worlds": 768,
+    "bins": [{"index": 0, "lower": 0.0, "upper": 0.1, "mass": 0.0, "count": 0}]}]
+}
+```
+
+- **Bind the UI's "P(SUCCESS)" tile to `p_meets_aspiration`.** It is a real probability: the
+  mass, over the enumerated assumption worlds weighted by P(θ) and the adversary COAs
+  weighted by the opponent model, of outcomes at or above the commander's aspiration.
+  Label it "meets the commander's aspiration", never "probability of success".
+- There is no sampling anywhere. `bins[].mass` sums to 1.0 and `bins[].count` sums to
+  `worlds` = `assumption_worlds × adversary_coas`. Two identical requests return identical
+  bodies.
+- `std_dev` is the true probability-weighted standard deviation, not a spread of samples.
+  `outcome_range` is the mass-weighted range: the lowest and highest outcome carrying
+  probability. It is not a confidence interval either.
+- An outcome below 0 lands in the first bin and one at or above 1 in the last;
+  `outcome_range` reports the unclamped extremes.
+
+`GET /api/options/what-if?scenario=&batch=&assumption=<id>` — what the UI's "if this
+assumption fails" needs.
+
+```jsonc
+{
+  "scenario": "meridian", "caution": "...",
+  "assumption": {"assumption_id": "asm_blue_1_k0", "index_k": 0, "statement": "...",
+                 "subject_id": "sys_dorne_asm", "subject_name": "Dorne-3 ...",
+                 "predicate": "range_km", "status": "violated", "p_holds": 0.1005,
+                 "p_holds_after_withdrawn": 0.5, "sensitivity": 0.36, "evpi": 0.0179},
+  "method": {"value": "eval.value.value with cond={k: 0} ...",
+             "status_ranking_and_risk": "eval.engine.recompute re-run ... evidence withdrawn ..."},
+  "withdrawn_claim_ids": ["clm_0003", "clm_0844"],
+  "options": [{"strategy_id": "str_blue_1", "number": 1, "title": "Anchor",
+               "value_before": 0.647330008,
+               "value_after_conditioned": 0.61115014, "delta_conditioned": -0.036179868,
+               "value_after_withdrawn": 0.791149485,
+               "status_before": "valid", "status_after_withdrawn": "valid",
+               "status_changed": false,
+               "gates_failed_before": [], "gates_failed_after_withdrawn": []}],
+  "ranking_before": ["str_blue_1", "str_blue_2", "str_blue_3"],
+  "ranking_after_conditioned": ["str_blue_2", "str_blue_1", "str_blue_3"],
+  "ranking_after_withdrawn": ["str_blue_1", "str_blue_2", "str_blue_3"],
+  "status_changes": [{"strategy_id": "str_coa_1", "from": "valid", "to": "invalid",
+                      "gates_failed_after": ["acceptable"]}],
+  "harmful_events_moved": [{"he_id": "he_02", "statement": "...", "jsps_horizon": "near",
+                            "level_before": "significant", "level_after": "moderate",
+                            "p_before": 0.6, "p_after": 0.35}],
+  "problem_sets_moved": [{"problem_set_id": "ps_01", "name": "...", "jsps_horizon": "near",
+                          "level_before": "significant", "level_after": "moderate"}]
+}
+```
+
+- Two mechanisms, both named in `method`, because they answer different halves of the
+  question. **`*_conditioned`** is the exact conditional `θ_k = 0` — the quantity the
+  assumption's `sensitivity` is a difference of. Risk is computed from the claim set, not
+  from θ, so it cannot move under conditioning; **`*_withdrawn`** re-runs
+  `eval.engine.recompute` with every approved claim on the assumption's
+  `(subject, predicate)` removed, which is what makes statuses, the ranking and the risk
+  tables move. Show them as what they are; do not average them.
+- `status_changes` uses `from` / `to`, matching the diff endpoint's key names.
+
 ### The product endpoints
 
 - Pass `workspace=` on every call once the operator starts a product flow, and keep passing
@@ -554,14 +768,19 @@ the batch-1 response body is unchanged by a mutation attempt.
 ## Cache key
 
 Batch snapshots — and the `derive.Index` built over them — are cached under
-`(dataset identity, batch)`, where dataset identity is
+`(scenario identity, batch)`; the evaluated overlay on top of them is cached under
+`(scenario id, scenario identity, batch, workspace, graph_version, state_version)`, so two
+scenarios can never share an entry even if their identities collided. For `meridian` the
+identity is
 
 ```text
 <SHA-256 of dataset/strategy-evaluation-dataset-pytho.zip>:<git HEAD of the dataset checkout>
 ```
 
 with `no-archive` / `no-git` standing in when either is unavailable. Changing the archive or
-the checkout produces a different key, so a stale batch cannot be served. A cold load of
+the checkout produces a different key, so a stale batch cannot be served. A scenario package
+uses `<scenario id>:<its VERSION, or a SHA-256 over the package's own files>`, so editing the
+package invalidates its cache without the package doing anything. A cold load of
 batch 3 takes about 40 ms against a 2 s budget, so caching is a convenience, not a
 requirement.
 
@@ -607,11 +826,14 @@ branches: strategy/assumption/claim/requirement status, `dependencies.kind` and 
 
 ```text
 app/backend/adapter.py         dataset loading, identity, preflight, batch and index cache
+app/backend/scenarios.py       the scenario registry: id -> adapter, criterion maps, availability
+app/backend/options.py         the comparison screen: criterion levels, ranking, distribution, what-if
 app/backend/derive.py          Index: one loaded batch, indexed, with the eval bridges
 app/backend/views.py           builders: Index in, typed contracts out
 app/backend/branding.py        PRODUCT_NAME and the classification marking
 app/backend/contracts.py       typed pydantic responses
-app/backend/errors.py          DatasetMissing / SchemaIncompatible / UnknownId
+app/backend/errors.py          DatasetMissing / SchemaIncompatible / UnknownId /
+                               UnknownScenario / ScenarioUnavailable
 app/backend/main.py            create_app(): error envelope and router wiring
 app/backend/routes/            one router per resource, plus the shared batch/workspace parameters
 app/backend/product/store.py   the workspace: SQLite, ids, versions, audit log
@@ -631,12 +853,19 @@ app/backend/product/planning.py    seeded planning objects, reviews, affected fl
 `test_overview.py`, `test_claims.py`, `test_risks.py`, `test_collection.py`.
 and the P3 files `test_ingest.py`, `test_review.py`, `test_workflow.py`,
 `test_planning.py`, `test_workspace.py`, with the authored fixture reports in
-`reports_fixture.py`. `conftest.py` primes `sys.path` through `adapter.eval_module` so a test
+`reports_fixture.py`. The v3 work adds `test_scenarios.py` (the registry, the unknown-scenario
+error, the amber_shield smoke tests -- skipped with a reason while its package cannot be
+served -- and the Meridian-unchanged golden) and `test_options.py` (every new endpoint, each
+number re-derived from `dataset/eval`, plus the honesty rules and the timing budgets).
+`golden/meridian_replay_sha256.json` holds one SHA-256 per Meridian read-endpoint body,
+recorded at commit `5aa1f0e` -- the last commit before the registry existed -- with `load_ms`
+and `response_ms` stripped. All 32 hashes still match with `scenario=meridian`, which is the
+proof that moving the default did not move Meridian. `conftest.py` primes `sys.path` through `adapter.eval_module` so a test
 can import the reference evaluator directly and use it as an oracle; it also points
 `STRATEGY_WORKSPACE_DIR` at a throwaway directory for the run and gives each test its own
 workspace, so the tests never touch `app/workspace/`.
 
-Backend suite: 277 tests, ~6 s.
+Backend suite: 391 tests, ~10 s.
 
 Known limitations, stated plainly:
 

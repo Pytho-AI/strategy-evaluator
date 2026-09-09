@@ -86,8 +86,38 @@ def adapter() -> DatasetAdapter:
     return DatasetAdapter()
 
 
+class MeridianClient(TestClient):
+    """A TestClient that pins ``scenario=meridian`` on every API request.
+
+    The registry default is ``amber_shield`` whenever its package loads. Everything in this
+    directory except ``test_scenarios.py`` is a Meridian regression suite -- it asserts
+    against ``dataset/``, the inject manifests and direct ``eval`` recomputation -- so the
+    scenario it exercises is named once, here, instead of in several hundred call sites.
+    A request that already carries ``scenario=`` is left alone, and so is a non-API path.
+    """
+
+    def request(self, method, url, **kwargs):  # noqa: D102 - httpx signature
+        text = str(url)
+        params = kwargs.get("params")
+        if text.startswith("/api/"):
+            if params is not None:
+                # httpx replaces the URL query with ``params``, so the pin goes there.
+                if isinstance(params, dict) and "scenario" not in params:
+                    kwargs["params"] = {**params, "scenario": "meridian"}
+            elif "scenario=" not in text:
+                url = f"{text}{'&' if '?' in text else '?'}scenario=meridian"
+        return super().request(method, url, **kwargs)
+
+
 @pytest.fixture(scope="session")
 def client(adapter: DatasetAdapter) -> TestClient:
+    """The Meridian regression client: every request names ``scenario=meridian``."""
+    return MeridianClient(create_app(adapter))
+
+
+@pytest.fixture(scope="session")
+def default_client(adapter: DatasetAdapter) -> TestClient:
+    """A plain client, so a test can see what an omitted ``scenario=`` resolves to."""
     return TestClient(create_app(adapter))
 
 

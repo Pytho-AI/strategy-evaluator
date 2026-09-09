@@ -4,6 +4,7 @@ from __future__ import annotations
 import time
 
 import pytest
+from conftest import MeridianClient
 from fastapi.testclient import TestClient
 
 from app.backend.adapter import DatasetAdapter
@@ -47,7 +48,7 @@ def test_cached_batch_is_faster_than_the_cold_load():
 
 @pytest.mark.parametrize("url", COLD_URLS)
 def test_each_endpoint_answers_in_under_two_seconds_from_cold(url):
-    client = TestClient(create_app(DatasetAdapter()))  # empty cache per endpoint
+    client = MeridianClient(create_app(DatasetAdapter()))  # empty cache per endpoint
     started = time.perf_counter()
     response = client.get(url)
     elapsed = time.perf_counter() - started

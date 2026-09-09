@@ -19,9 +19,18 @@ def test_health_reports_dataset_identity_and_load_time(client):
 
 
 def test_one_server_hosts_the_operator_workbench_and_api(client):
-    response = client.get("/")
-    assert response.status_code == 200
-    assert '<script src="./src/api.js"></script>' in response.text
+    """The v3 shell is at /, the API-backed workbench at /wired, the API at /api/*.
+
+    The root moved to the v3 wargaming shell in commit 37822c8; the API-backed workbench
+    kept its own path. This asserts both are served by the one process, without pinning
+    which shell the root happens to be.
+    """
+    root = client.get("/")
+    assert root.status_code == 200
+    assert "<x-dc></x-dc>" in root.text
+    wired = client.get("/wired/")
+    assert wired.status_code == 200
+    assert '<script src="./src/api.js"></script>' in wired.text
     assert client.get("/api/meta").status_code == 200
 
 

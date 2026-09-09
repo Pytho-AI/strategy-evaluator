@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .adapter import BLUE_ACTOR_ID, BLUE_GAME_ID, VALIDITY_TESTS
+from .adapter import VALIDITY_TESTS
 from .branding import MARKING
 from .contracts import (
     AdversaryCoaView,
@@ -78,17 +78,18 @@ CONFIDENCE_BASIS = (
 
 
 def blue_strategy_ids(
-    index: Index, game_id: str = BLUE_GAME_ID, actor_id: str = BLUE_ACTOR_ID
+    index: Index, game_id: str | None = None, actor_id: str | None = None
 ) -> list[str]:
     """The friendly options of one scenario's game.
 
     The defaults are Meridian's Blue player; the RPS game in that dataset is a test fixture,
     never an option. A scenario package names its own pair through GAME_ID / ACTOR_ID.
     """
+    pair = (game_id or index.game_id, actor_id or index.actor_id)
     return sorted(
         s["strategy_id"]
         for s in index.rows("strategies")
-        if (s["game_id"], s["actor_id"]) == (game_id, actor_id)
+        if (s["game_id"], s["actor_id"]) == pair
     )
 
 
@@ -530,7 +531,7 @@ def requirement_views(index: Index) -> list[RequirementView]:
 
 # ---------------------------------------------------------------- decision overview
 def decision_overview(index: Index) -> DecisionOverviewView:
-    ranking = index.ranking(BLUE_GAME_ID, BLUE_ACTOR_ID)
+    ranking = index.ranking(index.game_id, index.actor_id)
     recommended = index.strategies[ranking[0]] if ranking else None
     runner_up = index.strategies[ranking[1]] if len(ranking) > 1 else None
     criteria = _criteria(index, recommended, runner_up) if recommended else []
@@ -541,17 +542,17 @@ def decision_overview(index: Index) -> DecisionOverviewView:
         key=lambda r: (-levels.index(r["risk_level"]), -r["p_raw"], r["he_id"]),
     )
     top_level = risk_rows[0]["risk_level"] if risk_rows else None
-    game = index.by("games", "game_id")[BLUE_GAME_ID]
+    game = index.by("games", "game_id")[index.game_id]
     return DecisionOverviewView(
-        scenario_id=BLUE_GAME_ID,
+        scenario_id=index.game_id,
         scenario_name=game["name"],
-        friendly_force_id=BLUE_ACTOR_ID,
-        friendly_force_name=index.entity_name(BLUE_ACTOR_ID) or BLUE_ACTOR_ID,
+        friendly_force_id=index.actor_id,
+        friendly_force_name=index.entity_name(index.actor_id) or index.actor_id,
         adversary_id=next(
-            actor_id for actor_id in game["actor_ids"] if actor_id != BLUE_ACTOR_ID
+            actor_id for actor_id in game["actor_ids"] if actor_id != index.actor_id
         ),
         adversary_name=index.entity_name(next(
-            actor_id for actor_id in game["actor_ids"] if actor_id != BLUE_ACTOR_ID
+            actor_id for actor_id in game["actor_ids"] if actor_id != index.actor_id
         )) or "Unknown adversary",
         as_of=index.snapshot.as_of,
         batch=index.batch,
@@ -1085,9 +1086,9 @@ def _meridian(index: Index, table: str, key: str) -> dict[str, dict]:
     """Rows of one table that belong to the Meridian game, keyed by id."""
     if table == "strategies":
         return {
-            s[key]: s for s in index.rows("strategies") if s["game_id"] == BLUE_GAME_ID
+            s[key]: s for s in index.rows("strategies") if s["game_id"] == index.game_id
         }
-    meridian = {s["strategy_id"] for s in index.rows("strategies") if s["game_id"] == BLUE_GAME_ID}
+    meridian = {s["strategy_id"] for s in index.rows("strategies") if s["game_id"] == index.game_id}
     return {r[key]: r for r in index.rows(table) if r["strategy_id"] in meridian}
 
 
@@ -1166,8 +1167,8 @@ def diff(before: Index, after: Index) -> dict[str, Any]:
             if (strategies_before[key]["value"], strategies_before[key]["status"])
             != (strategies_after[key]["value"], strategies_after[key]["status"])
         ],
-        "ranking_before": before.ranking(BLUE_GAME_ID, BLUE_ACTOR_ID),
-        "ranking_after": after.ranking(BLUE_GAME_ID, BLUE_ACTOR_ID),
+        "ranking_before": before.ranking(before.game_id, before.actor_id),
+        "ranking_after": after.ranking(after.game_id, after.actor_id),
         "risk_assessments_changed": [
             RiskChangeView(
                 he_id=key[0],
