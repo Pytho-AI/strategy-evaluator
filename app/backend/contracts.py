@@ -14,6 +14,13 @@ ADVERSARY_RANGE = (
     "opponent model. Not a statistical confidence interval and not a casualty estimate."
 )
 
+P_MEETS_ASPIRATION = (
+    "the probability the option meets the commander's aspiration (w.tau) across the "
+    "enumerated assumption worlds weighted by P(theta) and the adversary COAs weighted by "
+    "the opponent model. It is a statement about this model's enumerated worlds, not a "
+    "probability of success in the real world."
+)
+
 
 class DatasetIdentityView(BaseModel):
     """What the batch cache is keyed on."""
@@ -57,11 +64,31 @@ class WorldsMeta(BaseModel):
     note: str
 
 
+class ScenarioMeta(BaseModel):
+    """One registered scenario. ``available: false`` means its package is not loadable yet."""
+
+    id: str
+    name: str
+    available: bool
+    default: bool = Field(description="what an omitted scenario= resolves to")
+    as_of: str | None = Field(
+        description="the latest batch's evaluation date; null when unavailable"
+    )
+    marking: str
+    batches: list[int]
+    counts: dict[str, int] = Field(description="row count per table at the latest batch")
+    unavailable_reason: str | None = None
+
+
 class MetaResponse(BaseModel):
     product_name: str
     dataset_name: str
     marking: str
     dataset: DatasetIdentityView
+    scenarios: list[ScenarioMeta] = Field(
+        description="every registered scenario, whether or not its package loads"
+    )
+    default_scenario: str = Field(description="what an omitted scenario= resolves to")
     batches: list[BatchMeta]
     worlds: WorldsMeta
 
@@ -1141,3 +1168,287 @@ class PlanningReviewRequest(BaseModel):
 
 class WorkspaceResetRequest(BaseModel):
     actor: str = "operator"
+
+
+# ---------------------------------------------------------------- options (v3 UI)
+CAUTION_NOTE = (
+    "JP 5-0 App. F caution (eval.style_check.CAUTION). It accompanies every ranked "
+    "comparison: the weighted totals are a decision aid, not a decision."
+)
+
+
+class CriterionMemberView(BaseModel):
+    """One objective or resource the criterion is scored over."""
+
+    id: str
+    name: str
+    unit: str | None = None
+    weight_share: float | None = Field(
+        default=None, description="objectives: the option's own weight, renormalised over the criterion"
+    )
+    expected_value: float | None = Field(
+        default=None, description="objectives: E[u_k] for this objective alone"
+    )
+    aspiration: float | None = None
+    budget: float | None = None
+    worst_case_use: float | None = Field(
+        default=None, description="resources: eval.validity.worst_case_cost"
+    )
+    utilisation: float | None = Field(
+        default=None, description="resources: worst_case_use / budget"
+    )
+
+
+class CriterionOutcomeView(BaseModel):
+    """One of the five comparison criteria, scored for one option."""
+
+    key: str = Field(description="mission, personnel, escalation, time or resources")
+    label: str
+    basis: str = Field(description="'objectives' or 'resources'")
+    expected_value: float = Field(
+        description=(
+            "objectives: eval.value.value with the option's own weights on the criterion's "
+            "objectives, renormalised to sum to one. resources: 1 - the tightest "
+            "worst_case_use / budget ratio. Higher is better in both cases."
+        )
+    )
+    shortfall: float = Field(description="1 - expected_value: what the level is binned from")
+    level: str = Field(description="JRAM risk level: low, moderate, significant or high")
+    level_label: str
+    score: int = Field(description="4/3/2/1 for low/moderate/significant/high")
+    weight: int = Field(description="the weight this request applied to the criterion")
+    contribution: int = Field(description="weight x score: this criterion's share of the total")
+    members: list[CriterionMemberView]
+
+
+class LevelThresholdView(BaseModel):
+    """The documented level table, read out of eval.jram.P_BANDS at run time."""
+
+    level: str
+    label: str
+    score: int
+    shortfall_from: float
+    shortfall_to: float
+    jram_probability_band: str
+
+
+class AdversaryRangeView(BaseModel):
+    min: float
+    max: float
+    basis: str = Field(description=ADVERSARY_RANGE)
+
+
+class OptionAssumptionView(BaseModel):
+    assumption_id: str
+    index_k: int
+    statement: str
+    status: str
+    p_holds: float = Field(
+        description="P(the assumption holds), from the grounding claim's derived confidence"
+    )
+    sensitivity: float | None = Field(
+        description="V(sigma | theta_k = 1) - V(sigma | theta_k = 0)"
+    )
+    evpi: float | None
+    subject_id: str
+    subject_name: str | None
+    predicate: str
+
+
+class OptionView(BaseModel):
+    """One COA on the comparison screen."""
+
+    strategy_id: str
+    number: int = Field(description="1-based position in the option set, id order")
+    title: str
+    approach: str = Field(description="main effort and sequencing")
+    concept: str
+    tasks: list[str] = Field(description="the option's policy rules as actions, in scheduled order")
+    status: str = Field(description="valid, invalid or infeasible")
+    validity: list[ValidityTestView] = Field(description="the five JP 5-0 tests with evidence")
+    gate_failed: str | None
+    gates_failed: list[str]
+    expected_value: float
+    aspiration: float = Field(description="w.tau: the commander's aspiration for this option")
+    adversary_range: AdversaryRangeView
+    robustness: float = Field(description="min over worlds of E_sigma'[w.u] (eval.value.robustness)")
+    criteria: list[CriterionOutcomeView]
+    weighted_total: int
+    weighted_max: int
+    assumptions: list[OptionAssumptionView]
+
+
+class OptionsResponse(Envelope):
+    scenario: str
+    scenario_name: str
+    caution: str = Field(description=CAUTION_NOTE)
+    weights: dict[str, int] = Field(
+        description="the criterion weights applied; an operator input, not dataset content"
+    )
+    weighted_max: int
+    level_thresholds: list[LevelThresholdView]
+    level_basis: str
+    options: list[OptionView]
+
+
+class RankedOptionView(BaseModel):
+    rank: int
+    strategy_id: str
+    number: int
+    title: str
+    status: str
+    weighted_total: int
+    weighted_pct: int = Field(description="weighted_total as a percentage of weighted_max")
+    expected_value: float
+    criteria: list[CriterionOutcomeView]
+
+
+class OptionStabilityShareView(BaseModel):
+    strategy_id: str
+    number: int
+    fraction_top: float
+
+
+class WeightStabilityView(BaseModel):
+    top_option_id: str
+    fraction_top: float = Field(
+        description="fraction of the enumerated perturbed weightings in which the top option stays first"
+    )
+    weightings_evaluated: int
+    method: str = Field(description="the perturbation set; it is enumerated, never sampled")
+    per_option: list[OptionStabilityShareView]
+
+
+class RankResponse(Envelope):
+    scenario: str
+    scenario_name: str
+    caution: str = Field(description=CAUTION_NOTE)
+    weights: dict[str, int]
+    weighted_max: int
+    level_thresholds: list[LevelThresholdView]
+    ranked: list[RankedOptionView]
+    weight_stability: WeightStabilityView
+
+
+class RankRequest(BaseModel):
+    """The five criterion weights. Anything omitted keeps the UI's shipped default."""
+
+    mission: int | None = Field(default=None, ge=0, le=5)
+    personnel: int | None = Field(default=None, ge=0, le=5)
+    escalation: int | None = Field(default=None, ge=0, le=5)
+    time: int | None = Field(default=None, ge=0, le=5)
+    resources: int | None = Field(default=None, ge=0, le=5)
+
+
+class OutcomeBinView(BaseModel):
+    index: int
+    lower: float
+    upper: float
+    mass: float = Field(description="P(theta) x P(adversary COA) summed over the bin")
+    count: int = Field(description="how many enumerated worlds fall in the bin")
+
+
+class OutcomeDistributionView(BaseModel):
+    """The enumerated outcome distribution of one option. No sampling anywhere."""
+
+    strategy_id: str
+    number: int
+    title: str
+    aspiration: float
+    expected_value: float
+    mean_outcome: float = Field(description="the mass-weighted mean; equals value under rho = expected")
+    std_dev: float = Field(description="the true probability-weighted standard deviation")
+    p_meets_aspiration: float = Field(description=P_MEETS_ASPIRATION)
+    total_mass: float = Field(description="sums to 1.0; the enumeration is exhaustive")
+    outcome_range: list[float] = Field(
+        description="mass-weighted range: the lowest and highest outcome carrying probability"
+    )
+    assumption_worlds: int = Field(description="2^K assignments over the actor's K assumptions")
+    adversary_coas: int
+    worlds: int = Field(description="enumerated (assumption world, adversary COA) outcomes")
+    bins: list[OutcomeBinView]
+
+
+class OutcomeDistributionResponse(Envelope):
+    scenario: str
+    scenario_name: str
+    bin_domain: list[float]
+    bin_note: str
+    aspiration_basis: str = Field(description=P_MEETS_ASPIRATION)
+    options: list[OutcomeDistributionView]
+
+
+class WhatIfAssumptionView(BaseModel):
+    assumption_id: str
+    index_k: int
+    statement: str
+    subject_id: str
+    subject_name: str | None
+    predicate: str
+    status: str
+    p_holds: float
+    p_holds_after_withdrawn: float | None
+    sensitivity: float | None
+    evpi: float | None
+
+
+class WhatIfOptionView(BaseModel):
+    strategy_id: str
+    number: int
+    title: str
+    value_before: float
+    value_after_conditioned: float = Field(description="eval.value.value with cond={k: 0}")
+    delta_conditioned: float
+    value_after_withdrawn: float = Field(
+        description="eval.engine.recompute with the assumption's evidence withdrawn"
+    )
+    status_before: str
+    status_after_withdrawn: str
+    status_changed: bool
+    gates_failed_before: list[str]
+    gates_failed_after_withdrawn: list[str]
+
+
+class WhatIfStatusChangeView(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    strategy_id: str
+    from_status: str = Field(alias="from")
+    to: str
+    gates_failed_after: list[str]
+
+
+class WhatIfRiskMoveView(BaseModel):
+    he_id: str
+    statement: str
+    jsps_horizon: str
+    level_before: str
+    level_after: str
+    p_before: float
+    p_after: float
+
+
+class WhatIfProblemSetMoveView(BaseModel):
+    problem_set_id: str
+    name: str
+    jsps_horizon: str
+    level_before: str
+    level_after: str
+
+
+class WhatIfResponse(Envelope):
+    scenario: str
+    scenario_name: str
+    caution: str = Field(description=CAUTION_NOTE)
+    assumption: WhatIfAssumptionView
+    method: dict[str, str] = Field(
+        description="the two mechanisms, named: theta_k = 0 for values, evidence withdrawal for the rest"
+    )
+    withdrawn_claim_ids: list[str]
+    options: list[WhatIfOptionView]
+    ranking_before: list[str]
+    ranking_after_conditioned: list[str]
+    ranking_after_withdrawn: list[str]
+    status_changes: list[WhatIfStatusChangeView]
+    harmful_events_moved: list[WhatIfRiskMoveView]
+    problem_sets_moved: list[WhatIfProblemSetMoveView]

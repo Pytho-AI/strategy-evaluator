@@ -5,15 +5,22 @@ import time
 
 from fastapi import APIRouter, Depends
 
-from ..adapter import DatasetAdapter
 from ..contracts import (
     CollectionRequirementView,
     ProblemSetAssessmentView,
     RankingView,
     SnapshotResponse,
 )
+from ..scenarios import ScenarioRegistry
 from ..views import assumption_view, decision_overview, strategy_view
-from .common import BATCH_QUERY, WORKSPACE_QUERY, envelope, get_adapter, view
+from .common import (
+    BATCH_QUERY,
+    SCENARIO_QUERY,
+    WORKSPACE_QUERY,
+    envelope,
+    get_registry,
+    view,
+)
 
 router = APIRouter()
 
@@ -22,10 +29,11 @@ router = APIRouter()
 def snapshot(
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> SnapshotResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     index = overlay.index
     strategies = index.rows("strategies")
     actors = sorted({(s["game_id"], s["actor_id"]) for s in strategies})

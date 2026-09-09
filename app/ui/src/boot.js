@@ -13,10 +13,13 @@
     if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
     return res.text();
   };
+  // Cache-busted: a redeployed build must never be shadowed by a cached script.
+  // These are three small local files, so refetching them costs nothing.
+  const v = "?v=" + Date.now();
   const [markup, logic, props] = await Promise.all([
-    text("./src/app.dc.html"),
-    text("./src/app.logic.js"),
-    text("./src/app.props.json").catch(() => "{}"),
+    text("./src/app.dc.html" + v),
+    text("./src/app.logic.js" + v),
+    text("./src/app.props.json" + v).catch(() => "{}"),
   ]);
   const host = document.querySelector("x-dc");
   host.innerHTML = markup;

@@ -77,12 +77,18 @@ CONFIDENCE_BASIS = (
 )
 
 
-def blue_strategy_ids(index: Index) -> list[str]:
-    """The Blue options of the Meridian game. The RPS game is a test fixture, not an option."""
+def blue_strategy_ids(
+    index: Index, game_id: str = BLUE_GAME_ID, actor_id: str = BLUE_ACTOR_ID
+) -> list[str]:
+    """The friendly options of one scenario's game.
+
+    The defaults are Meridian's Blue player; the RPS game in that dataset is a test fixture,
+    never an option. A scenario package names its own pair through GAME_ID / ACTOR_ID.
+    """
     return sorted(
         s["strategy_id"]
         for s in index.rows("strategies")
-        if (s["game_id"], s["actor_id"]) == (BLUE_GAME_ID, BLUE_ACTOR_ID)
+        if (s["game_id"], s["actor_id"]) == (game_id, actor_id)
     )
 
 

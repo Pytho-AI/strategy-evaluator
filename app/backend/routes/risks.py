@@ -5,10 +5,17 @@ import time
 
 from fastapi import APIRouter, Depends
 
-from ..adapter import DatasetAdapter
 from ..contracts import RisksResponse
+from ..scenarios import ScenarioRegistry
 from ..views import _escalation_edge, harmful_event_views, problem_set_views
-from .common import BATCH_QUERY, WORKSPACE_QUERY, envelope, get_adapter, view
+from .common import (
+    BATCH_QUERY,
+    SCENARIO_QUERY,
+    WORKSPACE_QUERY,
+    envelope,
+    get_registry,
+    view,
+)
 
 router = APIRouter()
 
@@ -17,10 +24,11 @@ router = APIRouter()
 def risks(
     batch: int = BATCH_QUERY,
     workspace: str = WORKSPACE_QUERY,
-    adapter: DatasetAdapter = Depends(get_adapter),
+    scenario: str | None = SCENARIO_QUERY,
+    registry: ScenarioRegistry = Depends(get_registry),
 ) -> RisksResponse:
     started = time.perf_counter()
-    overlay = view(adapter, batch, workspace)
+    overlay = view(registry, batch, workspace, scenario)
     index = overlay.index
     return RisksResponse(
         **envelope(overlay, started),

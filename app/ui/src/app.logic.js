@@ -71,7 +71,7 @@ class Component extends DCLogic {
   };
 
   async loadDocs(files, kind) {
-    const mod = await import(new URL('assets/docreader.js', document.baseURI).href);
+    const mod = await import(new URL('assets/docreader.js?v=' + Date.now(), document.baseURI).href);
     for (const f of files) {
       this.setState({ docBusy: `Reading ${f.name}…` });
       let doc;
@@ -79,7 +79,14 @@ class Component extends DCLogic {
       const sig = mod.signalIndex(doc.text || '');
       if (kind === 'plan') {
         const ex = mod.extractPlan(doc.text || '');
-        const entry = { ...doc, status: doc.text ? 'Parsed' : 'Could not read text — metadata only', mission: ex.mission || 'Not found in document', intent: ex.intent || 'Not found in document', endState: ex.endState || 'Not found in document', assumptions: ex.assumptions.length ? ex.assumptions : ['No explicit assumptions found'], pirs: ex.pirs || [], phases: ex.phases, sig };
+        // When a field is missing, say why: no text at all, a heading that was never
+        // found, or a heading found but no section that could be delimited.
+        const miss = (label, probe) => !doc.text
+          ? 'Not found — no text could be read from this file (a .pdf needs network access; use .docx or .txt)'
+          : (new RegExp(probe, 'i').test(doc.text)
+              ? `Not found — "${label}" appears in the text but no section under it could be delimited`
+              : `Not found — no "${label}" heading in this document`);
+        const entry = { ...doc, status: doc.text ? 'Parsed' : 'Could not read text — metadata only', mission: ex.mission || miss('Mission', 'mission'), intent: ex.intent || miss("Commander's Intent", 'intent'), endState: ex.endState || miss('End State', 'end ?state'), assumptions: ex.assumptions.length ? ex.assumptions : ['No explicit assumptions found'], pirs: ex.pirs || [], phases: ex.phases, sig };
         this.setState(s => ({ planDocs: [...s.planDocs, entry], planSel: s.planDocs.length }));
         this.applyPlan(entry, true);
       } else if (kind === 'guide') {

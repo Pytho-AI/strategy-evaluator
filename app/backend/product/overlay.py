@@ -59,11 +59,20 @@ def clear_cache() -> None:
     _CACHE.clear()
 
 
-def evaluate(adapter: DatasetAdapter, batch: int, workspace_id: str) -> Overlay:
-    """The batch as the workspace sees it, cached on (dataset, batch, workspace, versions)."""
+def evaluate(
+    adapter: DatasetAdapter,
+    batch: int,
+    workspace_id: str,
+    scenario_id: str = "meridian",
+) -> Overlay:
+    """The batch as the workspace sees it.
+
+    Cached on (scenario id, scenario identity/version, batch, workspace, graph_version,
+    state_version). Two scenarios never share an entry even if their identities collide.
+    """
     workspace = Workspace(workspace_id)
     key = (
-        adapter.identity.key, batch, workspace_id,
+        scenario_id, adapter.identity.key, batch, workspace_id,
         workspace.graph_version, workspace.state_version,
     )
     cached = _CACHE.get(key)
